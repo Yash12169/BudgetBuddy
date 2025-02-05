@@ -1,5 +1,15 @@
-css - tailwind css /n
-ui - daisy UI /n
+css - tailwind css 
+
+
+
+
+ui - daisy UI 
+
+
 orm - prisma
+
+
 database - PostgreSQL
+
+
 authentication - Auth0
