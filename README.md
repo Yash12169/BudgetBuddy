@@ -13,3 +13,6 @@ database - PostgreSQL
 
 
 authentication - Auth0
+
+
+hosting - Vercel
