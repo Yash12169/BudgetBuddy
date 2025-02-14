@@ -4,7 +4,7 @@ import { montserrat, poppins } from "@/fonts/fonts";
 
 export default function Disclaimer() {
   return (
-    <div className="flex flex-col bg-neutral px-5 py-5 text-neutral-content gap-2 rounded-lg  ">
+    <div className="flex flex-col bg-neutral px-5 py-5 text-neutral-content gap-2 rounded-[30px]  ">
         <div className={`${montserrat} font-[600] `}> 
             <p className="text-[20px]">Disclaimer</p>
         </div> 
