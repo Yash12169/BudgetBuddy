@@ -3,6 +3,7 @@ import Disclaimer from "@/components/Cards/Disclaimer";
 import NetWorth from "@/components/Cards/NetWorth";
 import RiskProfile from "@/components/Cards/RiskProfile";
 import StarterCard from "@/components/Cards/starterCard";
+import FranFormFaq from "@/components/FAQ/faq";
 import LandFooter from "@/components/Footer/LandFooter/landFooter";
 import Layout from "@/components/Layout/layout";
 import { SidebarDemo } from "@/components/Navbar/navbar";
@@ -14,7 +15,7 @@ import { Network } from "lucide-react";
 export default function Home() {
   return (
     <Layout>
-      <div className="w-screen h-screen px-3 gap-5 flex flex-col">
+      <div className="w-screen h-screen  gap-5 flex flex-col">
         <ThemeController />
           
         {/* <Disclaimer /> */}
@@ -22,7 +23,8 @@ export default function Home() {
         {/* <RiskProfile/> */}
         {/* <StarterCard/> */}
         {/* </div> */}
-        <LandFooter/>
+        {/* <LandFooter/> */}
+        <FranFormFaq/>
       </div>
     </Layout>
   );
