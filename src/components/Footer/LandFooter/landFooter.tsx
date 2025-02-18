@@ -5,11 +5,11 @@ import instagram from "../../../assets/socials-instagram.svg";
 import { montserrat, poppins } from "@/fonts/fonts";
 export default function LandFooter() {
   return (
-    <div className="flex justify-center items-center p-3">
-      <div className="w-[85%] bg-neutral text-neutral-content pr-8 pl-8 pt-[5em] pb-[5em] rounded-[30px] flex flex-col justify-between gap-10">
+    <div className="flex justify-center items-center p-3 bg-[#FFF8ED]" >
+      <div className="w-[85%] bg-[#1A1A4C] text-[#F7F2EB] pr-8 pl-8 pt-[5em] pb-[5em] rounded-[30px] flex flex-col justify-between gap-8">
         <div className="flex flex-col gap-8 ">
           <div
-            className={`${montserrat} font-[700] text-[40px] line-clamp-[40px] flex flex-col  items-center`}
+            className={`${montserrat} font-[700] text-[40px] line-clamp-[40px] flex flex-col  items-center text-[#41d298]`}
           >
             <p>Take Care of Your Finances.</p>
           </div>
@@ -27,7 +27,7 @@ export default function LandFooter() {
               viewBox="0 0 682.667 682.667"
               width="30"
               height="30"
-              className="text-neutral-content cursor-pointer"
+              className="text-[#41d298] cursor-pointer"
               fill="currentColor"
             >
               <defs>
@@ -71,7 +71,7 @@ export default function LandFooter() {
               viewBox="0 0 1226.37 1226.37"
               width="30"
               height="30"
-              className="text-neutral-content cursor-pointer"
+              className="text-[#41d298] cursor-pointer"
               fill="currentColor"
             >
               <g>
@@ -86,7 +86,7 @@ export default function LandFooter() {
               viewBox="0 0 512.002 512"
               width="36"
               height="36"
-              className="text-neutral-content cursor-pointer"
+              className="text-[#41d298] cursor-pointer"
               fill="currentColor"
             >
               <g transform="matrix(1,0,0,1,0,60)">
@@ -104,76 +104,76 @@ export default function LandFooter() {
         </div>
         <div className={`flex ${montserrat} justify-evenly  `}>
           <div className="flex flex-col gap-6">
-            <div className="font-[650] ">
+            <div className="font-[600] text-[#41d298]">
               <p>Offerings</p>
             </div>
-            <div className="flex  flex-col gap-2">
-              <p className="hover:underline cursor-pointer opacity-70">Expense Manager</p>
-              <p className="hover:underline cursor-pointer opacity-70">Budget Tracker</p>
-              <p className="hover:underline cursor-pointer opacity-70">Savings Planner</p>
-              <p className="hover:underline cursor-pointer opacity-70">Debt Calculator</p>
-              <p className="hover:underline cursor-pointer opacity-70">
+            <div className="flex  flex-col gap-2 text-sm">
+              <p className="hover:underline cursor-pointer ">Expense Manager</p>
+              <p className="hover:underline cursor-pointer ">Budget Tracker</p>
+              <p className="hover:underline cursor-pointer ">Savings Planner</p>
+              <p className="hover:underline cursor-pointer ">Debt Calculator</p>
+              <p className="hover:underline cursor-pointer ">
                 Investment Insights
               </p>
-              <p className="hover:underline cursor-pointer opacity-70">Bill Reminders</p>
+              <p className="hover:underline cursor-pointer ">Bill Reminders</p>
             </div>
           </div>
           <div className="flex flex-col gap-6">
-            <div className="font-[650]">
+            <div className="font-[600] text-[#41d298]">
               <p>Financial Goals</p>
             </div>
-            <div className="flex  flex-col gap-2">
-              <p className="hover:underline cursor-pointer opacity-70">Travel Budgeting</p>
-              <p className="hover:underline cursor-pointer opacity-70">
+            <div className="flex  flex-col gap-2 text-sm">
+              <p className="hover:underline cursor-pointer ">Travel Budgeting</p>
+              <p className="hover:underline cursor-pointer ">
                 Home Purchase Planning
               </p>
-              <p className="hover:underline cursor-pointer opacity-70">Emergency Fund</p>
-              <p className="hover:underline cursor-pointer opacity-70">
+              <p className="hover:underline cursor-pointer ">Emergency Fund</p>
+              <p className="hover:underline cursor-pointer ">
                 Retirement Savings
               </p>
-              <p className="hover:underline cursor-pointer opacity-70">Education Fund</p>
+              <p className="hover:underline cursor-pointer ">Education Fund</p>
             </div>
           </div>
           <div className="flex flex-col gap-6">
-            <div className="font-[650]">
+            <div className="font-[600] text-[#41d298] ">
               <p>Resources</p>
             </div>
-            <div className="flex  flex-col gap-2">
-              <p className="hover:underline cursor-pointer opacity-70">Financial Tips</p>
-              <p className="hover:underline cursor-pointer opacity-70">
+            <div className="flex  flex-col gap-2 text-sm">
+              <p className="hover:underline cursor-pointer ">Financial Tips</p>
+              <p className="hover:underline cursor-pointer ">
                 Money Management Guides
               </p>
-              <p className="hover:underline cursor-pointer opacity-70">
+              <p className="hover:underline cursor-pointer ">
                 Budgeting Templates
               </p>
-              <p className="hover:underline cursor-pointer opacity-70">Free Reports</p>
+              <p className="hover:underline cursor-pointer ">Free Reports</p>
             </div>
           </div>
           <div className="flex flex-col gap-6">
-            <div className="font-[650]">
+            <div className="font-[600] text-[#41d298]">
               <p>Tools & Subscriptions</p>
             </div>
-            <div className="flex  flex-col gap-2">
-              <p className="hover:underline cursor-pointer opacity-70">Budget Buddy Pro</p>
-              <p className="hover:underline cursor-pointer opacity-70">
+            <div className="flex  flex-col gap-2 text-sm ">
+              <p className="hover:underline cursor-pointer ">Budget Buddy Pro</p>
+              <p className="hover:underline cursor-pointer ">
                 Personalized Insights
               </p>
-              <p className="hover:underline cursor-pointer opacity-70">Smart Alerts</p>
-              <p className="hover:underline cursor-pointer opacity-70">
+              <p className="hover:underline cursor-pointer ">Smart Alerts</p>
+              <p className="hover:underline cursor-pointer ">
                 AI-Powered Recommendations
               </p>
             </div>
           </div>
           <div className="flex flex-col gap-6">
-            <div className="font-[650]">
+            <div className="font-[600] text-[#41d298]">
               <p>Legal & Support</p>
             </div>
-            <div className="flex  flex-col gap-2">
-              <p className="hover:underline cursor-pointer opacity-70">Terms of Service</p>
-              <p className="hover:underline cursor-pointer opacity-70">Privacy Policy</p>
-              <p className="hover:underline cursor-pointer opacity-70">Refund Policy</p>
-              <p className="hover:underline cursor-pointer opacity-70">Help & Support</p>
-              <p className="hover:underline cursor-pointer opacity-70">Contact Us</p>
+            <div className="flex  flex-col gap-2 text-sm">
+              <p className="hover:underline cursor-pointer ">Terms of Service</p>
+              <p className="hover:underline cursor-pointer ">Privacy Policy</p>
+              <p className="hover:underline cursor-pointer ">Refund Policy</p>
+              <p className="hover:underline cursor-pointer ">Help & Support</p>
+              <p className="hover:underline cursor-pointer ">Contact Us</p>
             </div>
           </div>
         </div>
@@ -211,12 +211,12 @@ export default function LandFooter() {
           <div
             className={`${montserrat} font-normal flex justify-center gap-10`}
           >
-            <p className="cursor-pointer opacity-70">Terms</p>
-            <p className="cursor-pointer opacity-70">Privacy</p>
-            <p className="cursor-pointer opacity-70">Refund Policy</p>
-            <p className="cursor-pointer opacity-70">Investor Charter</p>
-            <p className="cursor-pointer opacity-70">Statutory Records</p>
-            <p className="cursor-pointer opacity-70">ODR Portal</p>
+            <p className="cursor-pointer ">Terms</p>
+            <p className="cursor-pointer ">Privacy</p>
+            <p className="cursor-pointer ">Refund Policy</p>
+            <p className="cursor-pointer ">Investor Charter</p>
+            <p className="cursor-pointer ">Statutory Records</p>
+            <p className="cursor-pointer ">ODR Portal</p>
           </div>
         </div>
       </div>
