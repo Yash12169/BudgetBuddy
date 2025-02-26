@@ -1,5 +1,4 @@
 "use client";
-import "./Navbar.css";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { montserrat } from "@/fonts/fonts";
