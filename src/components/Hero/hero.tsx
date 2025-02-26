@@ -7,9 +7,9 @@ export default function Hero() {
     className={` w-[100%] h-screen text-white   pt-[5%] flex `}>
       <div className="bgblue-500 w-[50%] flex flex-col pt-[8%] gap-7 ">
         <div className="bg-ble-500 flex w-[100%] justify-end ">
-          <div className="flex bg--400 w-[70%]">
+          <div className="flex w-[71%]">
             <p
-              className={`${bricolage_grotesque} font-[600]  text-6xl w-[100%] leading-tight`}
+              className={`${bricolage_grotesque} font-[600]  text-7xl w-[100%] leading-tight`}
             >
               How will you spend your{" "}
               <span className="line-through decoration-green-400">money</span>{" "}
