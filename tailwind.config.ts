@@ -1,9 +1,16 @@
 import type { Config } from "tailwindcss";
 import daisyui from "daisyui";
+const defaultTheme = require("tailwindcss/defaultTheme");
+const colors = require("tailwindcss/colors");
+const {
+  default: flattenColorPalette,
+} = require("tailwindcss/lib/util/flattenColorPalette");
 
+/** @type {import('tailwindcss').Config} */
 const config: Config = {
-  darkMode: ["class"],
+  darkMode: "class",
   content: [
+    "./src/**/*.{ts,tsx}",
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -60,6 +67,9 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      boxShadow: {
+        input: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`,
+      },
       keyframes: {
         slideIn: {
           "0%": { width: "0%", left: "0" },
@@ -86,43 +96,26 @@ const config: Config = {
       },
     },
   },
-  plugins: [daisyui, require("tailwindcss-animate")],
+  plugins: [daisyui, require("tailwindcss-animate"), addVariablesForColors],
   daisyui: {
     themes: [
-      "light",
-      "dark",
-      "cupcake",
-      "bumblebee",
-      "emerald",
-      "corporate",
-      "synthwave",
-      "retro",
-      "cyberpunk",
-      "valentine",
-      "halloween",
-      "garden",
-      "forest",
-      "aqua",
-      "lofi",
-      "pastel",
-      "fantasy",
-      "wireframe",
-      "black",
-      "luxury",
-      "dracula",
-      "cmyk",
-      "autumn",
-      "business",
-      "acid",
-      "lemonade",
-      "night",
-      "coffee",
-      "winter",
-      "dim",
-      "nord",
-      "sunset",
+      "light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave",
+      "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua",
+      "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk",
+      "autumn", "business", "acid", "lemonade", "night", "coffee", "winter", "dim",
+      "nord", "sunset",
     ],
   },
 };
+
+function addVariablesForColors({ addBase, theme }: any) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+  addBase({
+    ":root": newVars,
+  });
+}
 
 export default config;
