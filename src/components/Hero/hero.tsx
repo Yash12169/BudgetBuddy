@@ -28,7 +28,7 @@ export default function Hero() {
               <p className={`${montserrat} font-semibold`}>Get Started for Free</p>
             </div>
             <div className="flex">
-                <p className={`${poppins} text-sm`}>It's easy! No payment required.</p>
+                <p className={`${poppins} text-sm`}>It&apos;s easy! No payment required.</p>
             </div>
           </div>
         </div>

@@ -1,8 +1,8 @@
 "use client";
 import "./Navbar.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { bricolage_grotesque, montserrat, poppins } from "@/fonts/fonts";
+import { montserrat } from "@/fonts/fonts";
 export default function Navbar2() {
   const shimmerRef = useRef<HTMLSpanElement>(null);
   const searchRef = useRef<SVGSVGElement>(null);
