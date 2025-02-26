@@ -9,7 +9,7 @@ export default function Hero() {
         <div className="bg-ble-500 flex w-[100%] justify-end ">
           <div className="flex bg--400 w-[70%]">
             <p
-              className={`${bricolage_grotesque} font-[600]  text-7xl w-[100%] leading-tight`}
+              className={`${bricolage_grotesque} font-[600]  text-6xl w-[100%] leading-tight`}
             >
               How will you spend your{" "}
               <span className="line-through decoration-green-400">money</span>{" "}
