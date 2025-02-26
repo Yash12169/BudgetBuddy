@@ -2,7 +2,7 @@
 import "./Navbar.css";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { bricolage_grotesque, montserrat } from "@/fonts/fonts";
+import { bricolage_grotesque, montserrat, poppins } from "@/fonts/fonts";
 export default function Navbar2() {
   const shimmerRef = useRef<HTMLSpanElement>(null);
   const searchRef = useRef<SVGSVGElement>(null);
@@ -85,11 +85,11 @@ export default function Navbar2() {
       </div>
 
       <div className=" flex gap-5 justify-center items-center">
-        <div className="hover:underline cursor-pointer">
+        <div className={`${montserrat} font-semibold hover:underline cursor-pointer`}>
           <p>Log In</p>
         </div>
         <div
-          className={`${bricolage_grotesque} bg-green-500 px-5 py-2 rounded-lg font-[500] text-white`}
+          className={`${montserrat}  bg-green-500 px-5 py-2 rounded-lg font-semibold cursor-pointer text-white`}
         >
           <p>Create an Account</p>
         </div>

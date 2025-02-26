@@ -80,7 +80,7 @@ function Faq() {
   };
 
   return (
-    <div className="flex flex-col gap-9 pt-9 bg-[#FFF8ED]">
+    <div className="flex flex-col gap-9 pt-0 bg-[#FFF8ED]">
       <div className="flex flex-col items-center gap-6">
         <div className={`${montserrat} font-bold text-4xl text-[#1c1f58]`}>
           <p>Any Questions?</p>
