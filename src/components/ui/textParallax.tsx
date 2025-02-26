@@ -3,7 +3,7 @@ import React from "react";
 import { ContainerScroll } from "./container-scroll-animation";
 import Image from "next/image";
 import feature2 from "../../assets/working.gif";
-import { bricolage_grotesque, montserrat, poppins } from "@/fonts/fonts";
+import { poppins } from "@/fonts/fonts";
 
 export function TextParallax() {
   return (
