@@ -19,6 +19,8 @@ import { Network } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import WaitScroller from "@/components/WaitScroller/waitScroller";
 import { TextParallax } from "@/components/ui/textParallax";
+import SignUpModal from "@/components/SignUpForm/SignUpModal";
+import { SignupForm } from "@/components/SignUpForm/SignUpForm";
 
 export default function Home() {
   return (

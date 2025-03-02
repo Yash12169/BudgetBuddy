@@ -1,13 +1,10 @@
 import type { Config } from "tailwindcss";
 import daisyui from "daisyui";
+import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
 
 const config: Config = {
   darkMode: ["class"],
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./src/**/*.{ts,tsx,js,jsx,mdx}"],
   theme: {
     extend: {
       colors: {
@@ -60,6 +57,9 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      boxShadow: {
+        input: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`,
+      },
       keyframes: {
         slideIn: {
           "0%": { width: "0%", left: "0" },
@@ -86,7 +86,17 @@ const config: Config = {
       },
     },
   },
-  plugins: [daisyui, require("tailwindcss-animate")],
+  plugins: [
+    daisyui,
+    require("tailwindcss-animate"),
+    function ({ addBase, theme }) {
+      let allColors = flattenColorPalette(theme("colors"));
+      let newVars = Object.fromEntries(
+        Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+      );
+      addBase({ ":root": newVars });
+    },
+  ],
   daisyui: {
     themes: [
       "light",

@@ -9,7 +9,7 @@ import {
 } from "@tabler/icons-react";
 import { montserrat } from "@/fonts/fonts";
 
-export function SignupForm() {
+export function LogInForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted");
@@ -17,23 +17,14 @@ export function SignupForm() {
   return (
     <div className={ `${montserrat} max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-[#FFF8ED] text-[#1c1f58]`}>
       <h2 className="font-semibold text-xl">
-        Welcome to BudgetBuddy
+        Welcome Back!
       </h2>
       <p className=" text-sm max-w-sm mt-2 ">
-      Take control of your finances create your BudgetBuddy account today!
+      Unlock personalized insights and smarter budgeting log in to BudgetBuddy now!
 </p>
 
       <form className="my-8" onSubmit={handleSubmit}>
-        <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4 text-[#1c1f58]">
-          <LabelInputContainer>
-            <Label htmlFor="firstname" className="text-[#1c1f58]">First name</Label>
-            <Input id="firstname" placeholder="Peter" type="text" className="text-[#1c1f58]" />
-          </LabelInputContainer>
-          <LabelInputContainer>
-            <Label htmlFor="lastname" className="text-[#1c1f58]">Last name</Label>
-            <Input id="lastname" className="text-[#1c1f58]" placeholder="Griffin" type="text" />
-          </LabelInputContainer>
-        </div>
+       
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email" className="text-[#1c1f58]">Email Address</Label>
           <Input id="email" className="text-[#1c1f58]" placeholder="projectmayhem@fc.com" type="email" />
@@ -42,21 +33,13 @@ export function SignupForm() {
           <Label htmlFor="password" className="text-[#1c1f58]">Password</Label>
           <Input id="password" className="text-[#1c1f58]" placeholder="••••••••" type="password" />
         </LabelInputContainer>
-        <LabelInputContainer className="mb-8 " >
-          <Label htmlFor="confirmpassword" className="text-[#1c1f58] ">Confirm Password</Label>
-          <Input
-            id="confirmpassword"
-            placeholder="••••••••"
-            className="text-[#1c1f58] "
-            type="confirmpassword"
-          />
-        </LabelInputContainer>
+      
 
         <button
           className="relative group/btn block bg-green-600 w-full text-white rounded-md h-10 font-semibold shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
           type="submit"
         >
-          Sign up &rarr;
+          Log In &rarr;
           <BottomGradient />
         </button>
 

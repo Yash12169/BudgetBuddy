@@ -4,16 +4,14 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import { SignupForm } from "./SignUpForm";
 import { montserrat } from "@/fonts/fonts";
+import { LogInForm } from "./LogInForm";
 
-const SignUpModal = () => {
+const LogInModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
-      <div
-       onClick={() => setIsOpen(true)}
-          className={`${montserrat}  bg-green-500 px-5 py-2 rounded-lg font-semibold cursor-pointer text-white`}
-        >
-          <p>Create an Account</p>
+        <div className={`${montserrat} font-semibold hover:underline cursor-pointer`}   onClick={() => setIsOpen(true)}>
+          <p>Log In</p>
         </div>
       <SpringModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
@@ -44,7 +42,7 @@ const SpringModal = ({
             onClick={(e) => e.stopPropagation()}
             className="rounded-lg w-full max-w-lg  cursor-default relative overflow-hidden"
           >
-            <SignupForm/>
+            <LogInForm/>
           </motion.div>
         </motion.div>
       )}
@@ -52,4 +50,4 @@ const SpringModal = ({
   );
 };
 
-export default SignUpModal;
+export default LogInModal;
