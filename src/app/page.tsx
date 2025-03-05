@@ -14,33 +14,38 @@ import ThemeController from "@/components/ThemeController/themeController";
 import HeroImage from "@/components/ui/heroImage";
 import InvestmentChart from "@/components/ui/investmentChart";
 import { Network } from "lucide-react";
+// import {Card,CardContent,CardHeader,CardTitle} from "@/components/ui/card";
 
 export default function Home() {
   return (
    <div className="flex flex-col">
-     <Navbar2/>
-    <Hero/>
-    <Faq/>
-    <LandFooter/>
-     <Layout>
      
       <div className="w-screen h-screen  gap-5 flex flex-col">
        
-        {/* <NavbarDemo/> */}
+        
        
-
-        {/* <Disclaimer /> */}
-        {/* <div className="flex gap-5"> */}
-        {/* <RiskProfile/> */}
-        {/* <StarterCard/> */}
-        {/* </div> */}
-        {/* <LandFooter/> */}
-        {/* <HeroImage/> */}
+              <Layout>
+        <Disclaimer /> 
+       <div className="flex gap-5"> 
+         <RiskProfile/> 
+         <NetWorth/>
+         <Allocation/>
+                  {/* <StarterCard/>  */}
+         
        
-        {/* <ThemeController /> */}
+        <ThemeController />
+        {/* <main className="flex min-h-screen felx-col items-center justify-content p-24">
+          <Card className="max-w-sm">
+            <CardHeader>
+              <image className="rounded-lg" width={500}
+              height={500}></image>
+            </CardHeader>
+          </Card>
+        </main> */}
         
       </div>
     </Layout>
+    </div>
    </div>
   );
 }

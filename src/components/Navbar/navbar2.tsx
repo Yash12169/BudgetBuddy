@@ -3,6 +3,9 @@ import "./Navbar.css";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { bricolage_grotesque, montserrat } from "@/fonts/fonts";
+import { Button } from "../ui/button";
+import { auth } from "../../../auth";
+import { handleSignOut } from "@/app/actions/authActions";
 export default function Navbar2() {
   const shimmerRef = useRef<HTMLSpanElement>(null);
   const searchRef = useRef<SVGSVGElement>(null);
@@ -92,6 +95,11 @@ export default function Navbar2() {
           className={`${bricolage_grotesque} bg-green-500 px-5 py-2 rounded-lg font-[500] text-white`}
         >
           <p>Create an Account</p>
+          <form action={handleSignOut}>
+            {/* <button variant ="default" type="submit">
+              Sign Out
+            </button> */}
+          </form>
         </div>
       </div>
     </nav>
