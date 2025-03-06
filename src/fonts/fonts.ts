@@ -1,4 +1,3 @@
-import exp from "constants";
 import { Bricolage_Grotesque, Fredoka, Montserrat, Poppins, Source_Sans_3 } from "next/font/google";
 
 const montserrat_init = Montserrat({

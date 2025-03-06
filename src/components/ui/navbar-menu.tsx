@@ -81,7 +81,6 @@ export const ProductItem = ({
   title,
   description,
   href,
-  src,
 }: {
   title: string;
   description: string;
@@ -102,6 +101,7 @@ export const ProductItem = ({
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const HoveredLink = ({ children, ...rest }: any) => {
   return (
     <Link
