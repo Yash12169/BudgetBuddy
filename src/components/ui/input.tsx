@@ -1,4 +1,5 @@
-<<<<<<< HEAD
+
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
@@ -21,7 +22,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
 Input.displayName = "Input"
 
 export { Input }
-=======
+
 "use client";
 import * as React from "react";
 import { cn } from "@/lib/utils";
@@ -82,4 +83,4 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 Input.displayName = "Input";
 
 export { Input };
->>>>>>> 486513cec03dba9c0a900f1777754efbfa1a6aea
+
