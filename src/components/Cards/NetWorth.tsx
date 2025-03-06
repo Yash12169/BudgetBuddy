@@ -4,7 +4,7 @@ import img from "../../assets/dash-icon-bulb.svg";
 import { montserrat, poppins } from "@/fonts/fonts";
 export default function NetWorth() {
   return (
-    <div className="pt-7  flex flex-col bg-accent text-accent-foreground shadow-lg w-[40%] rounded-[30px] justify-between gap-7">
+    <div className="pt-7  flex flex-col bg-accent text-accent-foreground shadow-lg w-[100%] h-[100%] rounded-[30px] justify-between gap-7">
       <div className=" px-7 h-[20%]">
         <div className={`${montserrat} font-[600] text-[20px]`}>
           <p>Net Worth</p>

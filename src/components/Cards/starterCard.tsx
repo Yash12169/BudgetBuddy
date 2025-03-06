@@ -6,7 +6,7 @@ import { montserrat, poppins } from "@/fonts/fonts";
 import RedBadge from "../ui/redBadge";
 export default function StarterCard() {
   return (
-    <div className="flex gap-4 flex-col w-[25%] px-5 py-5 bg-neutral text-neutral-content rounded-[30px]">
+    <div className="flex gap-4 flex-col w-[100%] h-[100%] px-5 py-5 bg-neutral text-neutral-content rounded-[30px]">
       <div className="bg--500 flex flex-col text-center items-center gap-4">
         <div
           className="rounded-full flex justify-center items-end bg--500 w-[25%]"
