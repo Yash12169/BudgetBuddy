@@ -1,10 +1,10 @@
-import { bricolage_grotesque, poppins } from "@/fonts/fonts";
+import { bricolage_grotesque, montserrat, poppins } from "@/fonts/fonts";
 import HeroImage from "../ui/heroImage";
 import mainshit from '../../assets/mainshit.webp'
 export default function Hero() {
   return (
     <div  style={{ backgroundImage: `url(${mainshit.src})`, backgroundSize: "cover", backgroundPosition: "center 90%" }}
-    className={` w-screen h-screen text-white   pt-[5%] flex `}>
+    className={` w-[100%] h-screen text-white   pt-[5%] flex `}>
       <div className="bgblue-500 w-[50%] flex flex-col pt-[8%] gap-7 ">
         <div className="bg-ble-500 flex w-[100%] justify-end ">
           <div className="flex bg--400 w-[70%]">
@@ -25,7 +25,7 @@ export default function Hero() {
         <div className="flex justify-end">
           <div className="w-[70%] gap-2 flex flex-col">
             <div className="bg-green-500 flex text-white px-7 py-3 w-fit rounded-lg  cursor-pointer">
-              <p className={`${bricolage_grotesque}`}>Get Started for Free</p>
+              <p className={`${montserrat} font-semibold`}>Get Started for Free</p>
             </div>
             <div className="flex">
                 <p className={`${poppins} text-sm`}>It's easy! No payment required.</p>

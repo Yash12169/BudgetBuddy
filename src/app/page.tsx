@@ -1,9 +1,11 @@
+import Accomplishments from "@/components/Accomplishments/accomplishments";
 import Allocation from "@/components/Cards/Allocation";
 import Disclaimer from "@/components/Cards/Disclaimer";
 import NetWorth from "@/components/Cards/NetWorth";
 import RiskProfile from "@/components/Cards/RiskProfile";
 import StarterCard from "@/components/Cards/starterCard";
 import Faq from "@/components/FAQ/faq";
+import Features from "@/components/Features/features";
 import LandFooter from "@/components/Footer/LandFooter/landFooter";
 import Hero from "@/components/Hero/hero";
 import Layout from "@/components/Layout/layout";
@@ -14,38 +16,33 @@ import ThemeController from "@/components/ThemeController/themeController";
 import HeroImage from "@/components/ui/heroImage";
 import InvestmentChart from "@/components/ui/investmentChart";
 import { Network } from "lucide-react";
-// import {Card,CardContent,CardHeader,CardTitle} from "@/components/ui/card";
 
 export default function Home() {
   return (
    <div className="flex flex-col">
+     <Navbar2/>
+    <Hero/>
+    <Faq/>
+    <LandFooter/>
+     <Layout>
      
       <div className="w-screen h-screen  gap-5 flex flex-col">
        
-        
+        {/* <NavbarDemo/> */}
        
-              <Layout>
-        <Disclaimer /> 
-       <div className="flex gap-5"> 
-         <RiskProfile/> 
-         <NetWorth/>
-         <Allocation/>
-                  {/* <StarterCard/>  */}
-         
+
+        {/* <Disclaimer /> */}
+        {/* <div className="flex gap-5"> */}
+        {/* <RiskProfile/> */}
+        {/* <StarterCard/> */}
+        {/* </div> */}
+        {/* <LandFooter/> */}
+        {/* <HeroImage/> */}
        
-        <ThemeController />
-        {/* <main className="flex min-h-screen felx-col items-center justify-content p-24">
-          <Card className="max-w-sm">
-            <CardHeader>
-              <image className="rounded-lg" width={500}
-              height={500}></image>
-            </CardHeader>
-          </Card>
-        </main> */}
+        {/* <ThemeController /> */}
         
       </div>
     </Layout>
-    </div>
    </div>
   );
 }

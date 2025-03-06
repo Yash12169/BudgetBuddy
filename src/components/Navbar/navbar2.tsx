@@ -3,9 +3,6 @@ import "./Navbar.css";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { bricolage_grotesque, montserrat } from "@/fonts/fonts";
-import { Button } from "../ui/button";
-import { auth } from "../../../auth";
-import { handleSignOut } from "@/app/actions/authActions";
 export default function Navbar2() {
   const shimmerRef = useRef<HTMLSpanElement>(null);
   const searchRef = useRef<SVGSVGElement>(null);
@@ -80,7 +77,6 @@ export default function Navbar2() {
               className="text-[1rem] font-semibold cursor-pointer opacity-90 relative group"
             >
               <p>{item}</p>
-              {/* Animated Border */}
               <div className="absolute bottom-0 left-0 h-[2px] bg-green-500 w-0 group-hover:animate-slideIn group-hover:group-hover-none animate-slideOut"></div>
             </div>
           ))}
@@ -88,18 +84,12 @@ export default function Navbar2() {
       </div>
 
       <div className=" flex gap-5 justify-center items-center">
-        <div className="hover:underline cursor-pointer">
-          <p>Log In</p>
-        </div>
-        <div
-          className={`${bricolage_grotesque} bg-green-500 px-5 py-2 rounded-lg font-[500] text-white`}
+        <LogInModal/>
+        <SignUpModal/>
+        {/* <div
+          className={`${montserrat}  bg-green-500 px-5 py-2 rounded-lg font-semibold cursor-pointer text-white`}
         >
           <p>Create an Account</p>
-          <form action={handleSignOut}>
-            {/* <button variant ="default" type="submit">
-              Sign Out
-            </button> */}
-          </form>
         </div>
       </div>
     </nav>
