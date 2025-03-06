@@ -5,40 +5,17 @@ import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import { montserrat } from "@/fonts/fonts";
-import { useSignUp } from "@clerk/nextjs";
 import { Island_Moments } from "next/font/google";
 import { Route } from "lucide-react";
-import { useRouter } from "next/router";
 
 export function SignupForm() {
-  const { signUp, isLoaded, setActive } = useSignUp();
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState<string | undefined>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
-  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(undefined);
-    if (!isLoaded) {
-      return;
-    }
-    try {
-      const signUpAttempt = await signUp.create({
-        emailAddress: email,
-        password,
-      });
-      if (signUpAttempt.status === "complete") {
-        await setActive({ session: signUpAttempt.createdSessionId });
-        router.push("/");
-      }
-    } catch (err: any) {
-      setError(err.error[0]?.message || "SignUp failed Please Try again later");
-    }
-
-    console.log("Form submitted");
   };
 
   return (
