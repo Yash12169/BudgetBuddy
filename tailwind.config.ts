@@ -8,6 +8,7 @@ const {
 
 /** @type {import('tailwindcss').Config} */
 const config: Config = {
+
   darkMode: "class",
   content: [
     "./src/**/*.{ts,tsx}",
@@ -96,7 +97,18 @@ const config: Config = {
       },
     },
   },
-  plugins: [daisyui, require("tailwindcss-animate"), addVariablesForColors],
+  plugins: [
+    daisyui,
+    require("tailwindcss-animate"),
+    function ({ addBase, theme }) {
+      let allColors = flattenColorPalette(theme("colors"));
+      let newVars = Object.fromEntries(
+        Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+      );
+      addBase({ ":root": newVars });
+    },
+  ],
+
   daisyui: {
     themes: [
       "light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave",

@@ -8,7 +8,12 @@ import { LoginForm } from "@/components/SignUp/loginForm";
 import Navbar2 from "@/components/Navbar/navbar2";
 import ExampleWrapper from "@/components/ui/modal";
 import { TextParallax } from "@/components/ui/textParallax";
+
+import SignUpModal from "@/components/SignUpForm/SignUpModal";
+import { SignupForm } from "@/components/SignUpForm/SignUpForm";
+
 import { ReactLenis } from "@studio-freight/react-lenis"; // Correct import
+
 
 export default function Home() {
   return (
