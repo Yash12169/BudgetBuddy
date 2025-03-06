@@ -1,5 +1,4 @@
 "use client";
-import "./Navbar.css";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import SignUpModal from "../SignUpForm/SignUpModal";
@@ -75,7 +74,7 @@ export default function Navbar2() {
           </h1>
         </div>
         <div className={`flex gap-[1.5rem] ${montserrat}`}>
-          {["Home", "Goals", "Finances"].map((item, index) => (
+          {["Home", "About", "Contact"].map((item, index) => (
             <div
               key={index}
               className="text-[1rem] font-semibold cursor-pointer opacity-90 relative group"
@@ -90,7 +89,11 @@ export default function Navbar2() {
       <div className=" flex gap-5 justify-center items-center">
         <LogInModal/>
         <SignUpModal/>
-       
+        {/* <div
+          className={`${montserrat}  bg-green-500 px-5 py-2 rounded-lg font-semibold cursor-pointer text-white`}
+        >
+          <p>Create an Account</p>
+        </div> */}
       </div>
     </nav>
   );

@@ -259,13 +259,7 @@ export default function HeroImage() {
       </svg>
       <div className="scale-[0.75] z-0" ref={floatRef}>
         <Image src={heroImage} alt="heroimage" />
-        
       </div>
-
-    
-      {/* <div className="w-[40%] rounded-[30px] opacity-50  bg-black " style={{clipPath:"Circle"}}>
-adf
-      </div> */}
     </div>
   );
 }

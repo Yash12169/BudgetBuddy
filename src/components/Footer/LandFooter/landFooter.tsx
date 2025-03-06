@@ -1,8 +1,4 @@
-import Image from "next/image";
-import youtube from "../../../assets/socials-youtube.svg";
-import twitter from "../../../assets/socials-twitter.svg";
-import instagram from "../../../assets/socials-instagram.svg";
-import { montserrat, poppins } from "@/fonts/fonts";
+import { montserrat } from "@/fonts/fonts";
 export default function LandFooter() {
   return (
     <div className="flex justify-center items-center p-3 bg-[#FFF8ED]" >

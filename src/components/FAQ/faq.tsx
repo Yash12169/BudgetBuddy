@@ -42,6 +42,7 @@ const faqs = [
 ];
 
 function Faq() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
   const iconRefs = useRef<(SVGSVGElement | null)[]>([]);
@@ -100,11 +101,11 @@ function Faq() {
             >
               <p className={`${montserrat} font-semibold`}>{faq.question}</p>
               <svg
-                ref={(el) => (iconRefs.current[index] = el)}
+                ref={(el) =>{ (iconRefs.current[index] = el || null)}}
                 width="30"
                 height="30"
                 viewBox="0 0 24 24"
-                fill="none"
+                fill="none" 
                 style={{ transform: "rotate(180deg)" }}
               >
                 <path
@@ -117,7 +118,7 @@ function Faq() {
               </svg>
             </div>
             <div
-              ref={(el) => (contentRefs.current[index] = el)}
+              ref={(el) => {(contentRefs.current[index] = el || null)}}
               className="overflow-hidden"
               style={{ height: 0, opacity: 0 }}
             >

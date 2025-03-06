@@ -1,10 +1,18 @@
 import type { Config } from "tailwindcss";
 import daisyui from "daisyui";
-import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
+import { default as flattenColorPalette } from "tailwindcss/lib/util/flattenColorPalette";
+const defaultTheme = require("tailwindcss/defaultTheme");
+const colors = require("tailwindcss/colors");
 
+/** @type {import('tailwindcss').Config} */
 const config: Config = {
-  darkMode: ["class"],
-  content: ["./src/**/*.{ts,tsx,js,jsx,mdx}"],
+  darkMode: "class",
+  content: [
+    "./src/**/*.{ts,tsx,js,jsx,mdx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
   	extend: {
   		colors: {
@@ -131,38 +139,11 @@ const config: Config = {
   ],
   daisyui: {
     themes: [
-      "light",
-      "dark",
-      "cupcake",
-      "bumblebee",
-      "emerald",
-      "corporate",
-      "synthwave",
-      "retro",
-      "cyberpunk",
-      "valentine",
-      "halloween",
-      "garden",
-      "forest",
-      "aqua",
-      "lofi",
-      "pastel",
-      "fantasy",
-      "wireframe",
-      "black",
-      "luxury",
-      "dracula",
-      "cmyk",
-      "autumn",
-      "business",
-      "acid",
-      "lemonade",
-      "night",
-      "coffee",
-      "winter",
-      "dim",
-      "nord",
-      "sunset",
+      "light", "dark", "cupcake", "bumblebee", "emerald", "corporate",
+      "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden",
+      "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black",
+      "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade",
+      "night", "coffee", "winter", "dim", "nord", "sunset",
     ],
   },
 };

@@ -16,3 +16,7 @@ authentication - Auth0
 
 
 hosting - Vercel
+
+
+##BudgetBuddy
+
