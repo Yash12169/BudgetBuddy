@@ -3,6 +3,8 @@ import "./Navbar.css";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { bricolage_grotesque, montserrat } from "@/fonts/fonts";
+import LogInModal from "../LogInForm/LogInModal";
+import SignUpModal from "../SignUpForm/SignUpModal";
 export default function Navbar2() {
   const shimmerRef = useRef<HTMLSpanElement>(null);
   const searchRef = useRef<SVGSVGElement>(null);
