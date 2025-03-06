@@ -7,7 +7,7 @@ import YellowBadge from "../ui/yellowBadge";
 import { montserrat, poppins } from "@/fonts/fonts";
 export default function RiskProfile() {
   return (
-    <div className="px-7 pt-7 flex flex-col bg-accent text-accent-foreground shadow-lg rounded-[30px] w-[40%] gap-7">
+    <div className="px-7 pt-7 flex flex-col bg-accent text-accent-foreground shadow-lg rounded-[30px] w-[100%] h-[100%] gap-7">
       <div className="h-[20%]">
         <div className={`${montserrat} font-[600] text-[20px]`}>
           <p>Risk Profile Summary</p>

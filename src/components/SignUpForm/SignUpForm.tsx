@@ -1,54 +1,98 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import {
-  IconBrandGithub,
-  IconBrandGoogle,
-} from "@tabler/icons-react";
+import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import { montserrat } from "@/fonts/fonts";
+import { Island_Moments } from "next/font/google";
+import { Route } from "lucide-react";
 
 export function SignupForm() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState<string | undefined>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted");
   };
+
   return (
-    <div className={ `${montserrat} max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-[#FFF8ED] text-[#1c1f58]`}>
-      <h2 className="font-semibold text-xl">
-        Welcome to BudgetBuddy
-      </h2>
+    <div
+      className={`${montserrat} max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-[#FFF8ED] text-[#1c1f58]`}
+    >
+      <h2 className="font-semibold text-xl">Welcome to BudgetBuddy</h2>
       <p className=" text-sm max-w-sm mt-2 ">
-      Take control of your finances create your BudgetBuddy account today!
-</p>
+        Take control of your finances create your BudgetBuddy account today!
+      </p>
 
       <form className="my-8" onSubmit={handleSubmit}>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4 text-[#1c1f58]">
           <LabelInputContainer>
-            <Label htmlFor="firstname" className="text-[#1c1f58]">First name</Label>
-            <Input id="firstname" placeholder="Peter" type="text" className="text-[#1c1f58]" />
+            <Label htmlFor="firstname" className="text-[#1c1f58]">
+              First name
+            </Label>
+            <Input
+              id="firstname"
+              value={firstname}
+              onChange={(e) => setFirstname(e.target.value)}
+              placeholder="Peter"
+              type="text"
+              className="text-[#1c1f58]"
+            />
           </LabelInputContainer>
           <LabelInputContainer>
-            <Label htmlFor="lastname" className="text-[#1c1f58]">Last name</Label>
-            <Input id="lastname" className="text-[#1c1f58]" placeholder="Griffin" type="text" />
+            <Label htmlFor="lastname" className="text-[#1c1f58]">
+              Last name
+            </Label>
+            <Input
+              value={lastname}
+              onChange={(e) => setLastname(e.target.value)}
+              id="lastname"
+              className="text-[#1c1f58]"
+              placeholder="Griffin"
+              type="text"
+            />
           </LabelInputContainer>
         </div>
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="email" className="text-[#1c1f58]">Email Address</Label>
-          <Input id="email" className="text-[#1c1f58]" placeholder="projectmayhem@fc.com" type="email" />
+          <Label htmlFor="email" className="text-[#1c1f58]">
+            Email Address
+          </Label>
+          <Input
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="text-[#1c1f58]"
+            placeholder="projectmayhem@fc.com"
+            type="email"
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="password" className="text-[#1c1f58]">Password</Label>
-          <Input id="password" className="text-[#1c1f58]" placeholder="••••••••" type="password" />
+          <Label htmlFor="password" className="text-[#1c1f58]">
+            Password
+          </Label>
+          <Input
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="text-[#1c1f58]"
+            placeholder="••••••••"
+            type="password"
+          />
         </LabelInputContainer>
-        <LabelInputContainer className="mb-8 " >
-          <Label htmlFor="confirmpassword" className="text-[#1c1f58] ">Confirm Password</Label>
+        <LabelInputContainer className="mb-8 ">
+          <Label htmlFor="confirmpassword" className="text-[#1c1f58] ">
+            Confirm Password
+          </Label>
           <Input
             id="confirmpassword"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="••••••••"
             className="text-[#1c1f58] "
-            type="confirmpassword"
+            type="password"
           />
         </LabelInputContainer>
 
@@ -67,10 +111,9 @@ export function SignupForm() {
             className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full  rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
             type="submit"
           >
+            <div id="clerk-captcha" />
             <IconBrandGithub className="h-4 w-4 " />
-            <span className=" text-sm">
-              GitHub
-            </span>
+            <span className=" text-sm">GitHub</span>
             <BottomGradient />
           </button>
           <button
@@ -78,12 +121,9 @@ export function SignupForm() {
             type="submit"
           >
             <IconBrandGoogle className="h-4 w-4 " />
-            <span className="text-sm">
-              Google
-            </span>
+            <span className="text-sm">Google</span>
             <BottomGradient />
           </button>
-         
         </div>
       </form>
     </div>
