@@ -58,6 +58,7 @@ export const ContainerScroll = ({
   );
 };
 
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Header = ({ translate, titleComponent }: any) => {
   return (
@@ -75,6 +76,8 @@ export const Header = ({ translate, titleComponent }: any) => {
 export const Card = ({
   rotate,
   scale,
+  translate,
+
   children,
 }: {
   rotate: MotionValue<number>;

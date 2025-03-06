@@ -1,9 +1,14 @@
 "use client";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { bricolage_grotesque, montserrat, poppins } from "@/fonts/fonts";
+import SignUpModal from "../SignUpForm/SignUpModal";
+import LogInModal from "../LogInForm/LogInModal";
+
 import { montserrat } from "@/fonts/fonts";
 import SignUpModal from "../ui/signUpModal";
 import LoginModal from "../Login/loginModal";
+
 export default function Navbar2() {
   const shimmerRef = useRef<HTMLSpanElement>(null);
   const searchRef = useRef<SVGSVGElement>(null);
@@ -78,7 +83,6 @@ export default function Navbar2() {
               className="text-[1rem] font-semibold cursor-pointer opacity-90 relative group"
             >
               <p>{item}</p>
-              {/* Animated Border */}
               <div className="absolute bottom-0 left-0 h-[2px] bg-green-500 w-0 group-hover:animate-slideIn group-hover:group-hover-none animate-slideOut"></div>
             </div>
           ))}
@@ -86,7 +90,7 @@ export default function Navbar2() {
       </div>
 
       <div className=" flex gap-5 justify-center items-center">
-        <LoginModal/>
+        <LogInModal/>
         <SignUpModal/>
       </div>
     </nav>
