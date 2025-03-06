@@ -1,17 +1,14 @@
 import type { Config } from "tailwindcss";
 import daisyui from "daisyui";
+import { default as flattenColorPalette } from "tailwindcss/lib/util/flattenColorPalette";
 const defaultTheme = require("tailwindcss/defaultTheme");
 const colors = require("tailwindcss/colors");
-const {
-  default: flattenColorPalette,
-} = require("tailwindcss/lib/util/flattenColorPalette");
 
 /** @type {import('tailwindcss').Config} */
 const config: Config = {
-
   darkMode: "class",
   content: [
-    "./src/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx,js,jsx,mdx}",
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -108,26 +105,15 @@ const config: Config = {
       addBase({ ":root": newVars });
     },
   ],
-
   daisyui: {
     themes: [
-      "light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave",
-      "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua",
-      "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk",
-      "autumn", "business", "acid", "lemonade", "night", "coffee", "winter", "dim",
-      "nord", "sunset",
+      "light", "dark", "cupcake", "bumblebee", "emerald", "corporate",
+      "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden",
+      "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black",
+      "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade",
+      "night", "coffee", "winter", "dim", "nord", "sunset",
     ],
   },
 };
-
-function addVariablesForColors({ addBase, theme }: any) {
-  let allColors = flattenColorPalette(theme("colors"));
-  let newVars = Object.fromEntries(
-    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
-  );
-  addBase({
-    ":root": newVars,
-  });
-}
 
 export default config;

@@ -1,5 +1,11 @@
-"use client";
+
 import Accomplishments from "@/components/Accomplishments/accomplishments";
+import Allocation from "@/components/Cards/Allocation";
+import Disclaimer from "@/components/Cards/Disclaimer";
+import NetWorth from "@/components/Cards/NetWorth";
+import RiskProfile from "@/components/Cards/RiskProfile";
+import StarterCard from "@/components/Cards/starterCard";
+
 import Faq from "@/components/FAQ/faq";
 import Features from "@/components/Features/features";
 import LandFooter from "@/components/Footer/LandFooter/landFooter";
