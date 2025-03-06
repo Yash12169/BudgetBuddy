@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-
 import { bricolage_grotesque, montserrat, poppins } from "@/fonts/fonts";
 import SignUpModal from "../SignUpForm/SignUpModal";
 import LogInModal from "../LogInForm/LogInModal";
