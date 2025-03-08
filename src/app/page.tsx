@@ -16,12 +16,10 @@ import { TextParallax } from "@/components/ui/textParallax";
 import SignUpModal from "@/components/SignUpForm/SignUpModal";
 import { SignupForm } from "@/components/SignUpForm/SignUpForm";
 
-import { ReactLenis } from "@studio-freight/react-lenis"; // Correct import
 
 
 export default function Home() {
   return (
-    <ReactLenis root>
       <div className="flex flex-col gap-[8rem] bg-[#FFF8ED] pb-[2.5rem]">
         <Navbar2 />
         <Hero />
@@ -31,6 +29,5 @@ export default function Home() {
         <Faq />
         <LandFooter />
       </div>
-    </ReactLenis>
   );
 }

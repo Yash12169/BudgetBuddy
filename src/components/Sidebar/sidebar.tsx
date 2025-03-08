@@ -20,6 +20,7 @@ import NetWorth from "../Cards/NetWorth";
 import StarterCard from "../Cards/starterCard";
 import FinancialScore from "../Cards/FinancialScore";
 import Habits from "../Cards/Habits";
+import Debt from "../Cards/Debt";
 
 export default function Sidebar() {
 
@@ -71,8 +72,8 @@ export default function Sidebar() {
             <div className="aspect-video rounded-xl bg-accent shadow-lg">
               <Habits />
             </div>
-            <div className="aspect-video rounded-xl bg-red-500">
-              <Habits />
+            <div className="aspect-video rounded-xl bg-accent shadow-lg">
+              <Debt />
             </div>
             <div className="aspect-video rounded-xl bg-red-500">
               <Habits />

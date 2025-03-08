@@ -19,16 +19,48 @@ model User{
   email String @unique
   firstName String
   lastName String
+  password String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
+  financial financials?
+  debt debt[]
+  emergencyFund emergencyFund?
+
 }
 
-
-
-model BasicFinancials{
+model financials{
   id Int @id @default(autoincrement())
-  userId String
-  salary Int 
+  userId Int @unique
+  salary Int
   expenses Int
   extraExpenses Int
   insurancePremium Int
-  emi Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User  @relation(fields: [userId],references: [id],onDelete: Cascade)
+}
+
+model debt{
+  id Int @id @default(autoincrement())
+  userId Int @unique
+  loanAmount Int
+  loanTenure Int
+  interestRate Int
+  emiAmount Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+}
+
+model emergencyFund{
+  id Int @id @default(autoincrement())
+  userId Int @unique
+  amount Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
 }
