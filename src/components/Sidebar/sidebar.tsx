@@ -1,3 +1,4 @@
+"use client";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
@@ -21,8 +22,19 @@ import StarterCard from "../Cards/starterCard";
 import FinancialScore from "../Cards/FinancialScore";
 import Habits from "../Cards/Habits";
 import Debt from "../Cards/Debt";
+import { useEffect } from "react";
+import axios from "axios";
+import ThemeController from "../ThemeController/themeController";
 
 export default function Sidebar() {
+
+
+
+  const id = 1;
+
+
+
+
 
   return (
     <SidebarProvider>
@@ -35,10 +47,14 @@ export default function Sidebar() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
+                  <BreadcrumbLink href="/user/dashboard">
+                    Dashboard
                   </BreadcrumbLink>
                 </BreadcrumbItem>
+                <BreadcrumbSeparator className="hidden md:block" />
+                <BreadcrumbLink href="/user/financials">
+                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                </BreadcrumbLink>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
                   <BreadcrumbPage>Data Fetching</BreadcrumbPage>
@@ -46,6 +62,7 @@ export default function Sidebar() {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
+          <ThemeController/>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <div className="grid auto-rows-min gap-4 md:grid-cols-2">

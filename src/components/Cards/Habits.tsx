@@ -9,17 +9,17 @@ export default function Habits() {
   const [salary,setSalary] = useState("")
   const [savings,setSavings] = useState("")
   const [expenses,setExpenses] = useState()
-  useEffect(()=>{
-    const fetchData = async () => {
+  // useEffect(()=>{
+  //   const fetchData = async () => {
     
-      const data = await axios.post("/api/fetch-financials")
-      setSalary(data.data.data.salary)
-      setSavings(data.data.data.savingsPercent)
-      setExpenses(100-parseInt(data.data.data.savingsPercent))
-    }
-    fetchData()
+  //     const data = await axios.post("/api/fetch-financials")
+  //     setSalary(data.data.data.salary)
+  //     setSavings(data.data.data.savingsPercent)
+  //     setExpenses(100-parseInt(data.data.data.savingsPercent))
+  //   }
+  //   fetchData()
     
-  })
+  // })
 
   return (
     <div className="flex flex-col p-5 gap-9">

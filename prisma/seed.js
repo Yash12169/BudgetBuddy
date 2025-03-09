@@ -13,6 +13,16 @@ async function main() {
         password: faker.internet.password(),
       },
     });
+    await prisma.financials.create({
+      data:{
+        userId: i+1,
+        salary: faker.number.int({min: 15000,max: 50000}),
+        expenses: faker.number.int({min: 5000,max: 10000}),
+        extraExpenses: faker.number.int({min: 2000,max: 5000}),
+        insurancePremium: faker.number.int({min: 500,max: 1000})
+
+      }
+    })
   }
 }
 
