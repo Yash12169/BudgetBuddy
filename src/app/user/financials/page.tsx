@@ -1,37 +1,23 @@
 "use client"
-
 import { useRouter } from "next/navigation"
 import { FormEvent } from 'react'
+import axios from "axios";
 
-export default function BasicFinancialForm() {
+export default function Home() {
     const router = useRouter()
     
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => { 
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
         const formValues = Object.fromEntries(formData.entries())
-        
+        console.log(formData)
         try {
-            // Update this URL to match your actual API route
-            const res = await fetch("/api/BasicFinancials", {
-                method: "POST",
-                body: JSON.stringify(formValues),
-                headers: {"Content-Type": "application/json"}
-            })
-            
-            if (!res.ok) {
-                throw new Error('Failed to submit form')
-            }
-            
-            // Parse the response
-            const data = await res.json()
-            console.log("Response:", data)
-            
-            // Navigate to dashboard on success
+            const res = await axios.post("/api/financials",formValues,{
+                headers: { "Content-Type": "application/json" },
+            })            
             router.push("/user/dashboard")
         } catch (error) {
             console.error("Error submitting form:", error)
-            // Handle error (show message to user, etc.)
         }
     }
     
