@@ -1,11 +1,15 @@
   "use client";
   import { userAtom } from "@/atoms/atoms";
+import { useUser } from "@clerk/nextjs";
   import axios from "axios";
   import { useAtom } from "jotai";
   import { useEffect } from "react";
   export default function UserProvider({ children}) {
+    const userC = useUser()
+    console.log("clerk",userC.user?.imageUrl)
     const [user, setUser] = useAtom(userAtom);
-    const id = 1;
+    const id = userC.user?.id;
+    console.log(id)
     useEffect(() => {
       const fetchUserData = async () => {
         try {
