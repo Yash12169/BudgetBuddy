@@ -22,15 +22,12 @@ import StarterCard from "../Cards/starterCard";
 import FinancialScore from "../Cards/FinancialScore";
 import Habits from "../Cards/Habits";
 import Debt from "../Cards/Debt";
-import { useEffect } from "react";
-import axios from "axios";
 import ThemeController from "../ThemeController/themeController";
+import { SignOutButton } from "@clerk/nextjs";
 
 export default function Sidebar() {
 
 
-
-  const id = 1;
 
 
 
@@ -63,13 +60,14 @@ export default function Sidebar() {
             </Breadcrumb>
           </div>
           <ThemeController/>
+          <SignOutButton/>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-2">
-            <div className="aspect-video rounded-xl bg-green-500">
+          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+            <div className="rounded-xl h-fit w-full">
               <StarterCard />
             </div>
-            <div className="aspect-video rounded-xl bg-red-500">
+            <div className="rounded-xl h-fit bg-red-500 col-span-2 ">
               <RiskProfile />
             </div>
           </div>

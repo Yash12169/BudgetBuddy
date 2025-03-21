@@ -3,12 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const id = params.id;
     const user = await prisma.user.findUnique({
-      where: { id: Number(id) },
+      where: { id: String(id) },
       include: {financial: true,debt: true},
     });
     if (!user)

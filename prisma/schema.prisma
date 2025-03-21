@@ -15,24 +15,24 @@ datasource db {
 
 
 model User{
-  id Int @id @default(autoincrement())
+  id String @id 
   email String @unique
   firstName String
   lastName String
-  password String
+  profileImage String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
 
 
   financial financials?
   debt debt[]
   emergencyFund emergencyFund?
-
 }
 
 model financials{
-  id Int @id @default(autoincrement())
-  userId Int @unique
+  id String @id 
+  userId String @unique
   salary Int
   expenses Int
   extraExpenses Int
@@ -44,8 +44,8 @@ model financials{
 }
 
 model debt{
-  id Int @id @default(autoincrement())
-  userId Int @unique
+  id String @id 
+  userId String @unique
   loanAmount Int
   loanTenure Int
   interestRate Int
@@ -57,8 +57,8 @@ model debt{
 }
 
 model emergencyFund{
-  id Int @id @default(autoincrement())
-  userId Int @unique
+  id String @id 
+  userId String @unique
   amount Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

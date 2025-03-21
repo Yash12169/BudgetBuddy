@@ -13,7 +13,6 @@ export default function Navbar2() {
   const linkedinRef = useRef<SVGSVGElement>(null);
   const githubRef = useRef<SVGSVGElement>(null);
 
-  //shimmer
   useEffect(() => {
     const shimmer = shimmerRef.current;
     const shimmerParent = shimmerParentRef.current;
@@ -89,11 +88,6 @@ export default function Navbar2() {
       <div className=" flex gap-5 justify-center items-center">
         <LogInModal/>
         <SignUpModal/>
-        {/* <div
-          className={`${montserrat}  bg-green-500 px-5 py-2 rounded-lg font-semibold cursor-pointer text-white`}
-        >
-          <p>Create an Account</p>
-        </div> */}
       </div>
     </nav>
   );
