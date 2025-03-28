@@ -10,6 +10,12 @@ const calcualteSavingScore=(savings: number):number=>{
   if(savings >= 10) return 20
   return 0;
 }
+const formatSalary = (amount: number): string => {
+  if (!amount || isNaN(amount)) return "₹0";
+  if (amount < 100000) return `₹${Math.round(amount/1000)}K`;
+  if (amount < 10000000) return `₹${(amount/100000).toFixed(1)}L`;
+  return `₹${(amount/10000000).toFixed(1)}Cr`;
+};
 export async function GET(req: NextRequest,{params}:{params:{userId:string}}) {
   try {
     const userId = Number(params.userId);
@@ -33,7 +39,7 @@ export async function GET(req: NextRequest,{params}:{params:{userId:string}}) {
 
     
     return NextResponse.json(
-      { success: true, message: "Financial data fetched", data: {salary:data.salary,expenses:data.expenses,savingsPercent:savingPercent,savingScore:savingScore} },
+      { success: true, message: "Financial data fetched", data: {salary:data.salary,expenses:data.expenses,savingsPercent:savingPercent,savingScore:savingScore,formattedSalary:formatSalary(data.salary)} },
       { status: 200 }
     );
   } catch (error: any) {

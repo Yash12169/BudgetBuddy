@@ -14,7 +14,7 @@ import Navbar2 from "@/components/Navbar/navbar2";
 import { TextParallax } from "@/components/ui/textParallax";
 
 import SignUpModal from "@/components/SignUpForm/SignUpModal";
-import { SignupForm } from "@/components/SignUpForm/SignUpForm";
+import { SignupForm } from "../components/SignUpForm/SignUpForm";
 
 
 
@@ -28,6 +28,7 @@ export default function Home() {
         <Features />
         <Faq />
         <LandFooter />
+      
       </div>
   );
 }

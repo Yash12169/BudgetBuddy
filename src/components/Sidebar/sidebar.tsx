@@ -24,6 +24,7 @@ import Habits from "../Cards/Habits";
 import Debt from "../Cards/Debt";
 import ThemeController from "../ThemeController/themeController";
 import { SignOutButton } from "@clerk/nextjs";
+import EmergencyFund from "../Cards/EmergencyFund";
 
 export default function Sidebar() {
 
@@ -90,8 +91,8 @@ export default function Sidebar() {
             <div className="aspect-video rounded-xl bg-accent shadow-lg">
               <Debt />
             </div>
-            <div className="aspect-video rounded-xl bg-red-500">
-              <Habits />
+            <div className="aspect-video rounded-xl bg-inherit">
+              <EmergencyFund />
             </div>
           </div>
           <Disclaimer />

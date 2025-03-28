@@ -8,6 +8,7 @@ export default function page() {
       <Sidebar/>
 
       </Layout>
+     
 
     </div>
   )
