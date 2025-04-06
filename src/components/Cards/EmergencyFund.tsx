@@ -55,7 +55,7 @@ export default function EmergencyFund() {
   }, []);
 
   return (
-    <div className="flex flex-col p-5 gap-9">
+    <div className="flex flex-col p-5 h-[45vh] justify-between text-black">
       <div className="flex flex-col items-center gap-5">
         <div className="p-5 rounded-full bg-gray-200">
           <Image src={card} alt="Emergency Fund" width={60} height={60} />

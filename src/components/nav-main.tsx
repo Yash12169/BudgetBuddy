@@ -1,7 +1,7 @@
 "use client"
 
 import { ChevronRight, type LucideIcon } from "lucide-react"
-
+import { useRouter } from "next/navigation"
 import {
   Collapsible,
   CollapsibleContent,
@@ -17,6 +17,15 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+// const titleParser = (title: string) => {
+//   const words = title.trim().split(" ");
+//   let ans = "";
+//   words.forEach((word, i) => {
+//     if (i > 0) ans += "-";
+//     ans += word.toLowerCase();
+//   });
+//   return ans;
+// };
 
 export function NavMain({
   items,
@@ -32,6 +41,7 @@ export function NavMain({
     }[]
   }[]
 }) {
+  const router = useRouter();
   return (
     <SidebarGroup>
       <SidebarGroupLabel></SidebarGroupLabel>
@@ -43,8 +53,10 @@ export function NavMain({
             defaultOpen={item.isActive}
             className="group/collapsible"
           >
+            
             <SidebarMenuItem className="">
-              <div  className="">
+              <div onClick={()=>{router.push(item.url)}}>
+                
                 <SidebarMenuButton tooltip={item.title} className="">
                   {item.icon && <item.icon  />}
                   <span className="">{item.title}</span>

@@ -2,7 +2,6 @@
 import Image from "next/image";
 import img from "../../assets/level3risk.png";
 import img2 from "../../assets/dash-icon-bulb.svg";
-
 import YellowBadge from "../ui/yellowBadge";
 import { montserrat, poppins } from "@/fonts/fonts";
 export default function RiskProfile() {

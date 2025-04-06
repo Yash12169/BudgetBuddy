@@ -7,20 +7,28 @@ const calcualteSavingScore=(savings: number):number=>{
   if(savings >=  40) return 80;
   if(savings >= 30) return 60;
   if(savings >= 20) return 40;
-  if(savings >= 10) return 20
+  if(savings >= 10) return 20;
   return 0;
+}
+const calcualteSavingStatus=(savings: number):string=>{
+  if(savings >= 50) return "Strong";
+  if(savings >=  40) return "Strong";
+  if(savings >= 30) return "Moderate";
+  if(savings >= 20) return "Moderate";
+  if(savings >= 10) return "Weak";
+  return "Weak";
 }
 const formatSalary = (amount: number): string => {
   if (!amount || isNaN(amount)) return "₹0";
   if (amount < 100000) return `₹${Math.round(amount/1000)}K`;
-  if (amount < 10000000) return `₹${(amount/100000).toFixed(1)}L`;
-  return `₹${(amount/10000000).toFixed(1)}Cr`;
+  if (amount < 10000000) return `₹${(amount/100000).toFixed(2)}L`;
+  return `₹${(amount/10000000).toFixed(2)}Cr`;
 };
 export async function GET(req: NextRequest,{params}:{params:{userId:string}}) {
   try {
-    const userId = Number(params.userId);
-    const data = await prisma.financials.findUnique({ 
-      where: { id: userId } 
+    const userId = params.userId;
+    const data = await prisma.financials.findUnique({
+      where: { userId: userId }
     });
     
     if(!data){
@@ -36,15 +44,13 @@ export async function GET(req: NextRequest,{params}:{params:{userId:string}}) {
 
 
     const savingScore = calcualteSavingScore(savingPercent);
-
+    const savingStatus = calcualteSavingStatus(savingPercent)
     
     return NextResponse.json(
-      { success: true, message: "Financial data fetched", data: {salary:data.salary,expenses:data.expenses,savingsPercent:savingPercent,savingScore:savingScore,formattedSalary:formatSalary(data.salary)} },
+      { success: true, message: "Financial data fetched", data: {salary:formatSalary(data.salary),expenses:data.expenses,savingsPercent:savingPercent,savingScore:savingScore,savingStatus: savingStatus} },
       { status: 200 }
     );
-  } catch (error: any) {
-    console.error("Error fetching financial data:", error);
-    
+  } catch (error: any) {    
     return NextResponse.json(
       { success: false, message: "Error fetching data", error: error.message },
       { status: 500 }

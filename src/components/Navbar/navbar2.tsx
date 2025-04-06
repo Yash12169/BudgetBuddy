@@ -4,14 +4,17 @@ import gsap from "gsap";
 import SignUpModal from "../SignUpForm/SignUpModal";
 import LogInModal from "../LogInForm/LogInModal";
 import { montserrat } from "@/fonts/fonts";
-
-
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 export default function Navbar2() {
   const shimmerRef = useRef<HTMLSpanElement>(null);
   const searchRef = useRef<SVGSVGElement>(null);
   const shimmerParentRef = useRef<HTMLButtonElement>(null);
   const linkedinRef = useRef<SVGSVGElement>(null);
   const githubRef = useRef<SVGSVGElement>(null);
+  const userC = useUser();
+  const router = useRouter()
+
 
   useEffect(() => {
     const shimmer = shimmerRef.current;
@@ -84,11 +87,29 @@ export default function Navbar2() {
           ))}
         </div>
       </div>
+      {!userC.isSignedIn && (
+        <div className=" flex gap-5 justify-center items-center">
+          <LogInModal />
+          <SignUpModal />
+        </div>
+      )}
+      { userC.isSignedIn && (
+        <div>
+        <div
+         onClick={() => (router.push("/user/dashboard"))}
+            className={`${montserrat}  bg-green-500 px-5 py-2 rounded-lg font-semibold cursor-pointer text-white`}
+          >
+            <p>Dashboard</p>
+          </div>
+      </div>
+      )
 
-      <div className=" flex gap-5 justify-center items-center">
+      }
+      {/* <div className=" flex gap-5 justify-center items-center">
         <LogInModal/>
         <SignUpModal/>
-      </div>
+        {console.log("nav",userC.isSignedIn)}
+      </div> */}
     </nav>
   );
 }
