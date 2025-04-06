@@ -6,5 +6,7 @@
 
 */
 -- AlterTable
-ALTER TABLE "emergencyFund" DROP COLUMN "amount",
-ADD COLUMN     "emergencyFund" DOUBLE PRECISION NOT NULL;
+--ALTER TABLE "emergencyFund" DROP COLUMN "amount",
+--ADD COLUMN     "emergencyFund" DOUBLE PRECISION NOT NULL;
+ALTER TABLE "emergencyFund"
+ADD COLUMN "emergencyFund" DOUBLE PRECISION NOT NULL;

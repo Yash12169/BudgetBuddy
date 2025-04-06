@@ -58,10 +58,10 @@ async function main() {
 
   // 5. Upsert emergency fund
   await prisma.emergencyFund.upsert({
-    where: { userId: "user_abc123" },
+    where: { userId},
     update: { emergencyFund: 50000, salary: 15000, status: "secure" },
     create: {
-      userId: "user_abc123",
+      userId,
       emergencyFund: 50000,
       salary: 15000,
       status: "secure",
