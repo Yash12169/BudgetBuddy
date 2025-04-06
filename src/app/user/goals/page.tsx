@@ -1,12 +1,12 @@
+import Goals from "@/components/Cards/Goals";
 import Layout from "@/components/Layout/layout";
-import Sidebar from "@/components/Sidebar/sidebar";
+import GoalSidebar from "@/components/Sidebar/GoalSidebar";
 
 export default function page() {
   return (
     <div>
       <Layout>
-      <Sidebar/>
-
+        <GoalSidebar/>
       </Layout>
      
 

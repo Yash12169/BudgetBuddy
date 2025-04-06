@@ -15,18 +15,28 @@ async function main() {
     //     password: faker.internet.password(),
     //   },
     // });
-    await prisma.financials.create({
-      data:{
-        id: "user_2uGEVCVsBBTBRsEZzNWCMsb5r3N",
-        userId:"user_2uGEVCVsBBTBRsEZzNWCMsb5r3N",
-        salary: faker.number.int({min: 15000,max: 50000}),
-        expenses: faker.number.int({min: 5000,max: 10000}),
-        extraExpenses: faker.number.int({min: 2000,max: 5000}),
-        insurancePremium: faker.number.int({min: 500,max: 1000})
+    // await prisma.financials.create({
+    //   data:{
+    //     id: "user_2uGEVCVsBBTBRsEZzNWCMsb5r3N",
+    //     userId:"user_2uGEVCVsBBTBRsEZzNWCMsb5r3N",
+    //     salary: faker.number.int({min: 15000,max: 50000}),
+    //     expenses: faker.number.int({min: 5000,max: 10000}),
+    //     extraExpenses: faker.number.int({min: 2000,max: 5000}),
+    //     insurancePremium: faker.number.int({min: 500,max: 1000})
 
-      }
-    })
+    //   }
+    // })
   // }
+
+
+
+  await prisma.emergencyFund.create({
+    data:{
+      id: "user_2uGEVCVsBBTBRsEZzNWCMsb5r3N",
+      userId:"user_2uGEVCVsBBTBRsEZzNWCMsb5r3N",
+      emergencyFund: faker.number.int({min: 19000,max:120000}),
+    }
+  })
 }
 
 main()
