@@ -2,7 +2,17 @@ import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
-
+export async function GET() {
+  try{
+    const emergencyFund=await prisma.emergencyFund.findMany();
+    return NextResponse.json({success:true,data:emergencyFund});
+  }
+  catch(err:any){
+    return NextResponse.json(
+      {success:false,message:err.message},{status:500}
+    );
+  }
+}
 interface EmergencyFundStatus {
   monthsCovered: number;
   status: 'critical' | 'danger' | 'warning' | 'moderate' | 'secure';
@@ -50,7 +60,7 @@ const calculateEmergencyStatus = (emergencyFund: number, salary: number): Emerge
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    const userId = 1; 
+    const userId = String(data.userId); 
     const emergencyFund = Number(data.emergencyFund) || 0;
     const salary = Number(data.salary) || 0;
 
