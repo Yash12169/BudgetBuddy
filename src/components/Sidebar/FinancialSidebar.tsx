@@ -15,6 +15,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import Allocation from "../Cards/Allocation";
+import RiskProfile from "../Cards/RiskProfile";
 import Disclaimer from "../Cards/Disclaimer";
 import NetWorth from "../Cards/NetWorth";
 import StarterCard from "../Cards/starterCard";
@@ -26,9 +27,8 @@ import { SignOutButton } from "@clerk/nextjs";
 import EmergencyFund from "../Cards/EmergencyFund";
 import Goals from "../Cards/Goals";
 import GoalTracker from "../Cards/GoalTracker";
-import { useRouter } from "next/navigation";
-export default function Sidebar() {
-  const router = useRouter();
+
+export default function FinancialSidebar() {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -41,7 +41,7 @@ export default function Sidebar() {
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
                   <BreadcrumbLink href="/user/dashboard">
-                    Dashboard
+                    Financial Checkup
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
@@ -59,31 +59,20 @@ export default function Sidebar() {
           <SignOutButton />
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="rounded-xl h-fit w-full">
-              <StarterCard />
-            </div>
-            <div className="rounded-xl h-fit col-span-2 ">
-              <GoalTracker />
-            </div>
-          </div>
           <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
           <FinancialScore />
           </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
-          
-            <Goals />
-          </div>
-          <div className="grid auto-rows-min gap-4 md:grid-cols-2">
-            <div className="aspect-video rounded-xl bg-green-500">
-              <NetWorth />
+          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+            <div className="aspect-video rounded-xl bg-accent shadow-lg">
+              <Habits />
             </div>
-            <div className="aspect-video rounded-xl bg-red-500">
-              <Allocation />
+            <div className="aspect-video rounded-xl bg-accent shadow-lg">
+              <Debt />
+            </div>
+            <div className="aspect-video rounded-xl bg-accent shadow-lg">
+              <EmergencyFund />
             </div>
           </div>
-
-          
           <Disclaimer />
 
           <div className="min-h-[100vh] flex-1 rounded-xl bg-pink-300 md:min-h-min" />
