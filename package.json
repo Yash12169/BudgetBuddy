@@ -2,11 +2,13 @@
   "name": "budgetbuddy",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "node prisma/seed.js"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
@@ -16,7 +18,7 @@
     "@hookform/resolvers": "^4.1.3",
     "@mantine/core": "^7.16.3",
     "@mantine/hooks": "^7.16.3",
-    "@prisma/client": "^6.4.1",
+    "@prisma/client": "^6.5.0",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-avatar": "^1.1.3",
     "@radix-ui/react-collapsible": "^1.1.3",
@@ -27,24 +29,28 @@
     "@radix-ui/react-separator": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.8",
+    "@swc/helpers": "^0.5.15",
     "@tabler/icons-react": "^3.30.0",
-    "axios": "^1.8.1",
+    "@tanstack/react-query": "^5.71.10",
+    "axios": "^1.8.4",
     "bcrypt": "^5.1.1",
     "chart.js": "^4.4.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^16.4.7",
     "framer-motion": "^12.4.9",
     "gsap": "^3.12.7",
     "init": "^0.1.2",
     "jotai": "^2.11.3",
     "lucide-react": "^0.474.0",
-    "next": "15.1.6",
+    "next": "^15.2.4",
     "next-auth": "^5.0.0-beta.25",
     "nodemailer": "^6.10.0",
     "pg": "^8.13.3",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.55.0",
     "react-icons": "^5.5.0",
     "react-mui-sidebar": "^1.6.0",
     "react-router-dom": "^7.2.0",
@@ -57,7 +63,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@faker-js/faker": "^9.6.0",
-    "@types/node": "^20.17.22",
+    "@types/node": "^20.17.30",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "daisyui": "^4.12.23",
@@ -67,6 +73,6 @@
     "prisma": "^6.4.1",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   }
 }

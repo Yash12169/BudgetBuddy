@@ -2,7 +2,12 @@
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient(); 
-
+const formatSalary = (amount: number): string => {
+  if (!amount || isNaN(amount)) return "₹0";
+  if (amount < 100000) return `₹${Math.round(amount/1000)}K`;
+  if (amount < 10000000) return `₹${(amount/100000).toFixed(1)}L`;
+  return `₹${(amount/10000000).toFixed(1)}Cr`;
+};
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
