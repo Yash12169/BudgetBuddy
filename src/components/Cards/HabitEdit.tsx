@@ -1,0 +1,237 @@
+"use client";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAtom } from "jotai";
+import finWeak from "../../assets/financial-health-icon-weak.svg";
+import finAverage from "../../assets/financial-health-icon-average.svg";
+import finStrong from "../../assets/financial-health-icon-good.svg";
+import { montserrat, poppins } from "@/fonts/fonts";
+import { debtAtom, financialAtom } from "@/atoms/atoms";
+import axios from "axios";
+import { useUser } from "@clerk/nextjs";
+
+const formatNumber = (value: string | number): string => {
+  const str = value.toString().replace(/,/g, "");
+  if (str === "" || isNaN(Number(str))) return "";
+  const [whole, decimal] = str.split(".");
+  const lastThree = whole.slice(-3);
+  const other = whole.slice(0, -3);
+  const formatted =
+    other.replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
+    (other ? "," : "") +
+    lastThree;
+  return decimal ? `${formatted}.${decimal}` : formatted;
+};
+
+const parseNumber = (value: string): number => {
+  const clean = value.replace(/,/g, "");
+  return isNaN(Number(clean)) ? 0 : Number(clean);
+};
+
+export default function HabitEdit() {
+  const router = useRouter();
+  const [financials] = useAtom(financialAtom);
+  const [debt] = useAtom(debtAtom);
+  const [totalScore, setTotalScore] = useState(0);
+  const [width, setWidth] = useState(0);
+  const [id,setId] = useState("");
+  const user = useUser()
+  useEffect(() => {
+    router.refresh();
+  }, []);
+  const [formValues, setFormValues] = useState({
+    income: "",
+    basic: "",
+    extra: "",
+    emi: "",
+    insurance: "",
+  });
+
+  const maxLimits = {
+    income: 100000000000,
+    basic: 100000000000,
+    extra: 100000000000,
+    emi: 100000000000,
+    insurance: 100000000000,
+  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setWidth(totalScore);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [totalScore]);
+  useEffect(() => {
+   
+    if (financials && debt ) {
+      setTotalScore(financials.data.savingScore);      
+      const salary = financials.data.amount;
+      const expenses = financials.allData.expenses;
+      const extra = financials.allData.extraExpenses;
+      const insurance = financials.allData.insurancePremium;
+      const emi = debt.rawAmount;
+      setFormValues(() => ({
+        emi: formatNumber(emi),
+        insurance: formatNumber(insurance),
+        basic: formatNumber(expenses),
+        extra: formatNumber(extra),
+        income: formatNumber(salary),
+      }));
+    }
+  }, [financials, debt]);
+
+  const handleInputChange =
+    (field: keyof typeof formValues) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const rawValue = e.target.value.replace(/,/g, "");
+
+      if (/^\d*$/.test(rawValue)) {
+        const num = Number(rawValue);
+        if (num > (maxLimits[field] || Infinity)) return;
+
+        setFormValues((prev) => ({
+          ...prev,
+          [field]: formatNumber(num),
+        }));
+      }
+    };
+
+  const totalExpenses =
+    parseNumber(formValues.basic) +
+    parseNumber(formValues.extra) +
+    parseNumber(formValues.emi) +
+    parseNumber(formValues.insurance);
+
+  const totalIncome = parseNumber(formValues.income);
+  const savings = totalIncome - totalExpenses;
+
+  if (!financials || !debt) {
+    return (
+      <div className="flex gap-4 flex-col h-fit px-5 py-9 bg-neutral text-neutral-content rounded-[30px]">
+        <div className="flex w-full flex-col gap-4">
+          <div className="skeleton h-32 w-full"></div>
+          <div className="skeleton h-4 w-28"></div>
+          <div className="skeleton h-4 w-full"></div>
+          <div className="skeleton h-4 w-full"></div>
+        </div>
+      </div>
+    );
+  }
+  
+  const handleSubmit = async () => {
+    const userId = financials?.allData?.userId;
+    if (!userId) {
+      console.error("User ID not found in financial data");
+    }  
+    const payload = {
+      userId,
+      income: parseNumber(formValues.income),
+      basic: parseNumber(formValues.basic),
+      extra: parseNumber(formValues.extra),
+      emi: parseNumber(formValues.emi),
+      insurance: parseNumber(formValues.insurance),
+    };
+  
+    try {
+      await axios.put("/api/financials/", payload);
+      router.push("/user/financial-checkup");
+    } catch (err) {
+      console.error("Submit failed", err);
+    }
+  };
+  console.log(financials)
+  return (
+    <div className="flex w-full h-fit flex-col bg-accent text-accent-foreground shadow-lg rounded-[30px] p-7 gap-10">
+      <div className="flex flex-col">
+        <div className="text-xl text-black font-semibold">
+          <p className={montserrat}>Spending Habit</p>
+        </div>
+        <div className="text-sm">
+          <p className={montserrat}>Are you an overspender? Check now.</p>
+        </div>
+      </div>
+
+      <div className="flex border-2 gap-5 items-center   w-[60%] rounded-[15px] px-5 py-2">
+        <div>
+          {totalScore <= 30 && <Image src={finWeak} alt="weak financials" />}
+          {totalScore > 30 && totalScore < 70 && (
+            <Image src={finAverage} alt="weak financials" />
+          )}
+          {totalScore >= 70 && <Image src={finStrong} alt="weak financials" />}
+        </div>
+        <div className="text-black text-5xl">
+          <p className={`${montserrat} font-semibold`}>{totalScore}</p>
+        </div>
+        <div className={`${poppins}`}>
+          <div className="text-black text-[14px]">
+            <p>Spending Habit Score</p>
+          </div>
+          <div className="text-sm">
+            <p>out of 100</p>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-5">
+        {[
+          { label: "Monthly Income", key: "income" },
+          { label: "Basic Needs", key: "basic" },
+          { label: "Extra Spends", key: "extra" },
+          { label: "EMIs", key: "emi" },
+          { label: "Monthly Insurance Premium", key: "insurance" },
+        ].map((item) => (
+          <div className="flex flex-col gap-2" key={item.key}>
+            <label className={poppins}>
+              {item.label} <span className="text-red-600 text-xl">*</span>
+            </label>
+            <div className="flex items-center gap-3">
+              <p className="font-semibold text-lg">₹</p>
+              <input
+                type="text"
+                value={formValues[item.key as keyof typeof formValues]}
+                onChange={handleInputChange(
+                  item.key as keyof typeof formValues
+                )}
+                className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out`}
+              />
+            </div>
+          </div>
+        ))}
+
+        <div className="flex flex-col gap-2 p-1">
+          <label className={poppins}>Monthly Expenses</label>
+          <div className="flex items-center gap-3">
+            <p className="font-semibold text-lg">₹</p>
+            <input
+              type="text"
+              disabled
+              value={formatNumber(totalExpenses)}
+              className={`bg-[#c3c3c38e] rounded-[15px] px-3 py-2 ${montserrat} border-2 border-[#747373] font-semibold`}
+            />
+          </div>
+        </div>
+        <div className="flex flex-col gap-2 p-1">
+          <label className={poppins}>Monthly Savings</label>
+          <div className="flex items-center gap-3">
+            <p className="font-semibold text-lg">₹</p>
+            <input
+              type="text"
+              disabled
+              value={formatNumber(savings)}
+              className={`bg-[#c3c3c38e] rounded-[15px] px-3 py-2 ${montserrat} border-2 border-[#747373] font-semibold`}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="flex gap-5">
+        <div onClick={handleSubmit} className=" flex justify-center items-center bg-[#6F39C5] px-6 py-2  rounded-[25px] text-white cursor-pointer">
+          <p className={`${montserrat} font-semibold`}>Submit</p>
+        </div>
+        <div onClick={()=>router.push("/user/financial-checkup")} className="flex justify-center items-center text-[#6F39C5] border-2 border-[#6F39C5] px-5 py-2 rounded-[25px] cursor-pointer">
+          <p className={`${montserrat} font-semibold`}>Cancel</p>
+        </div>
+      </div>
+    </div>
+  );
+}

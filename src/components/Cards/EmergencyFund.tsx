@@ -1,10 +1,13 @@
 "use client";
 import Image from "next/image";
-import card from "../../assets/dash-debt-tool.svg";
-import { Badge } from "../ui/badge";
-import { Montserrat, Poppins } from "next/font/google"; // Changed import
-import { useEffect, useState } from "react";
-
+import siren from "../../assets/dash-emergency-tool.svg";
+import { Montserrat, Poppins } from "next/font/google";
+import { useState } from "react";
+import { emergencyFundAtom, financialAtom } from "@/atoms/atoms";
+import { useAtom } from "jotai";
+import RedBadge from "../ui/redBadge";
+import GreenBadge from "../ui/greenBadge";
+import YellowBadge from "../ui/yellowBadge";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["600"] });
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500"] });
@@ -16,49 +19,30 @@ type StatusDetails = {
 
 export default function EmergencyFund() {
   const [salary, setSalary] = useState<number>(0);
-  const [emergencyFund, setEmergencyFund] = useState<number>(0);
-  const [statusDetails, setStatusDetails] = useState<StatusDetails>({ 
-    text: "Loading...", 
-    color: "bg-gray-500" 
+  // const [emergencyFund, setEmergencyFund] = useState<number>(0);
+  const [emergencyFund] = useAtom(emergencyFundAtom);
+  const [financials] = useAtom(financialAtom);
+  const [statusDetails, setStatusDetails] = useState<StatusDetails>({
+    text: "Loading...",
+    color: "bg-gray-500",
   });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/emergency-fund");
-        const data = await response.json();
-        
-        setSalary(data.salary || 0);
-        setEmergencyFund(data.emergencyFund || 0);
-        
-        const monthsCovered = data.emergencyFund / data.salary;
-        let newStatus: StatusDetails;
-        
-        if (monthsCovered <= 0) {
-          newStatus = { text: "Critical", color: "bg-red-500" };
-        } else if (monthsCovered < 1) {
-          newStatus = { text: "Danger", color: "bg-red-400" };
-        } else if (monthsCovered < 3) {
-          newStatus = { text: "Warning", color: "bg-yellow-500" };
-        } else if (monthsCovered < 6) {
-          newStatus = { text: "Moderate", color: "bg-blue-500" };
-        } else {
-          newStatus = { text: "Secure", color: "bg-green-500" };
-        }
-        
-        setStatusDetails(newStatus);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
-
+  if (!emergencyFund || !financials) {
+    return (
+      <div className="flex gap-4 flex-col h-[100%] px-5 py-9 bg-neutral text-neutral-content rounded-[30px]">
+        <div className="flex w-full flex-col gap-4">
+          <div className="skeleton h-32 w-full"></div>
+          <div className="skeleton h-4 w-28"></div>
+          <div className="skeleton h-4 w-full"></div>
+          <div className="skeleton h-4 w-full"></div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col p-5 h-[45vh] justify-between text-black">
       <div className="flex flex-col items-center gap-5">
-        <div className="p-5 rounded-full bg-gray-200">
-          <Image src={card} alt="Emergency Fund" width={60} height={60} />
+        <div className="p-3 rounded-full">
+          <Image src={siren} height={40} width={40} alt="Emergency Fund"/>
         </div>
         <div className={`${montserrat.className} text-xl font-semibold`}>
           <p>Emergency Fund</p>
@@ -72,7 +56,7 @@ export default function EmergencyFund() {
               <p>Monthly Salary</p>
             </div>
             <div className="font-semibold text-lg">
-              <p>₹{salary.toLocaleString()}</p>
+              <p>{financials.data.salary}</p>
             </div>
           </div>
 
@@ -81,7 +65,7 @@ export default function EmergencyFund() {
               <p>Emergency Fund:</p>
             </div>
             <div className="font-semibold text-lg">
-              <p>₹{emergencyFund.toLocaleString()}</p>
+              <p>{emergencyFund.emergencyFundAmount}</p>
             </div>
           </div>
         </div>
@@ -89,12 +73,32 @@ export default function EmergencyFund() {
         <div className={`${poppins.className} flex flex-col gap-5`}>
           <div className="gap-1 flex flex-col">
             <div className="text-sm text-[#36454F]">
+              <p>Months Covered:</p>
+            </div>
+            <div className="font-semibold text-lg">
+              <p>{emergencyFund.emergencyFundStatus.monthsCovered}</p>
+            </div>
+          </div>
+          <div className="gap-1 flex flex-col">
+            <div className="text-sm text-[#36454F]">
               <p>Your Status:</p>
             </div>
             <div>
-              <Badge className={statusDetails.color}>
-                {statusDetails.text}
-              </Badge>
+              {emergencyFund.emergencyFundStatus.status === "critical" && (
+                <RedBadge text="Critical" />
+              )}
+              {emergencyFund.emergencyFundStatus.status === "danger" && (
+                <RedBadge text="Danger" />
+              )}
+              {emergencyFund.emergencyFundStatus.status === "warning" && (
+                <YellowBadge text="Warning" />
+              )}
+              {emergencyFund.emergencyFundStatus.status === "moderate" && (
+                <YellowBadge text="Moderate" />
+              )}
+              {emergencyFund.emergencyFundStatus.status === "secure" && (
+                <GreenBadge text="Secure" />
+              )}
             </div>
           </div>
         </div>
@@ -107,7 +111,9 @@ export default function EmergencyFund() {
             <p className={`${poppins.className} font-semibold text-sm`}>View</p>
           </div>
           <div className="flex justify-center items-center border-2 border-black hover:bg-black hover:text-white transition duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer">
-            <p className={`${poppins.className} font-semibold text-sm`}>Re-Check</p>
+            <p className={`${poppins.className} font-semibold text-sm`}>
+              Re-Check
+            </p>
           </div>
         </div>
       </div>

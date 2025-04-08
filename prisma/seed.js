@@ -30,13 +30,36 @@ async function main() {
 
 
 
-  await prisma.emergencyFund.create({
-    data:{
+  // await prisma.emergencyFund.create({
+  //   data:{
+  //     id: "user_2uGEVCVsBBTBRsEZzNWCMsb5r3N",
+  //     userId:"user_2uGEVCVsBBTBRsEZzNWCMsb5r3N",
+  //     emergencyFund: faker.number.int({min: 19000,max:120000}),
+  //   }
+  // })
+  const loanAmount = faker.number.int({ min: 100000, max: 1000000 });
+  const loanTenure = faker.number.int({ min: 1, max: 10 }); // in years
+  const interestRate = faker.number.float({ min: 8, max: 10 }); // annual interest rate in %
+  
+  const monthlyRate = interestRate / 12 / 100;
+  const totalMonths = loanTenure * 12;
+  
+  const emiAmount = Math.round(
+    (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) /
+    (Math.pow(1 + monthlyRate, totalMonths) - 1)
+  );
+  
+  await prisma.debt.create({
+    data: {
       id: "user_2uGEVCVsBBTBRsEZzNWCMsb5r3N",
-      userId:"user_2uGEVCVsBBTBRsEZzNWCMsb5r3N",
-      emergencyFund: faker.number.int({min: 19000,max:120000}),
+      userId: "user_2uGEVCVsBBTBRsEZzNWCMsb5r3N",
+      loanAmount,
+      loanTenure,
+      interestRate,
+      emiAmount,
     }
-  })
+  });
+  
 }
 
 main()

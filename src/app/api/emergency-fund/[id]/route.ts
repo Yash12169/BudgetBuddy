@@ -1,11 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { Param } from "@prisma/client/runtime/library";
-import { Sankofa_Display } from "next/font/google";
 import { NextRequest, NextResponse } from "next/server";
-import { messageInRaw } from "svix";
-
 const prisma = new PrismaClient();
-
 interface EmergencyFundStatus {
   monthsCovered: number;
   status: "critical" | "danger" | "warning" | "moderate" | "secure";
@@ -14,7 +9,12 @@ interface EmergencyFundStatus {
   recommendedMin: number;
   recommendedIdeal: number;
 }
-
+const formatAmount = (amount: number): string => {
+  if (!amount || isNaN(amount)) return "₹0";
+  if (amount < 100000) return "₹"+" "+`${Math.round(amount/1000)}K`;
+  if (amount < 10000000) return "₹"+" "+`${(amount/100000).toFixed(2)}L`;
+  return "₹"+" "+`${(amount/10000000).toFixed(2)}Cr`;
+};
 const calculateEmergencyStatus = (
   emergencyFund: number,
   salary: number
@@ -123,7 +123,7 @@ export async function GET(
 
     
     return NextResponse.json(
-      { success: true, message: "emergency fund found", data: data,emergencyFundStatus:emergencyFundStatus },
+      { success: true, message: "emergency fund found", data: data,emergencyFundAmount: formatAmount(data.emergencyFund),emergencyFundStatus:emergencyFundStatus },
       { status: 200 }
     );
   } catch (error) {
