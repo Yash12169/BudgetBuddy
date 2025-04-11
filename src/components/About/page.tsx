@@ -105,8 +105,7 @@ export default function AboutSection() {
             </div>
           </div>
         </motion.div>
-
-        {/* Key Features Section */}
+        
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
