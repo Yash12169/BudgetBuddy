@@ -38,7 +38,7 @@ export default function AboutSection() {
     },
   ];
 
-  // Animation variants
+
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -61,7 +61,7 @@ export default function AboutSection() {
       className="min-h-screen py-20 px-4 md:px-16 bg-gradient-to-b from-[#f0f8ff] to-[#e6f9f0]"
     >
       <div className="max-w-6xl mx-auto">
-        {/* Hero Title */}
+      
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -76,7 +76,7 @@ export default function AboutSection() {
           </p>
         </motion.div>
 
-        {/* Our Story Section - Text Only */}
+     
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -379,7 +379,7 @@ export default function AboutSection() {
               <input
                 type="tel"
                 id="phone"
-                placeholder="+1 (___) ___-____"
+                placeholder=" "
                 value={formData.phone}
                 onChange={(e) =>
                   setFormData({ ...formData, phone: e.target.value })
