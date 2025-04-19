@@ -1,3 +1,4 @@
+
 "use client";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -6,6 +7,7 @@ import LogInModal from "../LogInForm/LogInModal";
 import { montserrat } from "@/fonts/fonts";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+
 export default function Navbar2() {
   const shimmerRef = useRef<HTMLSpanElement>(null);
   const searchRef = useRef<SVGSVGElement>(null);
@@ -13,8 +15,7 @@ export default function Navbar2() {
   const linkedinRef = useRef<SVGSVGElement>(null);
   const githubRef = useRef<SVGSVGElement>(null);
   const userC = useUser();
-  const router = useRouter()
-
+  const router = useRouter();
 
   useEffect(() => {
     const shimmer = shimmerRef.current;
@@ -75,10 +76,19 @@ export default function Navbar2() {
             BudgetBuddy<span className="text-green-500">.</span>
           </h1>
         </div>
+
         <div className={`flex gap-[1.5rem] ${montserrat}`}>
           {["Home", "About", "Contact"].map((item, index) => (
             <div
               key={index}
+              onClick={() => {
+                const target = item.toLowerCase();
+                if (target === "home") {
+                  router.push("/");
+                } else {
+                  router.push(`/${target}`);
+                }
+              }}
               className="text-[1rem] font-semibold cursor-pointer opacity-90 relative group"
             >
               <p>{item}</p>
@@ -87,29 +97,24 @@ export default function Navbar2() {
           ))}
         </div>
       </div>
+
       {!userC.isSignedIn && (
         <div className=" flex gap-5 justify-center items-center">
           <LogInModal />
           <SignUpModal />
         </div>
       )}
-      { userC.isSignedIn && (
+
+      {userC.isSignedIn && (
         <div>
-        <div
-         onClick={() => (router.push("/user/dashboard"))}
+          <div
+            onClick={() => router.push("/user/dashboard")}
             className={`${montserrat}  bg-green-500 px-5 py-2 rounded-lg font-semibold cursor-pointer text-white`}
           >
             <p>Dashboard</p>
           </div>
-      </div>
-      )
-
-      }
-      {/* <div className=" flex gap-5 justify-center items-center">
-        <LogInModal/>
-        <SignUpModal/>
-        {console.log("nav",userC.isSignedIn)}
-      </div> */}
+        </div>
+      )}
     </nav>
   );
 }

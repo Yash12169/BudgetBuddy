@@ -1,5 +1,7 @@
-const { faker } = require('@faker-js/faker');
-const { PrismaClient } = require('@prisma/client');
+
+import 'dotenv/config';
+import { PrismaClient } from '@prisma/client';
+import { faker } from '@faker-js/faker';
 
 const prisma = new PrismaClient();
 
@@ -66,7 +68,9 @@ main()
   .catch((e) => {
     console.error(e);
     process.exit(1);
-  })
-  .finally(async () => {
+  } finally {
     await prisma.$disconnect();
-  });
+  }
+}
+
+main();

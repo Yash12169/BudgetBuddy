@@ -29,7 +29,7 @@ const parseNumber = (value: string): number => {
   return isNaN(Number(clean)) ? 0 : Number(clean);
 };
 
-export default function HabitEdit() {
+export default function DebtEdit() {
   const router = useRouter();
   const [financials] = useAtom(financialAtom);
   const [debt] = useAtom(debtAtom);
@@ -146,10 +146,10 @@ export default function HabitEdit() {
     <div className="flex w-full h-fit flex-col bg-accent text-accent-foreground shadow-lg rounded-[30px] p-7 gap-10">
       <div className="flex flex-col">
         <div className="text-xl text-black font-semibold">
-          <p className={montserrat}>Spending Habit</p>
+          <p className={montserrat}>Debt</p>
         </div>
         <div className="text-sm">
-          <p className={montserrat}>Are you an overspender? Check now.</p>
+          <p className={montserrat}>Tell us about your outstanding loans</p>
         </div>
       </div>
 
@@ -166,7 +166,7 @@ export default function HabitEdit() {
         </div>
         <div className={`${poppins}`}>
           <div className="text-black text-[14px]">
-            <p>Spending Habit Score</p>
+            <p>Debt Score</p>
           </div>
           <div className="text-sm">
             <p>out of 100</p>

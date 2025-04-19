@@ -1,8 +1,7 @@
+// app/about/page.tsx
 "use client";
-export default function page() {
-  return (
+import About from "@/components/About/page";
 
-    <div>gi</div>
-
-  )
+export default function Home() {
+  return <About/>;
 }

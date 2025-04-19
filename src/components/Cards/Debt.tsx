@@ -9,10 +9,12 @@ import { useAtom } from "jotai";
 import { debtAtom } from "@/atoms/atoms";
 import YellowBadge from "../ui/yellowBadge";
 import RedBadge from "../ui/redBadge";
+import { useRouter } from "next/navigation";
 export default function Debt() {
   const [salary, setSalary] = useState("");
   const [savings, setSavings] = useState("");
   const [expenses, setExpenses] = useState();
+  const router = useRouter()
   const [debt] = useAtom(debtAtom);
   if (!debt) {
     return (
@@ -88,7 +90,7 @@ export default function Debt() {
             <p className={`${[poppins]} font-semibold text-sm`}>View</p>
           </div>
           <div className="flex justify-center items-center border-2  border-black hover:bg-black hover:text-white transition duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer">
-            <p className={`${poppins} font-semibold text-sm`}>Re-Check</p>
+            <p className={`${poppins} font-semibold text-sm`} onClick={()=>router.push("/user/financial-checkup/debt")}>Re-Check</p>
           </div>
         </div>
       </div>
