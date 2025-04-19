@@ -9,8 +9,11 @@ async function main() {
   const userId = "user_2uGEVCVsBBTBRsEZzNWCMsb5r3N";
 
   try {
-    // 1. Create/update user
-    await prisma.user.upsert({
+   
+    await prisma.$connect();
+    console.log("🔌 Connected to database");
+
+    const user = await prisma.user.upsert({
       where: { id: userId },
       update: {},
       create: {
@@ -21,9 +24,10 @@ async function main() {
         profileImage: faker.image.avatar(),
       },
     });
+    console.log(`👤 User upserted: ${user.email}`);
 
-    // 2. Create/update financials (salary only exists here)
-    await prisma.financials.upsert({
+  
+    const financials = await prisma.financials.upsert({
       where: { userId },
       update: {
         salary: faker.number.int({ min: 15000, max: 50000 }),
@@ -39,14 +43,17 @@ async function main() {
         insurancePremium: faker.number.int({ min: 500, max: 1000 }),
       },
     });
+    console.log(`💰 Financials upserted with salary: ${financials.salary}`);
 
-    // 3. Clear existing debts
-    await prisma.debt.deleteMany({ where: { userId } });
+    //  Clear existing debts
+    const deleteCount = await prisma.debt.deleteMany({ where: { userId } });
+    console.log(`🧹 Deleted ${deleteCount.count} existing debts`);
 
-    // 4. Create sample debts
+    
     const debtCount = 3;
+    const debts = [];
     for (let i = 0; i < debtCount; i++) {
-      await prisma.debt.create({
+      const debt = await prisma.debt.create({
         data: {
           userId,
           loanAmount: faker.number.int({ min: 5000, max: 20000 }),
@@ -55,21 +62,19 @@ async function main() {
           emiAmount: faker.number.int({ min: 100, max: 500 }),
         },
       });
+      debts.push(debt);
     }
+    console.log(`🏦 Created ${debts.length} new debts`);
 
-    // 5. Create/update emergency fund (NO SALARY FIELD)
+    
     const fundValue = faker.number.float({ 
       min: 10000, 
       max: 50000, 
       precision: 0.01 
     });
-    const status = faker.helpers.arrayElement([
-      "secure", 
-      "in-progress", 
-      "at-risk"
-    ]);
+    const status = faker.helpers.arrayElement(["secure", "in-progress", "at-risk"]);
     
-    await prisma.emergencyFund.upsert({
+    const emergencyFund = await prisma.emergencyFund.upsert({
       where: { userId },
       update: { 
         emergencyFund: fundValue,
@@ -81,6 +86,31 @@ async function main() {
         status: status
       },
     });
+    console.log(`🛡️ Emergency fund set to ${emergencyFund.status} with $${emergencyFund.emergencyFund}`);
+
+    
+    const goals = ['Buy a Car', 'Own a House', 'Vacation in Japan', 'Start a Business'];
+    for (let i = 0; i < goals.length; i++) {
+      const targetAmount = faker.number.int({ min: 10000, max: 500000 });
+      const adjustedTargetAmount = targetAmount * 1.1; 
+
+      await prisma.lifeGoal.create({
+        data: {
+          userId,
+          title: goals[i],
+          amountRequired: faker.number.int({ min: 50000, max: 1000000 }),
+          targetAmount: targetAmount,
+          adjustedTargetAmount: adjustedTargetAmount,
+          yearsToGoal: faker.number.int({ min: 1, max: 10 }), 
+          category: faker.helpers.arrayElement(['personal', 'financial', 'career']),
+          currentSalary: financials.salary,
+          annualIncrementRate: faker.number.float({ min: 0.03, max: 0.1, precision: 0.01 }),
+          forecastedSalary: financials.salary * (1 + faker.number.float({ min: 0.03, max: 0.1, precision: 0.01 })),
+          isAchievable: true,
+        },
+      });
+    }
+    console.log(`🎯 Created ${goals.length} life goals`);
 
     console.log("✅ Database seeded successfully!");
   } catch (error) {
