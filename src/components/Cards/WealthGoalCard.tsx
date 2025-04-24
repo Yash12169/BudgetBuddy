@@ -3,7 +3,9 @@ import Image from "next/image";
 import card from "../../assets/fincheckcard.svg";
 import gem from '../../assets/dash-wealth-goal.svg'
 import { montserrat, poppins } from "@/fonts/fonts";
+import { useRouter } from "next/navigation";
 export default function WealthGoalCard() {
+  const router = useRouter()
 
   return (
     <div className="flex flex-col p-5 h-[45vh] justify-between text-black">
@@ -66,7 +68,7 @@ export default function WealthGoalCard() {
             <p className={`${[poppins]} font-semibold text-sm`}>View</p>
           </div>
           <div className="flex justify-center items-center border-2  border-black hover:bg-black hover:text-white transition duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer">
-            <p className={`${poppins} font-semibold text-sm`}>Modify</p>
+            <p className={`${poppins} font-semibold text-sm`} onClick={()=>router.push("/user/goals/goal-edit/")}>Modify</p>
           </div>
         </div>
       </div>

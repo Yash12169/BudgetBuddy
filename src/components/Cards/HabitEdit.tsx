@@ -29,32 +29,36 @@ const parseNumber = (value: string): number => {
   return isNaN(Number(clean)) ? 0 : Number(clean);
 };
 
-export default function HabitEdit() {
+export default function DebtEdit() {
   const router = useRouter();
   const [financials] = useAtom(financialAtom);
   const [debt] = useAtom(debtAtom);
   const [totalScore, setTotalScore] = useState(0);
   const [width, setWidth] = useState(0);
-  const [id,setId] = useState("");
-  const user = useUser()
-  useEffect(() => {
-    router.refresh();
-  }, []);
+  const { user } = useUser();
+
   const [formValues, setFormValues] = useState({
+    loan: "",
+    time: "",
+    interest: "",
+    emi: "",
     income: "",
     basic: "",
     extra: "",
-    emi: "",
     insurance: "",
   });
 
   const maxLimits = {
-    income: 100000000000,
-    basic: 100000000000,
-    extra: 100000000000,
+    loan: 100000000000,
+    time: 100000000000,
+    interest: 100000000000,
     emi: 100000000000,
-    insurance: 100000000000,
   };
+
+  useEffect(() => {
+    router.refresh();
+  }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setWidth(totalScore);
@@ -62,22 +66,24 @@ export default function HabitEdit() {
 
     return () => clearTimeout(timer);
   }, [totalScore]);
+
   useEffect(() => {
-   
-    if (financials && debt ) {
-      setTotalScore(financials.data.savingScore);      
-      const salary = financials.data.amount;
-      const expenses = financials.allData.expenses;
-      const extra = financials.allData.extraExpenses;
-      const insurance = financials.allData.insurancePremium;
-      const emi = debt.rawAmount;
-      setFormValues(() => ({
-        emi: formatNumber(emi),
-        insurance: formatNumber(insurance),
-        basic: formatNumber(expenses),
-        extra: formatNumber(extra),
-        income: formatNumber(salary),
-      }));
+    if (financials && debt) {
+      // Calculate score based on debt load
+      const debtLoad = debt.data.debtLoad;
+      const score = debtLoad <= 30 ? 80 : debtLoad <= 50 ? 50 : 30;
+      setTotalScore(score);
+
+      setFormValues({
+        loan: formatNumber(debt.data.data.loanAmount),
+        time: formatNumber(debt.data.data.loanTenure),
+        interest: formatNumber(debt.data.data.interestRate),
+        emi: formatNumber(debt.data.data.emiAmount),
+        income: formatNumber(financials?.allData?.salary || 0),
+        basic: formatNumber(financials?.allData?.expenses || 0),
+        extra: formatNumber(financials?.allData?.extraExpenses || 0),
+        insurance: formatNumber(financials?.allData?.insurancePremium || 0),
+      });
     }
   }, [financials, debt]);
 
@@ -86,7 +92,7 @@ export default function HabitEdit() {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const rawValue = e.target.value.replace(/,/g, "");
 
-      if (/^\d*$/.test(rawValue)) {
+      if (/^\d*\.?\d*$/.test(rawValue)) {
         const num = Number(rawValue);
         if (num > (maxLimits[field] || Infinity)) return;
 
@@ -106,6 +112,43 @@ export default function HabitEdit() {
   const totalIncome = parseNumber(formValues.income);
   const savings = totalIncome - totalExpenses;
 
+  const handleSubmit = async () => {
+    const userId = debt?.data?.data?.userId;
+    if (!userId) {
+      console.error("User ID not found in debt data");
+      return;
+    }
+
+    const debtPayload = {
+      userId,
+      loanAmount: parseNumber(formValues.loan),
+      loanTenure: parseNumber(formValues.time),
+      interestRate: parseFloat(formValues.interest),
+      emiAmount: parseNumber(formValues.emi),
+    };
+
+    try {
+      // Update debt information using PUT route
+      await axios.put("/api/debt", debtPayload);
+      
+      // Also update financials if needed
+      const financialPayload = {
+        userId,
+        salary: parseNumber(formValues.income),
+        expenses: parseNumber(formValues.basic),
+        extraExpenses: parseNumber(formValues.extra),
+        emi: parseNumber(formValues.emi),
+        insurancePremium: parseNumber(formValues.insurance),
+      };
+      
+      await axios.put("/api/financials", financialPayload);
+      
+      router.push("/user/financial-checkup");
+    } catch (err) {
+      console.error("Submit failed", err);
+    }
+  };
+
   if (!financials || !debt) {
     return (
       <div className="flex gap-4 flex-col h-fit px-5 py-9 bg-neutral text-neutral-content rounded-[30px]">
@@ -118,68 +161,45 @@ export default function HabitEdit() {
       </div>
     );
   }
-  
-  const handleSubmit = async () => {
-    const userId = financials?.allData?.userId;
-    if (!userId) {
-      console.error("User ID not found in financial data");
-    }  
-    const payload = {
-      userId,
-      income: parseNumber(formValues.income),
-      basic: parseNumber(formValues.basic),
-      extra: parseNumber(formValues.extra),
-      emi: parseNumber(formValues.emi),
-      insurance: parseNumber(formValues.insurance),
-    };
-  
-    try {
-      await axios.put("/api/financials/", payload);
-      router.push("/user/financial-checkup");
-      window.location.href = "/user/financial-checkup";
-    } catch (err) {
-      console.error("Submit failed", err);
-    }
-  };
-  console.log(financials)
+
   return (
     <div className="flex w-full h-fit flex-col bg-accent text-accent-foreground shadow-lg rounded-[30px] p-7 gap-10">
       <div className="flex flex-col">
         <div className="text-xl text-black font-semibold">
-          <p className={montserrat}>Spending Habit</p>
+          <p className={montserrat}>Debt</p>
         </div>
         <div className="text-sm">
-          <p className={montserrat}>Are you an overspender? Check now.</p>
+          <p className={montserrat}>Tell us about your outstanding loans</p>
         </div>
       </div>
 
-      <div className="flex border-2 gap-5 items-center   w-[60%] rounded-[15px] px-5 py-2">
+      <div className="flex border-2 gap-5 items-center w-[60%] rounded-[15px] px-5 py-2">
         <div>
           {totalScore <= 30 && <Image src={finWeak} alt="weak financials" />}
           {totalScore > 30 && totalScore < 70 && (
-            <Image src={finAverage} alt="weak financials" />
+            <Image src={finAverage} alt="average financials" />
           )}
-          {totalScore >= 70 && <Image src={finStrong} alt="weak financials" />}
+          {totalScore >= 70 && <Image src={finStrong} alt="strong financials" />}
         </div>
         <div className="text-black text-5xl">
           <p className={`${montserrat} font-semibold`}>{totalScore}</p>
         </div>
         <div className={`${poppins}`}>
           <div className="text-black text-[14px]">
-            <p>Spending Habit Score</p>
+            <p>Debt Score</p>
           </div>
           <div className="text-sm">
             <p>out of 100</p>
           </div>
         </div>
       </div>
+
       <div className="flex flex-wrap gap-5">
         {[
-          { label: "Monthly Income", key: "income" },
-          { label: "Basic Needs", key: "basic" },
-          { label: "Extra Spends", key: "extra" },
+          { label: "Loan Amount", key: "loan" },
+          { label: "Loan Tenure", key: "time" },
+          { label: "Interest Rate", key: "interest" },
           { label: "EMIs", key: "emi" },
-          { label: "Monthly Insurance Premium", key: "insurance" },
         ].map((item) => (
           <div className="flex flex-col gap-2" key={item.key}>
             <label className={poppins}>
@@ -226,10 +246,16 @@ export default function HabitEdit() {
       </div>
 
       <div className="flex gap-5">
-        <div onClick={handleSubmit} className=" flex justify-center items-center bg-[#6F39C5] px-6 py-2  rounded-[25px] text-white cursor-pointer">
+        <div
+          onClick={handleSubmit}
+          className="flex justify-center items-center bg-[#6F39C5] px-6 py-2 rounded-[25px] text-white cursor-pointer"
+        >
           <p className={`${montserrat} font-semibold`}>Submit</p>
         </div>
-        <div onClick={()=>router.push("/user/financial-checkup")} className="flex justify-center items-center text-[#6F39C5] border-2 border-[#6F39C5] px-5 py-2 rounded-[25px] cursor-pointer">
+        <div
+          onClick={() => router.push("/user/financial-checkup")}
+          className="flex justify-center items-center text-[#6F39C5] border-2 border-[#6F39C5] px-5 py-2 rounded-[25px] cursor-pointer"
+        >
           <p className={`${montserrat} font-semibold`}>Cancel</p>
         </div>
       </div>

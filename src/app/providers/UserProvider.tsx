@@ -1,5 +1,5 @@
 "use client";
-import { debtAtom, emergencyFundAtom, financialAtom, userAtom } from "@/atoms/atoms";
+import { debtAtom, emergencyFundAtom, financialAtom, goalAtom, userAtom } from "@/atoms/atoms";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { useAtom } from "jotai";
@@ -10,9 +10,20 @@ export default function UserProvider({ children }) {
   const [financial,setFinancial] = useAtom(financialAtom);
   const [emergencyFund,setEmergencyFund] = useAtom(emergencyFundAtom)
   const [debt,setDebt] = useAtom(debtAtom);
+  const [goal,setGoal] = useAtom(goalAtom)
   const id = userC.user?.id;
 
   useEffect(() => {
+    const fetchGoalData = async()=>{
+      try{
+        const data = await axios.get(`/api/goals/${id}`)
+        console.log("yeh hai goal",data)
+      }
+      catch(error){
+        console.log(error)
+      }
+    }
+    
     const fetchUserData = async () => {
       try {
         const data = await axios.get(`/api/fetch-user/${id}`);
@@ -53,6 +64,7 @@ export default function UserProvider({ children }) {
     fetchEmergencyFund();
     fetchFinancials();
     fetchUserData();
+    fetchGoalData();
     fetchDebt();
   }, [id]);
   return <>{children}</>;
