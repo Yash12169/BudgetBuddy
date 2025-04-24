@@ -13,10 +13,9 @@ const inflationRates = {
 
 type CategoryType = keyof typeof inflationRates;
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest,{params}:{params:{userId:string}}) {
   try {
-    const { searchParams } = new URL(req.url);
-    const userId = searchParams.get('userId');
+    const userId = params.userId
 
     if (!userId) {
       return NextResponse.json({ success: false, message: 'Missing userId' }, { status: 400 });

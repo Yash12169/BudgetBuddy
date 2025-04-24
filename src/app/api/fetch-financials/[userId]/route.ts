@@ -11,19 +11,27 @@ const calcualteSavingScore=(savings: number):number=>{
   return 0;
 }
 const calcualteSavingStatus=(savings: number):string=>{
-  if(savings >= 50) return "Strong";
-  if(savings >=  40) return "Strong";
-  if(savings >= 30) return "Moderate";
-  if(savings >= 20) return "Moderate";
-  if(savings >= 10) return "Weak";
-  return "Weak";
+  if(savings >= 50) return "strong";
+  if(savings >=  40) return "strong";
+  if(savings >= 30) return "moderate";
+  if(savings >= 20) return "moderate";
+  if(savings >= 10) return "weak";
+  return "weak";
 }
-const formatSalary = (amount: number): string => {
+const formatAmount = (amount: number): string => {
   if (!amount || isNaN(amount)) return "₹0";
-  if (amount < 100000) return `₹${Math.round(amount/1000)}K`;
-  if (amount < 10000000) return `₹${(amount/100000).toFixed(2)}L`;
-  return `₹${(amount/10000000).toFixed(2)}Cr`;
+  if (amount < 100000) return "₹"+" "+`${Math.round(amount/1000)}K`;
+  if (amount < 10000000) return "₹"+" "+`${(amount/100000).toFixed(2)}L`;
+  return "₹"+" "+`${(amount/10000000).toFixed(2)}Cr`;
 };
+const commaSeparated = (amount: number): string => {
+  const str = amount.toString();             // O(N)
+  const lastThree = str.slice(-3);           // O(1)
+  const other = str.slice(0, -3);            // O(N)
+  const withCommas = other.replace(/\B(?=(\d{2})+(?!\d))/g, ","); // O(N)
+  return withCommas + "," + lastThree;       // O(N)
+};
+
 export async function GET(req: NextRequest,{params}:{params:{userId:string}}) {
   try {
     const userId = params.userId;
@@ -47,7 +55,7 @@ export async function GET(req: NextRequest,{params}:{params:{userId:string}}) {
     const savingStatus = calcualteSavingStatus(savingPercent)
     
     return NextResponse.json(
-      { success: true, message: "Financial data fetched", data: {salary:formatSalary(data.salary),expenses:data.expenses,savingsPercent:savingPercent,savingScore:savingScore,savingStatus: savingStatus} },
+      { success: true, message: "Financial data fetched",allData: data ,data: {salary:formatAmount(data.salary),amount:data.salary,expenses:formatAmount(data.expenses),savingsPercent:savingPercent,savingScore:savingScore,savingStatus: savingStatus} },
       { status: 200 }
     );
   } catch (error: any) {    

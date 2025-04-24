@@ -3,17 +3,23 @@ import wallet from "../../assets/investment-score.svg";
 import shield from "../../assets/security-score.svg";
 import { bricolage_grotesque, montserrat, poppins } from "@/fonts/fonts";
 import finWeak from "../../assets/financial-health-icon-weak.svg";
+import finAverage from "../../assets/financial-health-icon-average.svg";
+import finStrong from "../../assets/financial-health-icon-good.svg";
+
+
 import Image from "next/image";
 import img2 from "../../assets/dash-icon-bulb.svg";
 import { useAtom } from "jotai";
 import { emergencyFundAtom, financialAtom } from "@/atoms/atoms";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function FinancialScore() {
   const [financials] = useAtom(financialAtom)
   const [emergencyFund] = useAtom(emergencyFundAtom);
   const [totalScore,setTotalScore] = useState(0);
   const [width,setWidth] = useState(0);
+  const router = useRouter();
   useEffect(()=>{
     if(financials && emergencyFund){
        const FinancialScore = financials.data.savingScore;
@@ -61,7 +67,10 @@ export default function FinancialScore() {
 
           <div className="flex border-2 gap-5 items-center   w-[60%] rounded-[15px] px-5 py-2">
             <div>
-              <Image src={finWeak} alt="weak financials" />
+              {totalScore <= 30 && (<Image src={finWeak} alt="weak financials" />)}
+              {totalScore > 30 && totalScore< 70 && (<Image src={finAverage} alt="weak financials" />)}
+              {totalScore >= 70 && (<Image src={finStrong} alt="weak financials" />)}
+
             </div>
             <div className="text-black text-5xl">
               <p className={`${montserrat} font-semibold`}>{totalScore}</p>
@@ -162,8 +171,8 @@ export default function FinancialScore() {
               <span className="font-semibold">Reminder!</span>  Recheck your financial health regularly to track improvements.
             </p>
           </div>
-          <div className="flex justify-center items-center text-secondary cursor-pointer w-[10%] h-[75%]  rounded-full bg-neutral hover:bg-neutral-200 transition">
-            <p className={`text-[12px] font-semibold ${poppins}`}>Financial Checkup</p>
+          <div className="flex justify-center items-center text-secondary cursor-pointer w-[10%] h-[75%]  rounded-full bg-neutral">
+            <p className={`text-[12px] font-semibold ${poppins}`} onClick={()=>router.push("/user/financial-checkup")}>Financial Checkup</p>
           </div>
         </div>
       </div>

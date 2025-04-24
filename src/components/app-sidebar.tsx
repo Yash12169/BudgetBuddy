@@ -37,7 +37,7 @@ const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "",
   },
   teams: [
     {
@@ -129,9 +129,9 @@ const data = {
       ],
     },
     {
-      title: "AI Suggestions",
+      title: "",
       url: "/user/ai",
-      icon: BotIcon,
+      icon: null,
       isActive: true,
       items: [
         {
@@ -149,9 +149,9 @@ const data = {
       ],
     },
     {
-      title: "Logout",
+      title: "",
       url: "/user/logout",
-      icon: LogOut,
+      icon: null,
       isActive: true,
       items: [
         {
