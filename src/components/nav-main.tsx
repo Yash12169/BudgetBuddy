@@ -48,7 +48,8 @@ export function NavMain({
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
-            key={item.title}
+           key={`${item.title}-${item.url}`}
+
             asChild
             defaultOpen={item.isActive}
             className="group/collapsible"
@@ -69,3 +70,21 @@ export function NavMain({
     </SidebarGroup>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
