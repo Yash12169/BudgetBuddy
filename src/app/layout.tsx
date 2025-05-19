@@ -50,6 +50,8 @@
 //     </ClerkProvider>
 //   )
 // }
+// app/layout.tsx
+
 import type { Metadata } from 'next'
 import {
   ClerkProvider,
@@ -86,12 +88,13 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <header className="flex justify-end items-center p-4 gap-4 h-16">
+      <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+        <head />
+        <body className="antialiased bg-white text-black">
+          <header className="flex justify-end items-center p-4 gap-4 h-16 border-b">
             <SignedOut>
-              <SignInButton />
-              <SignUpButton />
+              <SignInButton mode="modal" />
+              <SignUpButton mode="modal" />
             </SignedOut>
             <SignedIn>
               <UserButton />
