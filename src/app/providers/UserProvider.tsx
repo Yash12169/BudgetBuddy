@@ -4,68 +4,82 @@ import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
-export default function UserProvider({ children }) {
+
+interface UserProviderProps {
+  children: React.ReactNode;
+}
+
+export default function UserProvider({ children }: UserProviderProps) {
   const userC = useUser();
-  const [user, setUser] = useAtom(userAtom);
-  const [financial,setFinancial] = useAtom(financialAtom);
-  const [emergencyFund,setEmergencyFund] = useAtom(emergencyFundAtom)
-  const [debt,setDebt] = useAtom(debtAtom);
-  const [goal,setGoal] = useAtom(goalAtom)
+  const [, setUser] = useAtom(userAtom);
+  const [, setFinancial] = useAtom(financialAtom);
+  const [, setEmergencyFund] = useAtom(emergencyFundAtom);
+  const [, setDebt] = useAtom(debtAtom);
+  const [, setGoal] = useAtom(goalAtom);
   const id = userC.user?.id;
 
   useEffect(() => {
-    const fetchGoalData = async()=>{
-      try{
-        const data = await axios.get(`/api/goals/${id}`)
-        console.log("yeh hai goal",data)
+    const fetchGoalData = async () => {
+      try {
+        const data = await axios.get(`/api/goals/${id}`);
+        setGoal(data.data);
+      } catch (error) {
+        console.error("Error fetching goal data:", error);
       }
-      catch(error){
-        console.log(error)
-      }
-    }
+    };
     
     const fetchUserData = async () => {
       try {
         const data = await axios.get(`/api/fetch-user/${id}`);
         setUser({ ...data.data.user });
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching user data:", error);
       }
     };
+
     const fetchFinancials = async () => {
-      try{
-        const response = await axios.get(`/api/fetch-financials/${id}`)
-        setFinancial(response.data)
+      try {
+        const response = await axios.get(`/api/fetch-financials/${id}`);
+        setFinancial(response.data);
+      } catch (error) {
+        console.error("Error fetching financials:", error);
       }
-      catch(error){
-        console.log(error)
-      }
-    }
-    const fetchEmergencyFund = async ()=>{
-      try{
-         const response = await axios.get(`/api/emergency-fund/${id}`)
-         setEmergencyFund(response.data);
+    };
 
+    const fetchEmergencyFund = async () => {
+      try {
+        const response = await axios.get(`/api/emergency-fund/${id}`);
+        setEmergencyFund(response.data);
+      } catch (error) {
+        console.error("Error fetching emergency fund:", error);
       }
-      catch(error){
-        console.log(error)
-      }
-    }
-    const fetchDebt = async ()=>{
-      try{
-         const response = await axios.get(`/api/debt/${id}`)
-         setDebt(response.data);
+    };
 
+    const fetchDebt = async () => {
+      try {
+        const response = await axios.get(`/api/debt/${id}`);
+        setDebt(response.data);
+      } catch (error) {
+        console.error("Error fetching debt:", error);
       }
-      catch(error){
-        console.log(error)
-      }
+    };
+    
+    
+
+    if (id) {
+      Promise.all([
+        fetchEmergencyFund(),
+        fetchFinancials(),
+        fetchUserData(),
+        fetchGoalData(),
+        fetchDebt()
+      ]).then(() => {
+        
+      }).catch(error => {
+        console.error("Error in initial data fetch:", error);
+      });
     }
-    fetchEmergencyFund();
-    fetchFinancials();
-    fetchUserData();
-    fetchGoalData();
-    fetchDebt();
-  }, [id]);
+  }, [id, setUser, setFinancial, setEmergencyFund, setDebt, setGoal]);
+
   return <>{children}</>;
 }

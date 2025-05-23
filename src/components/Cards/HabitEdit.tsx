@@ -34,7 +34,6 @@ export default function DebtEdit() {
   const [financials] = useAtom(financialAtom);
   const [debt] = useAtom(debtAtom);
   const [totalScore, setTotalScore] = useState(0);
-  const [width, setWidth] = useState(0);
   const { user } = useUser();
 
   const [formValues, setFormValues] = useState({
@@ -57,15 +56,7 @@ export default function DebtEdit() {
 
   useEffect(() => {
     router.refresh();
-  }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setWidth(totalScore);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, [totalScore]);
+  }, [router]);
 
   useEffect(() => {
     if (financials && debt) {
@@ -85,7 +76,7 @@ export default function DebtEdit() {
         insurance: formatNumber(financials?.allData?.insurancePremium || 0),
       });
     }
-  }, [financials, debt]);
+  }, [financials, debt, setTotalScore, setFormValues]);
 
   const handleInputChange =
     (field: keyof typeof formValues) =>

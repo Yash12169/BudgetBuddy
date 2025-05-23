@@ -1,4 +1,3 @@
-
 import Accomplishments from "@/components/Accomplishments/accomplishments";
 import Allocation from "@/components/Cards/Allocation";
 import Disclaimer from "@/components/Cards/Disclaimer";
@@ -16,19 +15,18 @@ import { TextParallax } from "@/components/ui/textParallax";
 import SignUpModal from "@/components/SignUpForm/SignUpModal";
 import { SignupForm } from "../components/SignUpForm/SignUpForm";
 
-
-
 export default function Home() {
   return (
-      <div className="flex flex-col gap-[8rem] bg-[#FFF8ED] pb-[2.5rem]">
-        <Navbar2 />
+    <div className="flex flex-col bg-[#FFF8ED]">
+      <Navbar2 />
+      <main className="flex flex-col gap-16 md:gap-[8rem] pt-16 md:pt-0">
         <Hero />
         <TextParallax />
         <Accomplishments />
         <Features />
         <Faq />
         <LandFooter />
-      
-      </div>
+      </main>
+    </div>
   );
 }

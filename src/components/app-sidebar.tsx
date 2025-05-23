@@ -2,7 +2,11 @@
 
 import * as React from "react"
 import {
-GalleryVerticalEnd,
+  GalleryVerticalEnd,
+  Goal,
+  LayoutDashboardIcon,
+  PieChart,
+  User2,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -15,7 +19,6 @@ SidebarFooter,
 SidebarHeader,
 SidebarRail,
 } from "@/components/ui/sidebar"
-
 const data = {
 user: {
 name: "shadcn",

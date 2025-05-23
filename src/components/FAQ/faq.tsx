@@ -17,17 +17,17 @@ const faqs = [
   {
     question: " Is my financial data secure?",
     answer:
-      "Absolutely! We use top-notch encryption and security measures to keep your data safe. Your financial secrets are safe with us—we won’t judge your spending habits, even if you spend more on takeout than groceries.",
+      "Absolutely! We use top-notch encryption and security measures to keep your data safe. Your financial secrets are safe with us—we won't judge your spending habits, even if you spend more on takeout than groceries.",
   },
   {
     question: "Can I access my budget from different devices?",
     answer:
-      "Yes! If you create an account, your budget travels with you—whether you’re using your laptop, phone, or a borrowed tablet from a friend",
+      "Yes! If you create an account, your budget travels with you—whether you're using your laptop, phone, or a borrowed tablet from a friend",
   },
   {
     question: "Can I set spending limits for different categories?",
     answer:
-      "Yes! You can set spending limits for essentials (like rent) and non-essentials (like your ever-growing sneaker collection). If you go over budget, we won’t yell at you—but we will send you a friendly reminder that maybe, just maybe, you should slow down on the impulse purchases.",
+      "Yes! You can set spending limits for essentials (like rent) and non-essentials (like your ever-growing sneaker collection). If you go over budget, we won't yell at you—but we will send you a friendly reminder that maybe, just maybe, you should slow down on the impulse purchases.",
   },
   {
     question: "Do I need to create an account?",
@@ -37,12 +37,11 @@ const faqs = [
   {
     question: "Can I share my budget with my partner or family?",
     answer:
-      "Yes! If you’re co-budgeting with someone, you can share access with a partner, roommate, or even your dog—though we recommend giving financial control only to humans.",
+      "Yes! If you're co-budgeting with someone, you can share access with a partner, roommate, or even your dog—though we recommend giving financial control only to humans.",
   },
 ];
 
 function Faq() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
   const iconRefs = useRef<(SVGSVGElement | null)[]>([]);
@@ -81,32 +80,36 @@ function Faq() {
   };
 
   return (
-    <div className="flex flex-col gap-9 pt-0 bg-[#FFF8ED]">
-      <div className="flex flex-col items-center gap-6">
-        <div className={`${montserrat} font-bold text-4xl text-[#1c1f58]`}>
+    <div className="flex flex-col gap-9 py-8 md:py-16 px-4 md:px-8 bg-[#FFF8ED]">
+      <div className="flex flex-col items-center gap-4 md:gap-6 text-center">
+        <div className={`${montserrat} font-bold text-3xl md:text-4xl text-[#1c1f58]`}>
           <p>Any Questions?</p>
         </div>
-        <div className={`${poppins} text-lg  text-[#1c1f58]`}>
+        <div className={`${poppins} text-base md:text-lg text-[#1c1f58] max-w-2xl`}>
           <p>
             Find answers to common questions that you may have in your mind.
           </p>
         </div>
       </div>
-      <div className="flex flex-col items-center  p-5 gap-5">
+      <div className="flex flex-col items-center gap-4 md:gap-5 w-full">
         {faqs.map((faq, index) => (
-          <div key={index} className="w-[70%] p-5 rounded-[25px] bg-[] text-[#1c1f58] border border-green-500">
+          <div 
+            key={index} 
+            className="w-full md:w-[90%] lg:w-[70%] p-4 md:p-5 rounded-[25px] text-[#1c1f58] border border-green-500 transition-all duration-300 hover:border-green-600"
+          >
             <div
-              className="flex justify-between items-center cursor-pointer"
+              className="flex justify-between items-center cursor-pointer gap-4"
               onClick={() => toggleFAQ(index)}
             >
-              <p className={`${montserrat} font-semibold`}>{faq.question}</p>
+              <p className={`${montserrat} font-semibold text-sm md:text-base`}>{faq.question}</p>
               <svg
-                ref={(el) =>{ (iconRefs.current[index] = el || null)}}
-                width="30"
-                height="30"
+                ref={(el) => (iconRefs.current[index] = el || null)}
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
                 fill="none" 
-                style={{ transform: "rotate(180deg)" }}
+                style={{ transform: "rotate(180deg)", flexShrink: 0 }}
+                className="transition-transform duration-300"
               >
                 <path
                   d="M17 14L12 9L7 14"
@@ -118,24 +121,22 @@ function Faq() {
               </svg>
             </div>
             <div
-              ref={(el) => {(contentRefs.current[index] = el || null)}}
+              ref={(el) => (contentRefs.current[index] = el || null)}
               className="overflow-hidden"
               style={{ height: 0, opacity: 0 }}
             >
-              <p className={`${poppins} mt-2`}>{faq.answer}</p>
+              <p className={`${poppins} mt-2 text-sm md:text-base`}>{faq.answer}</p>
             </div>
           </div>
         ))}
       </div>
-      <div className=" flex items-center justify-center">
-        <p
-          className={`${montserrat} font-semibold text-lg bg-green-500 text-white cursor-pointer w-fit px-5 py-3 rounded-lg`}
+      <div className="flex items-center justify-center mt-4 md:mt-8">
+        <button
+          className={`${montserrat} font-semibold text-base md:text-lg bg-green-500 text-white cursor-pointer px-4 md:px-5 py-2 md:py-3 rounded-lg hover:bg-green-600 transition-colors`}
         >
           Got More Questions?
-        </p>
+        </button>
       </div>
-
-     
     </div>
   );
 }
