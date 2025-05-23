@@ -3,22 +3,20 @@ import Image from "next/image";
 import card from "../../assets/fincheckcard.svg";
 import GreenBadge from "../ui/greenBadge";
 import { montserrat, poppins } from "@/fonts/fonts";
-type GoalCardProps = {
-    title: string;
-  image: string;
-  amount: number;
-  status: boolean;
-  targetYear: number;
-  possiblity: boolean;
-}
-export default function GoalCard(props:GoalCardProps) {
-    const { title, image, amount, status, targetYear, possibility } = props;
 
+interface GoalCardProps {
+  title: string;
+  expenses: number;
+  savings: number;
+  habit: string;
+}
+
+export default function GoalCard({ title, expenses, savings, habit }: GoalCardProps) {
   return (
     <div className="flex flex-col p-5 h-[45vh] justify-between text-black">
       <div className="flex flex-col items-center gap-5">
         <div className="p-5 rounded-full bg-gray-200">
-          <Image src={card} alt={"card"} />
+          <Image src={card} alt="card" />
         </div>
         <div className={`${montserrat} text-xl font-semibold`}>
           <p>{title}</p>
@@ -61,7 +59,7 @@ export default function GoalCard(props:GoalCardProps) {
               <p>Habit:</p>
             </div>
             <div>
-              <GreenBadge text="Saver" />
+              <GreenBadge text={habit} />
             </div>
           </div>
         </div>
@@ -71,9 +69,9 @@ export default function GoalCard(props:GoalCardProps) {
         <div className="bg-[#c9cac88b] rounded-full h-[1px] w-full"></div>
         <div className="flex justify-between">
           <div className="bg-black text-white rounded-[30px] px-5 py-1 cursor-pointer flex justify-center items-center">
-            <p className={`${[poppins]} font-semibold text-sm`}>View</p>
+            <p className={`${poppins} font-semibold text-sm`}>View</p>
           </div>
-          <div className="flex justify-center items-center border-2  border-black hover:bg-black hover:text-white transition duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer">
+          <div className="flex justify-center items-center border-2 border-black hover:bg-black hover:text-white transition duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer">
             <p className={`${poppins} font-semibold text-sm`}>Modify</p>
           </div>
         </div>

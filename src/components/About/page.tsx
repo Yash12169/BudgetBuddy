@@ -1,4 +1,3 @@
-
 "use client";
 import { useState } from "react";
 import { montserrat } from "@/fonts/fonts";
@@ -88,18 +87,18 @@ export default function AboutSection() {
             <h3 className="text-3xl font-semibold mb-6 text-gray-800">Our Story</h3>
             <div className="space-y-6">
               <p className="text-gray-700 leading-relaxed text-lg">
-                BudgetBuddy was born from a simple idea: financial management shouldn't be complicated. 
+                BudgetBuddy was born from a simple idea: financial management shouldn&apos;t be complicated. 
                 Founded in 2023, our platform combines cutting-edge technology with intuitive design to 
                 help users of all financial backgrounds take control of their money.
               </p>
               <p className="text-gray-700 leading-relaxed text-lg">
                 We believe everyone deserves financial clarity without the jargon or hidden fees. 
-                Whether you're saving for a dream vacation or paying off student loans, BudgetBuddy 
+                Whether you&apos;re saving for a dream vacation or paying off student loans, BudgetBuddy 
                 provides the tools and insights you need to make informed financial decisions.
               </p>
               <p className="text-gray-700 leading-relaxed text-lg">
                 Our journey began when our founders recognized the stress people face when managing 
-                their finances. We've since grown into a trusted platform helping thousands achieve 
+                their finances. We&apos;ve since grown into a trusted platform helping thousands achieve 
                 their financial goals through smart automation and personalized guidance.
               </p>
             </div>
@@ -191,7 +190,7 @@ export default function AboutSection() {
               <h3 className="text-2xl font-semibold text-gray-800 group-hover:text-green-700 transition">Our Mission</h3>
             </div>
             <p className="text-gray-700 leading-relaxed mb-4">
-              We're revolutionizing personal finance by making budgeting effortless and insightful. 
+              We&apos;re revolutionizing personal finance by making budgeting effortless and insightful. 
               Our mission is to empower 10 million people to achieve financial freedom by 2030.
             </p>
             <ul className="space-y-3">

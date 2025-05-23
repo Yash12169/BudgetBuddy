@@ -1,65 +1,32 @@
 import { montserrat } from "@/fonts/fonts";
+
 export default function LandFooter() {
   return (
-    <div className="flex justify-center items-center p-3 bg-[#FFF8ED]" >
-      <div className="w-[85%] bg-[#1A1A4C] text-[#F7F2EB] pr-8 pl-8 pt-[5em] pb-[5em] rounded-[30px] flex flex-col justify-between gap-8">
-        <div className="flex flex-col gap-8 ">
-          <div
-            className={`${montserrat} font-[700] text-[40px] line-clamp-[40px] flex flex-col  items-center text-[#41d298]`}
-          >
-            <p>Take Care of Your Finances.</p>
+    <div className="flex justify-center items-center p-3 bg-[#FFF8ED]">
+      <div className="w-[95%] md:w-[90%] lg:w-[85%] bg-[#1A1A4C] text-[#F7F2EB] px-4 md:px-6 lg:px-8 py-8 md:py-12 lg:py-[5em] rounded-[30px] flex flex-col justify-between gap-8">
+        <div className="flex flex-col gap-6 md:gap-8">
+          <div className={`${montserrat} font-[700] text-2xl md:text-3xl lg:text-[40px] flex flex-col items-center text-[#41d298]`}>
+            <p className="text-center">Take Care of Your Finances.</p>
           </div>
-          <div className="flex flex-col items-center ">
-            <p className={`${montserrat} font-[600] w-[55%] text-center`}>
+          <div className="flex flex-col items-center">
+            <p className={`${montserrat} font-[600] w-full md:w-[75%] lg:w-[55%] text-center text-sm md:text-base`}>
               Budget Buddy helps you manage your finances effortlessly. Its
               non-advisory offerings include free budgeting and expense-tracking
               tools, whereas Premium Assist provides personalized financial
               insights and planning.
             </p>
           </div>
-          <div className="flex justify-center gap-8 items-center ">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 682.667 682.667"
-              width="30"
-              height="30"
-              className="text-[#41d298] cursor-pointer"
-              fill="currentColor"
-            >
+          <div className="flex justify-center gap-6 md:gap-8 items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 682.667 682.667" width="24" height="24" className="text-[#41d298] cursor-pointer hover:text-[#2fb77e] transition-colors" fill="currentColor">
               <defs>
                 <clipPath id="clip-path">
                   <path d="M0 512h512V0H0Z" fill="#ffffff" />
                 </clipPath>
               </defs>
-              <g
-                clipPath="url(#clip-path)"
-                transform="matrix(1.33333 0 0 -1.33333 0 682.667)"
-              >
-                <path
-                  d="M0 0c-.05-21.046-.288-42.093-.576-63.138-.348-25.391-.74-50.793-7.108-75.749-6.677-26.17-19.847-48.74-40.337-65.449-21.592-17.608-47.69-26.863-75.858-28.576-37.36-2.272-74.736-3.17-112.111-3.082-37.376-.088-74.752.81-112.111 3.082-28.168 1.713-54.266 10.968-75.858 28.576-20.49 16.709-33.66 39.279-40.338 65.449-6.368 24.956-6.76 50.358-7.107 75.749-.288 21.045-.527 42.092-.576 63.138.049 21.046.288 42.093.576 63.138.347 25.391.739 50.793 7.107 75.749 6.678 26.17 19.848 48.74 40.338 65.449 21.592 17.608 47.69 26.863 75.858 28.576 37.359 2.272 74.735 3.17 112.111 3.082 37.375.088 74.751-.81 112.111-3.082 28.168-1.713 54.266-10.968 75.858-28.576 20.49-16.709 33.66-39.279 40.337-65.449 6.368-24.956 6.76-50.358 7.108-75.749C-.288 42.093-.05 21.046 0 0Z"
-                  transform="translate(491.99 256)"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="40"
-                  strokeLinecap="butt"
-                  strokeLinejoin="miter"
-                  strokeMiterlimit="10"
-                />
-                <path
-                  d="M0 0c0-57.99-47.01-105-105-105S-210-57.99-210 0s47.01 105 105 105S0 57.99 0 0Z"
-                  transform="translate(360 256)"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="40"
-                  strokeLinecap="butt"
-                  strokeLinejoin="miter"
-                  strokeMiterlimit="10"
-                />
-                <path
-                  d="M0 0c0-16.568-13.432-30-30-30-16.568 0-30 13.432-30 30 0 16.568 13.432 30 30 30C-13.432 30 0 16.568 0 0"
-                  transform="translate(424 391)"
-                  fill="currentColor"
-                />
+              <g clipPath="url(#clip-path)" transform="matrix(1.33333 0 0 -1.33333 0 682.667)">
+                <path d="M0 0c-.05-21.046-.288-42.093-.576-63.138-.348-25.391-.74-50.793-7.108-75.749-6.677-26.17-19.847-48.74-40.337-65.449-21.592-17.608-47.69-26.863-75.858-28.576-37.36-2.272-74.736-3.17-112.111-3.082-37.376-.088-74.752.81-112.111 3.082-28.168 1.713-54.266 10.968-75.858 28.576-20.49 16.709-33.66 39.279-40.338 65.449-6.368 24.956-6.76 50.358-7.107 75.749-.288 21.045-.527 42.092-.576 63.138.049 21.046.288 42.093.576 63.138.347 25.391.739 50.793 7.107 75.749 6.678 26.17 19.848 48.74 40.338 65.449 21.592 17.608 47.69 26.863 75.858 28.576 37.359 2.272 74.735 3.17 112.111 3.082 37.375.088 74.751-.81 112.111-3.082 28.168-1.713 54.266-10.968 75.858-28.576 20.49-16.709 33.66-39.279 40.337-65.449 6.368-24.956 6.76-50.358 7.108-75.749C-.288 42.093-.05 21.046 0 0Z" transform="translate(491.99 256)" fill="none" stroke="currentColor" strokeWidth="40" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10"/>
+                <path d="M0 0c0-57.99-47.01-105-105-105S-210-57.99-210 0s47.01 105 105 105S0 57.99 0 0Z" transform="translate(360 256)" fill="none" stroke="currentColor" strokeWidth="40" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10"/>
+                <path d="M0 0c0-16.568-13.432-30-30-30-16.568 0-30 13.432-30 30 0 16.568 13.432 30 30 30C-13.432 30 0 16.568 0 0" transform="translate(424 391)" fill="currentColor"/>
               </g>
             </svg>
             <svg
@@ -98,78 +65,69 @@ export default function LandFooter() {
             </svg>
           </div>
         </div>
-        <div className={`flex ${montserrat} justify-evenly  `}>
-          <div className="flex flex-col gap-6">
+        
+        <div className={`${montserrat} grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 md:gap-6 lg:gap-4`}>
+          <div className="flex flex-col gap-4 md:gap-6">
             <div className="font-[600] text-[#41d298]">
               <p>Offerings</p>
             </div>
-            <div className="flex  flex-col gap-2 text-sm">
-              <p className="hover:underline cursor-pointer ">Expense Manager</p>
-              <p className="hover:underline cursor-pointer ">Budget Tracker</p>
-              <p className="hover:underline cursor-pointer ">Savings Planner</p>
-              <p className="hover:underline cursor-pointer ">Debt Calculator</p>
-              <p className="hover:underline cursor-pointer ">
-                Investment Insights
-              </p>
-              <p className="hover:underline cursor-pointer ">Bill Reminders</p>
+            <div className="flex flex-col gap-2 text-xs md:text-sm">
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Expense Manager</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Budget Tracker</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Savings Planner</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Debt Calculator</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Investment Insights</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Bill Reminders</p>
             </div>
           </div>
-          <div className="flex flex-col gap-6">
+          
+          <div className="flex flex-col gap-4 md:gap-6">
             <div className="font-[600] text-[#41d298]">
               <p>Financial Goals</p>
             </div>
-            <div className="flex  flex-col gap-2 text-sm">
-              <p className="hover:underline cursor-pointer ">Travel Budgeting</p>
-              <p className="hover:underline cursor-pointer ">
-                Home Purchase Planning
-              </p>
-              <p className="hover:underline cursor-pointer ">Emergency Fund</p>
-              <p className="hover:underline cursor-pointer ">
-                Retirement Savings
-              </p>
-              <p className="hover:underline cursor-pointer ">Education Fund</p>
+            <div className="flex flex-col gap-2 text-xs md:text-sm">
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Travel Budgeting</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Home Purchase Planning</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Emergency Fund</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Retirement Savings</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Education Fund</p>
             </div>
           </div>
-          <div className="flex flex-col gap-6">
-            <div className="font-[600] text-[#41d298] ">
+          
+          <div className="flex flex-col gap-4 md:gap-6">
+            <div className="font-[600] text-[#41d298]">
               <p>Resources</p>
             </div>
-            <div className="flex  flex-col gap-2 text-sm">
-              <p className="hover:underline cursor-pointer ">Financial Tips</p>
-              <p className="hover:underline cursor-pointer ">
-                Money Management Guides
-              </p>
-              <p className="hover:underline cursor-pointer ">
-                Budgeting Templates
-              </p>
-              <p className="hover:underline cursor-pointer ">Free Reports</p>
+            <div className="flex flex-col gap-2 text-xs md:text-sm">
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Financial Tips</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Money Management Guides</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Budgeting Templates</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Free Reports</p>
             </div>
           </div>
-          <div className="flex flex-col gap-6">
+          
+          <div className="flex flex-col gap-4 md:gap-6">
             <div className="font-[600] text-[#41d298]">
               <p>Tools & Subscriptions</p>
             </div>
-            <div className="flex  flex-col gap-2 text-sm ">
-              <p className="hover:underline cursor-pointer ">Budget Buddy Pro</p>
-              <p className="hover:underline cursor-pointer ">
-                Personalized Insights
-              </p>
-              <p className="hover:underline cursor-pointer ">Smart Alerts</p>
-              <p className="hover:underline cursor-pointer ">
-                AI-Powered Recommendations
-              </p>
+            <div className="flex flex-col gap-2 text-xs md:text-sm">
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Budget Buddy Pro</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Personalized Insights</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Smart Alerts</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">AI-Powered Recommendations</p>
             </div>
           </div>
-          <div className="flex flex-col gap-6">
+          
+          <div className="flex flex-col gap-4 md:gap-6">
             <div className="font-[600] text-[#41d298]">
               <p>Legal & Support</p>
             </div>
-            <div className="flex  flex-col gap-2 text-sm">
-              <p className="hover:underline cursor-pointer ">Terms of Service</p>
-              <p className="hover:underline cursor-pointer ">Privacy Policy</p>
-              <p className="hover:underline cursor-pointer ">Refund Policy</p>
-              <p className="hover:underline cursor-pointer ">Help & Support</p>
-              <p className="hover:underline cursor-pointer ">Contact Us</p>
+            <div className="flex flex-col gap-2 text-xs md:text-sm">
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Terms of Service</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Privacy Policy</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Refund Policy</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Help & Support</p>
+              <p className="hover:underline cursor-pointer hover:text-[#41d298] transition-colors">Contact Us</p>
             </div>
           </div>
         </div>

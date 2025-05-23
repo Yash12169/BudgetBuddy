@@ -24,9 +24,11 @@ import { useEffect } from "react";
 
 export default function FinancialSidebar() {
   const router = useRouter();
+  
   useEffect(() => {
     router.refresh();
-  }, []);
+  }, [router]);
+
   return (
     <SidebarProvider>
       <AppSidebar />

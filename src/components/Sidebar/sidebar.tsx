@@ -27,8 +27,50 @@ import EmergencyFund from "../Cards/EmergencyFund";
 import Goals from "../Cards/Goals";
 import GoalTracker from "../Cards/GoalTracker";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import axios from "axios";
 export default function Sidebar() {
   const router = useRouter();
+  const id = "user_2uGEVCVsBBTBRsEZzNWCMsb5r3N";
+  useEffect(() => {
+    const test = async () => {
+      try {
+        if (!id) {
+          console.error("No user ID available");
+          return;
+        }
+
+        const emergencyFund = 30000;
+
+        console.log("Attempting to create emergency fund record for user:", id);
+        console.log("Sending data:", { emergencyFund });
+
+        const response = await axios.post(`/api/emergency-fund/${id}`, {
+          emergencyFund,
+        });
+
+        if (response.data.success) {
+          console.log("Successfully created emergency fund record:", response.data);
+        } else {
+          console.error("Failed to create emergency fund record:", response.data.message);
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error("Axios error creating emergency fund record:", {
+            message: error.message,
+            response: error.response?.data,
+            status: error.response?.status,
+          });
+        } else {
+          console.error("Unknown error creating emergency fund record:", error);
+        }
+      }
+    };
+
+    test();
+  }, [id]);
+
+  
   return (
     <SidebarProvider>
       <AppSidebar />

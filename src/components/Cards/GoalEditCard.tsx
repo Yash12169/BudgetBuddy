@@ -104,7 +104,7 @@ export default function GoalEditCard() {
         currentSalary: financialData.income
       }));
     }
-  }, [goalData, financialData]);
+  }, [goalData, financialData, setFormValues]);
 
   const [achievabilityScore, setAchievabilityScore] = useState(0);
   const [amountRequired, setAmountRequired] = useState(0);
@@ -137,7 +137,7 @@ export default function GoalEditCard() {
     
     score = Math.max(0, Math.min(100, score));
     setAchievabilityScore(Math.round(score));
-  }, [formValues]);
+  }, [formValues, setForecastedSalary, setAmountRequired, setAchievabilityScore, setFormValues]);
 
   const handleInputChange = (key) => (e) => {
     let value = e.target.value;

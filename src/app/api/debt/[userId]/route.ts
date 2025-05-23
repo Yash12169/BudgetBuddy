@@ -9,15 +9,34 @@ const formatAmount = (amount: number): string => {
   return "₹"+" "+`${(amount/10000000).toFixed(2)}Cr`;
 };
 
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+) {
   try {
+    const userId = params.userId;
     const data = await req.json();
-    const userId = data.userId;
-    const loanAmount = Number(data.loanAmount) || 0;
-    const loanTenure = Number(data.loanTenure) || 0;
+    
+    if (!data.loanAmount || !data.loanTenure) {
+      return NextResponse.json(
+        { success: false, message: "Missing required fields: loanAmount and loanTenure" },
+        { status: 400 }
+      );
+    }
+    const loanAmount = Number(data.loanAmount);
+    const loanTenure = Number(data.loanTenure);
     const interestRate = Number(data.interestRate) || 0;
-    const emiAmount = Number(data.emiAmount);
-    console.log(prisma.debt);
+    const emiAmount = Number(data.emiAmount) || 0;
+    const existingDebt = await prisma.debt.findFirst({
+      where: { userId },
+    });
+
+    if (existingDebt) {
+      return NextResponse.json(
+        { success: false, message: "User already has a debt record. Use PUT to update." },
+        { status: 409 }
+      );
+    }
 
     const newRecord = await prisma.debt.create({
       data: {
@@ -28,13 +47,16 @@ export async function POST(req: NextRequest) {
         emiAmount,
       },
     });
+
     return NextResponse.json(
-      { success: true, message: "debt data stored", data: newRecord },
+      { success: true, message: "Debt record created successfully", data: newRecord },
       { status: 201 }
     );
-  } catch (err: any) {
+  } catch (error: unknown) {
+    console.error("Error creating debt record:", error);
+    const errorMessage = error instanceof Error ? error.message : "Internal server error";
     return NextResponse.json(
-      { success: false, message: err.message },
+      { success: false, message: errorMessage },
       { status: 500 }
     );
   }
@@ -47,73 +69,81 @@ export async function GET(
   try {
     const userId = params.userId;
     const data = await prisma.debt.findFirst({
-      where: { userId: userId },
+      where: { userId },
     });
+
     if (!data) {
       return NextResponse.json(
-        { success: false, message: "data not found" },
-        { status: 500 }
+        { success: false, message: "No debt data found for this user" },
+        { status: 404 }
       );
     }
+
     const emiAmount = data.emiAmount;
     const financialData = await prisma.financials.findUnique({
-      where: { id: userId },
+      where: { userId },
     });
 
-    if (!financialData)
+    if (!financialData) {
       return NextResponse.json(
-        { success: false, message: "data missing please try again" },
-        { status: 500 }
+        { success: false, message: "Financial data not found for this user" },
+        { status: 404 }
       );
-    const salary = financialData.salary;
+    }
 
+    const salary = financialData.salary;
     const debtLoad = parseFloat(((emiAmount / salary) * 100).toFixed(2));
-    const loanAmount = formatAmount(data.loanAmount)
+    const loanAmount = formatAmount(data.loanAmount);
+
     return NextResponse.json(
       {
         success: true,
-        message: "data fetched successfully",
-        data: { data: data, debtLoad: debtLoad },
-        loanAmount: loanAmount,
+        message: "Data fetched successfully",
+        data: { data, debtLoad },
+        loanAmount,
         emiAmount: formatAmount(emiAmount),
         rawAmount: emiAmount
       },
       { status: 200 }
     );
-  } catch (err: any) {
+  } catch (error: unknown) {
+    console.error("Error fetching debt data:", error);
+    const errorMessage = error instanceof Error ? error.message : "Internal server error";
     return NextResponse.json(
-      { success: false, message: err.message },
+      { success: false, message: errorMessage },
       { status: 500 }
     );
   }
 }
 
-export async function PUT(req: NextRequest) {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+) {
   try {
+    const userId = params.userId;
     const data = await req.json();
-    const userId = data.userId;
     
-    if (!userId) {
+    if (!data.loanAmount || !data.loanTenure) {
       return NextResponse.json(
-        { success: false, message: "userId is required" },
+        { success: false, message: "Missing required fields: loanAmount and loanTenure" },
         { status: 400 }
       );
     }
-    
-    const loanAmount = Number(data.loanAmount) || 0;
-    const loanTenure = Number(data.loanTenure) || 0;
+
+    const loanAmount = Number(data.loanAmount);
+    const loanTenure = Number(data.loanTenure);
     const interestRate = Number(data.interestRate) || 0;
     const emiAmount = Number(data.emiAmount) || 0;
 
-    // Check if debt record exists for this user
+    // Check if debt record exists
     const existingDebt = await prisma.debt.findFirst({
-      where: { userId: userId },
+      where: { userId },
     });
 
     let updatedDebt;
     
     if (existingDebt) {
-      // Update existing record
       updatedDebt = await prisma.debt.update({
         where: { id: existingDebt.id },
         data: {
@@ -124,7 +154,6 @@ export async function PUT(req: NextRequest) {
         },
       });
     } else {
-      // Create new record if none exists
       updatedDebt = await prisma.debt.create({
         data: {
           userId,
@@ -136,16 +165,16 @@ export async function PUT(req: NextRequest) {
       });
     }
 
-    // Get financial data to calculate debt load
+    // Get financial data for debt load calculation
     const financialData = await prisma.financials.findUnique({
-      where: { id: userId },
+      where: { userId },
     });
 
     if (!financialData) {
       return NextResponse.json(
         { 
           success: true, 
-          message: "debt data updated but financial data missing", 
+          message: "Debt data updated but financial data missing", 
           data: updatedDebt 
         },
         { status: 200 }
@@ -158,10 +187,10 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        message: "debt data updated successfully",
+        message: "Debt data updated successfully",
         data: { 
           data: updatedDebt, 
-          debtLoad: debtLoad 
+          debtLoad 
         },
         loanAmount: formatAmount(loanAmount),
         emiAmount: formatAmount(emiAmount),
@@ -169,11 +198,50 @@ export async function PUT(req: NextRequest) {
       },
       { status: 200 }
     );
-  } catch (err: any) {
-    console.error("Error updating debt:", err);
+  } catch (error: unknown) {
+    console.error("Error updating debt:", error);
+    const errorMessage = error instanceof Error ? error.message : "Internal server error";
     return NextResponse.json(
-      { success: false, message: err.message },
+      { success: false, message: errorMessage },
       { status: 500 }
     );
   }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  try {
+    const userId = params.userId;
+    
+    const existingDebt = await prisma.debt.findFirst({
+      where: { userId },
+    });
+
+    if (!existingDebt) {
+      return NextResponse.json(
+        { success: false, message: "No debt record found for this user" },
+        { status: 404 }
+      );
+    }
+
+    await prisma.debt.delete({
+      where: { id: existingDebt.id },
+    });
+
+    return NextResponse.json(
+      { success: true, message: "Debt record deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error: unknown) {
+    console.error("Error deleting debt:", error);
+    const errorMessage = error instanceof Error ? error.message : "Internal server error";
+    return NextResponse.json(
+      { success: false, message: errorMessage },
+      { status: 500 }
+    );
+  }
+}
+
+export const dynamic = "force-dynamic";
