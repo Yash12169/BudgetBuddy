@@ -2,22 +2,10 @@
 
 import * as React from "react"
 import {
-  AudioWaveform,
-  BookDashedIcon,
-  BookOpen,
-  Bot,
-  BotIcon,
-  Command,
-  Frame,
   GalleryVerticalEnd,
   Goal,
-  LayoutDashboard,
   LayoutDashboardIcon,
-  LogOut,
-  Map,
   PieChart,
-  Settings2,
-  SquareTerminal,
   User2,
 } from "lucide-react"
 
@@ -31,8 +19,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
-
-// This is sample data.
 const data = {
   user: {
     name: "shadcn",
@@ -71,7 +57,6 @@ const data = {
       title: "Financial Checkup",
       url: "/user/financial-checkup",
       icon: PieChart,
-      
       isActive: true,
       items: [
         {
@@ -168,11 +153,8 @@ const data = {
         },
       ],
     },
-   
   ],
-  projects: [
-    
-  ],
+  projects: [],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
