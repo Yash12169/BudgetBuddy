@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Verify user exists
+    
     const user = await prisma.user.findUnique({
       where: { id: userId }
     });
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
     const forecastedSalary = currentSalary * Math.pow(1 + Number(annualIncrementRate), yearsToGoal);
     const isAchievable = forecastedSalary * 0.3 * yearsToGoal >= adjustedTargetAmount;
 
-    // If this is a priority 1 goal, update other priority 1 goals to priority 2
+    
     if (priority === 1) {
       await prisma.lifeGoal.updateMany({
         where: { userId, priority: 1 },
@@ -148,7 +148,7 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    // Verify user exists if userId is being updated
+    
     if (userId && userId !== existingGoal.userId) {
       const user = await prisma.user.findUnique({
         where: { id: userId }
@@ -182,7 +182,7 @@ export async function PUT(req: NextRequest) {
       updateData.priority = priority;
     }
 
-    // Recalculate financial metrics if necessary fields are present
+    
     if (amountRequired !== undefined && yearsToGoal !== undefined && category !== undefined) {
       const inflationRate = inflationRates[category as CategoryType] || inflationRates.general;
       updateData.adjustedTargetAmount = updateData.amountRequired * Math.pow(1 + inflationRate, updateData.yearsToGoal);
@@ -193,7 +193,7 @@ export async function PUT(req: NextRequest) {
       }
     }
 
-    // Handle priority 1 updates
+    
     if (priority === 1 && userId) {
       await prisma.lifeGoal.updateMany({
         where: {

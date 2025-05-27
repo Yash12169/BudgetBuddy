@@ -38,6 +38,7 @@ export default function EmergencyFund() {
       </div>
     );
   }
+  
   return (
     <div className="flex flex-col p-5 h-[45vh] justify-between text-black">
       <div className="flex flex-col items-center gap-5">

@@ -68,8 +68,8 @@ export async function GET(
 ) {
   try {
     const userId = params.userId;
-    const data = await prisma.debt.findFirst({
-      where: { userId },
+     const data = await prisma.debt.findUnique({
+      where: { userId: userId }
     });
 
     if (!data) {
@@ -80,7 +80,7 @@ export async function GET(
     }
 
     const emiAmount = data.emiAmount;
-    const financialData = await prisma.financials.findUnique({
+    const financialData = await prisma.financials.findFirst({
       where: { userId },
     });
 

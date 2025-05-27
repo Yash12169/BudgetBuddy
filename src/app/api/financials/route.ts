@@ -15,16 +15,17 @@ export async function POST(req: NextRequest) {
     const expenses = Number(data.expenses) || 0;
     const extraExpenses = Number(data.extraExpenses) || 0;
     const insurancePremium = Number(data.insurancePremium) || 0;
-    const emi = Number(data.emi) || 0;
+    const userId = data.userId;
+    
 
     const newRecord = await prisma.financials.create({
       data: {
-        userId: "1",
+        userId,
         salary,
         expenses,
         extraExpenses,
         insurancePremium,
-        emi,
+        
       },
     });
 
