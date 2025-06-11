@@ -41,7 +41,7 @@ export default function UserProvider({ children }: UserProviderProps) {
 
     const fetchFinancials = async () => {
       try {
-        const response = await axios.get(`/api/fetch-financials/${id}`);
+        const response = await axios.get(`/api/financials/${id}`);
         setFinancial(response.data);
       } catch (error) {
         console.error("Error fetching financials:", error);
