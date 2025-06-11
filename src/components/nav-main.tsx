@@ -73,7 +73,6 @@ export function NavMain({ items }: { items: NavItem[] }) {
                   </div>
                 )}
 
-                {/* Show title only if sidebar is expanded */}
                 {!isCollapsed && (
                   <span className="ml-2 transition-opacity duration-200">
                     {item.title}

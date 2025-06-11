@@ -17,7 +17,7 @@ export default function UserProvider({ children }: UserProviderProps) {
   const [, setDebt] = useAtom(debtAtom);
   const [, setGoal] = useAtom(goalAtom);
   const id = userC.user?.id;
-
+ console.log(userC,"this is user")
   useEffect(() => {
     const fetchGoalData = async () => {
       try {
@@ -30,8 +30,10 @@ export default function UserProvider({ children }: UserProviderProps) {
     
     const fetchUserData = async () => {
       try {
+        console.log("fetching user....  ")
         const data = await axios.get(`/api/fetch-user/${id}`);
         setUser({ ...data.data.user });
+        console.log("asdfasdff id",id)
       } catch (error) {
         console.error("Error fetching user data:", error);
       }

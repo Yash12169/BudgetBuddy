@@ -35,8 +35,8 @@ model financials {
 }
 
 model debt {
-  id           Int   @id() @default(autoincrement()) 
-  userId       String
+  id           String   @id @default(cuid())
+  userId       String   @unique
   loanAmount   Int
   loanTenure   Int
   interestRate Float
