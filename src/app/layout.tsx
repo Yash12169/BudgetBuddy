@@ -10,6 +10,7 @@ import {
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import UserProvider from './providers/UserProvider'
+// import QueryProvider from './provider/QueryProvider'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -44,7 +45,9 @@ export default function RootLayout({
               <UserButton />
             </SignedIn>
           </header>
-          <UserProvider>{children}</UserProvider>
+          {/* <QueryProvider> */}
+            <UserProvider>{children}</UserProvider>
+          {/* </QueryProvider> */}
         </body>
       </html>
     </ClerkProvider>

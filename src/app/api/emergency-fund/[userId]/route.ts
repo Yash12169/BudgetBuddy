@@ -23,6 +23,17 @@ const calculateEmergencyStatus = (
   emergencyFund: number,
   salary: number
 ): EmergencyFundStatus => {
+  if (!salary || salary <= 0) {
+    return {
+      monthsCovered: 0,
+      status: "critical",
+      message: "Salary information not available or invalid",
+      score: 0,
+      recommendedMin: 3,
+      recommendedIdeal: 6,
+    };
+  }
+
   const monthsCovered = emergencyFund / salary;
 
   let status: EmergencyFundStatus["status"];
@@ -68,7 +79,15 @@ export async function POST(
   try {
     const userId = params.userId;
     const data = await req.json();
-    const emergencyFund = Number(data.emergencyFund) || 0;
+    
+    if (!data.emergencyFund || isNaN(Number(data.emergencyFund)) || Number(data.emergencyFund) < 0) {
+      return NextResponse.json(
+        { success: false, message: "Invalid emergency fund amount" },
+        { status: 400 }
+      );
+    }
+
+    const emergencyFund = Number(data.emergencyFund);
 
     const existingFund = await prisma.emergencyFund.findFirst({
       where: { userId: userId }
@@ -115,8 +134,9 @@ export async function POST(
       { status: 201 }
     );
   } catch (error) {
+    console.error("Error creating emergency fund:", error);
     return NextResponse.json(
-      { success: false, message: "Error creating emergency fund", error },
+      { success: false, message: "Error creating emergency fund" },
       { status: 500 }
     );
   }
@@ -162,8 +182,9 @@ export async function GET(
       { status: 200 }
     );
   } catch (error) {
+    console.error("Error fetching emergency fund:", error);
     return NextResponse.json(
-      { success: false, message: "Error fetching data", error },
+      { success: false, message: "Error fetching emergency fund" },
       { status: 500 }
     );
   }
@@ -176,9 +197,16 @@ export async function PUT(
   try {
     const userId = params.userId;
     const data = await req.json();
-    const emergencyFund = Number(data.emergencyFund) || 0;
+    
+    if (!data.emergencyFund || isNaN(Number(data.emergencyFund)) || Number(data.emergencyFund) < 0) {
+      return NextResponse.json(
+        { success: false, message: "Invalid emergency fund amount" },
+        { status: 400 }
+      );
+    }
 
-    // Get user's salary from financials
+    const emergencyFund = Number(data.emergencyFund);
+
     const finData = await prisma.financials.findFirst({
       where: { userId: userId }
     });
@@ -193,7 +221,6 @@ export async function PUT(
     const salary = finData.salary;
     const statusData = calculateEmergencyStatus(emergencyFund, salary);
 
-    // Update or create emergency fund
     const updatedRecord = await prisma.emergencyFund.upsert({
       where: { userId: userId },
       update: {
@@ -219,8 +246,9 @@ export async function PUT(
       { status: 200 }
     );
   } catch (error) {
+    console.error("Error updating emergency fund:", error);
     return NextResponse.json(
-      { success: false, message: "Error updating emergency fund", error },
+      { success: false, message: "Error updating emergency fund" },
       { status: 500 }
     );
   }
@@ -233,7 +261,6 @@ export async function DELETE(
   try {
     const userId = params.userId;
 
-    // Check if emergency fund exists
     const existingFund = await prisma.emergencyFund.findFirst({
       where: { userId: userId }
     });
@@ -245,7 +272,6 @@ export async function DELETE(
       );
     }
 
-    // Delete the emergency fund
     await prisma.emergencyFund.delete({
       where: { userId: userId }
     });
@@ -255,8 +281,9 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
+    console.error("Error deleting emergency fund:", error);
     return NextResponse.json(
-      { success: false, message: "Error deleting emergency fund", error },
+      { success: false, message: "Error deleting emergency fund" },
       { status: 500 }
     );
   }

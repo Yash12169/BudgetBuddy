@@ -8,6 +8,7 @@ import { useAtom } from "jotai";
 import RedBadge from "../ui/redBadge";
 import GreenBadge from "../ui/greenBadge";
 import YellowBadge from "../ui/yellowBadge";
+import { useRouter } from "next/navigation";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["600"] });
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500"] });
@@ -18,14 +19,10 @@ type StatusDetails = {
 };
 
 export default function EmergencyFund() {
-  const [salary, setSalary] = useState<number>(0);
-  // const [emergencyFund, setEmergencyFund] = useState<number>(0);
   const [emergencyFund] = useAtom(emergencyFundAtom);
   const [financials] = useAtom(financialAtom);
-  const [statusDetails, setStatusDetails] = useState<StatusDetails>({
-    text: "Loading...",
-    color: "bg-gray-500",
-  });
+  const router = useRouter();
+
   if (!emergencyFund || !financials) {
     return (
       <div className="flex gap-4 flex-col h-[100%] px-5 py-9 bg-neutral text-neutral-content rounded-[30px]">
@@ -38,6 +35,7 @@ export default function EmergencyFund() {
       </div>
     );
   }
+
   return (
     <div className="flex flex-col p-5 h-[45vh] justify-between text-black">
       <div className="flex flex-col items-center gap-5">
@@ -110,7 +108,10 @@ export default function EmergencyFund() {
           <div className="bg-black text-white rounded-[30px] px-5 py-1 cursor-pointer flex justify-center items-center">
             <p className={`${poppins.className} font-semibold text-sm`}>View</p>
           </div>
-          <div className="flex justify-center items-center border-2 border-black hover:bg-black hover:text-white transition duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer">
+          <div 
+            onClick={() => router.push("/user/emergency-fund/edit")}
+            className="flex justify-center items-center border-2 border-black hover:bg-black hover:text-white transition duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer"
+          >
             <p className={`${poppins.className} font-semibold text-sm`}>
               Re-Check
             </p>

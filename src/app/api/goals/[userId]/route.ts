@@ -1,4 +1,3 @@
-
 import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -13,9 +12,23 @@ const inflationRates = {
 
 type CategoryType = keyof typeof inflationRates;
 
-export async function GET(req: NextRequest,{params}:{params:{userId:string}}) {
+interface GoalUpdateData {
+  title?: string;
+  targetAmount?: number;
+  amountRequired?: number;
+  yearsToGoal?: number;
+  category?: string;
+  currentSalary?: number;
+  annualIncrementRate?: number;
+  priority?: number;
+  adjustedTargetAmount?: number;
+  forecastedSalary?: number;
+  isAchievable?: boolean;
+}
+
+export async function GET(req: NextRequest, { params }: { params: { userId: string } }) {
   try {
-    const userId = params.userId
+    const userId = params.userId;
 
     if (!userId) {
       return NextResponse.json({ success: false, message: 'Missing userId' }, { status: 400 });
@@ -30,7 +43,7 @@ export async function GET(req: NextRequest,{params}:{params:{userId:string}}) {
         title: true,
         targetAmount: true,
         adjustedTargetAmount: true,
-        amountRequired: true, 
+        amountRequired: true,
         yearsToGoal: true,
         category: true,
         currentSalary: true,
@@ -47,18 +60,18 @@ export async function GET(req: NextRequest,{params}:{params:{userId:string}}) {
     }
 
     return NextResponse.json({ success: true, data: goals }, { status: 200 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('GET error:', error);
-    return NextResponse.json({ success: false, message: 'Failed to fetch goals', error: error.message }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ success: false, message: 'Failed to fetch goals', error: errorMessage }, { status: 500 });
   }
 }
 
-
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, { params }: { params: { userId: string } }) {
   try {
+    const { userId } = params;
     const body = await req.json();
     const {
-      userId,
       title,
       targetAmount,
       amountRequired,
@@ -70,7 +83,6 @@ export async function POST(req: NextRequest) {
     } = body;
 
     const missingFields = [];
-    if (!userId) missingFields.push('userId');
     if (!title) missingFields.push('title');
     if (!targetAmount) missingFields.push('targetAmount');
     if (!amountRequired) missingFields.push('amountRequired');
@@ -95,7 +107,6 @@ export async function POST(req: NextRequest) {
     const forecastedSalary = currentSalary * Math.pow(1 + annualIncrementRate, yearsToGoal);
     const isAchievable = forecastedSalary * 0.3 * yearsToGoal >= adjustedTargetAmount;
 
-    
     if (priority === 1) {
       await prisma.lifeGoal.updateMany({
         where: { userId, priority: 1 },
@@ -107,13 +118,13 @@ export async function POST(req: NextRequest) {
       data: {
         userId,
         title,
-        targetAmount,
-        amountRequired,
+        targetAmount: Number(targetAmount),
+        amountRequired: Number(amountRequired),
         adjustedTargetAmount,
-        yearsToGoal,
+        yearsToGoal: Number(yearsToGoal),
         category,
-        currentSalary,
-        annualIncrementRate,
+        currentSalary: Number(currentSalary),
+        annualIncrementRate: Number(annualIncrementRate),
         forecastedSalary,
         isAchievable,
         priority,
@@ -121,62 +132,62 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data: goal }, { status: 201 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('POST error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error', error: error.message }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ success: false, message: 'Internal server error', error: errorMessage }, { status: 500 });
   }
 }
 
-export async function PUT(req: NextRequest) {
+export async function PUT(req: NextRequest, { params }: { params: { userId: string } }) {
   try {
+    const { userId } = params;
     const body = await req.json();
     const {
       id,
-      targetAmount,
+      title,
       amountRequired,
       yearsToGoal,
       category,
       currentSalary,
       annualIncrementRate,
-      title,
       priority,
-      userId: requestUserId,
     } = body;
 
     if (!id) {
       return NextResponse.json({ success: false, message: 'Goal ID is required' }, { status: 400 });
     }
 
-    const updateData: any = {};
+    const existingGoal = await prisma.lifeGoal.findFirst({
+      where: { id, userId },
+    });
+
+    if (!existingGoal) {
+      return NextResponse.json({ success: false, message: 'Goal not found or unauthorized' }, { status: 404 });
+    }
+
+    const updateData: GoalUpdateData = {};
     if (title) updateData.title = title;
 
-    
     if (priority !== undefined) {
       if (priority < 1 || priority > 3) {
         return NextResponse.json({ success: false, message: 'Invalid priority' }, { status: 400 });
       }
       updateData.priority = priority;
 
-      if (priority === 1 && requestUserId) {
+      if (priority === 1) {
         await prisma.lifeGoal.updateMany({
-          where: { userId: requestUserId, priority: 1, NOT: { id } },
+          where: { userId, priority: 1, NOT: { id } },
           data: { priority: 2 },
         });
       }
     }
 
-   
     if (amountRequired && yearsToGoal && category && currentSalary && annualIncrementRate) {
       const inflationRate = inflationRates[category as CategoryType] || inflationRates.general;
-      const adjustedTargetAmount = amountRequired * Math.pow(1 + inflationRate, yearsToGoal);
-      const forecastedSalary = currentSalary * Math.pow(1 + annualIncrementRate, yearsToGoal);
-      const isAchievable = forecastedSalary * 0.3 * yearsToGoal >= adjustedTargetAmount;
-
-      Object.assign(updateData, {
-        adjustedTargetAmount,
-        forecastedSalary,
-        isAchievable,
-      });
+      updateData.adjustedTargetAmount = amountRequired * Math.pow(1 + inflationRate, yearsToGoal);
+      updateData.forecastedSalary = currentSalary * Math.pow(1 + annualIncrementRate, yearsToGoal);
+      updateData.isAchievable = updateData.forecastedSalary * 0.3 * yearsToGoal >= updateData.adjustedTargetAmount;
     }
 
     const updatedGoal = await prisma.lifeGoal.update({
@@ -185,27 +196,557 @@ export async function PUT(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data: updatedGoal }, { status: 200 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('PUT error:', error);
-    return NextResponse.json({ success: false, message: 'Failed to update goal', error: error.message }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ success: false, message: 'Failed to update goal', error: errorMessage }, { status: 500 });
   }
 }
 
-
-export async function DELETE(req: NextRequest) {
+export async function DELETE(req: NextRequest, { params }: { params: { userId: string } }) {
   try {
-    const body = await req.json();
-    const { id } = body;
+    const { userId } = params;
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
 
     if (!id) {
       return NextResponse.json({ success: false, message: 'Goal ID is required' }, { status: 400 });
     }
 
+    const existingGoal = await prisma.lifeGoal.findFirst({
+      where: { id, userId },
+    });
+
+    if (!existingGoal) {
+      return NextResponse.json({ success: false, message: 'Goal not found or unauthorized' }, { status: 404 });
+    }
+
     await prisma.lifeGoal.delete({ where: { id } });
 
     return NextResponse.json({ success: true, message: 'Goal deleted successfully' }, { status: 200 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('DELETE error:', error);
-    return NextResponse.json({ success: false, message: 'Failed to delete goal', error: error.message }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ success: false, message: 'Failed to delete goal', error: errorMessage }, { status: 500 });
   }
 }
+
+}
+
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  try {
+    const { userId } = params;
+    const body = await req.json();
+    const {
+      title,
+      targetAmount,
+      amountRequired,
+      yearsToGoal,
+      category,
+      currentSalary,
+      annualIncrementRate,
+      priority = 3,
+    } = body;
+
+    // Validate required fields
+    const missingFields = [];
+    if (!title) missingFields.push('title');
+    if (!targetAmount) missingFields.push('targetAmount');
+    if (!amountRequired) missingFields.push('amountRequired');
+    if (!yearsToGoal) missingFields.push('yearsToGoal');
+    if (!category) missingFields.push('category');
+    if (!currentSalary) missingFields.push('currentSalary');
+    if (!annualIncrementRate) missingFields.push('annualIncrementRate');
+
+    if (missingFields.length > 0) {
+      return NextResponse.json(
+        { success: false, message: 'Missing required fields', missingFields },
+        { status: 400 }
+      );
+    }
+
+    // Validate priority
+    if (priority < 1 || priority > 3) {
+      return NextResponse.json(
+        { success: false, message: 'Priority must be between 1 and 3' },
+        { status: 400 }
+      );
+    }
+
+    // Calculate financial metrics
+    const inflationRate = inflationRates[category as CategoryType] || inflationRates.general;
+    const adjustedTargetAmount = amountRequired * Math.pow(1 + inflationRate, yearsToGoal);
+    const forecastedSalary = currentSalary * Math.pow(1 + Number(annualIncrementRate), yearsToGoal);
+    const isAchievable = forecastedSalary * 0.3 * yearsToGoal >= adjustedTargetAmount;
+
+    // Handle priority 1 goals
+    if (priority === 1) {
+      await prisma.lifeGoal.updateMany({
+        where: { userId, priority: 1 },
+        data: { priority: 2 },
+      });
+    }
+
+    // Create the goal
+    const goal = await prisma.lifeGoal.create({
+      data: {
+        userId,
+        title,
+        targetAmount: Number(targetAmount),
+        amountRequired: Number(amountRequired),
+        adjustedTargetAmount,
+        yearsToGoal: Number(yearsToGoal),
+        category,
+        currentSalary: Number(currentSalary),
+        annualIncrementRate: Number(annualIncrementRate),
+        forecastedSalary,
+        isAchievable,
+        priority,
+      },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        }
+      }
+    });
+
+    return NextResponse.json({ success: true, data: goal }, { status: 201 });
+  } catch (error) {
+    console.error('POST error:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        message: 'Failed to create goal',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  try {
+    const { userId } = params;
+    const body = await req.json();
+    const {
+      id,
+      title,
+      targetAmount,
+      amountRequired,
+      yearsToGoal,
+      category,
+      currentSalary,
+      annualIncrementRate,
+      priority,
+    } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, message: 'Goal ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Verify the goal exists and belongs to the user
+    const existingGoal = await prisma.lifeGoal.findFirst({
+      where: { id, userId },
+    });
+
+    if (!existingGoal) {
+      return NextResponse.json(
+        { success: false, message: 'Goal not found or unauthorized' },
+        { status: 404 }
+      );
+    }
+
+    // Prepare update data
+    const updateData: any = {};
+    if (title !== undefined) updateData.title = title;
+    if (targetAmount !== undefined) updateData.targetAmount = Number(targetAmount);
+    if (amountRequired !== undefined) updateData.amountRequired = Number(amountRequired);
+    if (yearsToGoal !== undefined) updateData.yearsToGoal = Number(yearsToGoal);
+    if (category !== undefined) updateData.category = category;
+    if (currentSalary !== undefined) updateData.currentSalary = Number(currentSalary);
+    if (annualIncrementRate !== undefined) updateData.annualIncrementRate = Number(annualIncrementRate);
+
+    // Handle priority updates
+    if (priority !== undefined) {
+      if (priority < 1 || priority > 3) {
+        return NextResponse.json(
+          { success: false, message: 'Priority must be between 1 and 3' },
+          { status: 400 }
+        );
+      }
+      updateData.priority = priority;
+
+      // Handle priority 1 updates
+      if (priority === 1) {
+        await prisma.lifeGoal.updateMany({
+          where: { 
+            userId, 
+            priority: 1,
+            NOT: { id }
+          },
+          data: { priority: 2 },
+        });
+      }
+    }
+
+    // Recalculate financial metrics if necessary fields are present
+    if (amountRequired !== undefined && yearsToGoal !== undefined && category !== undefined) {
+      const inflationRate = inflationRates[category as CategoryType] || inflationRates.general;
+      updateData.adjustedTargetAmount = updateData.amountRequired * Math.pow(1 + inflationRate, updateData.yearsToGoal);
+      
+      if (currentSalary !== undefined && annualIncrementRate !== undefined) {
+        updateData.forecastedSalary = updateData.currentSalary * Math.pow(1 + Number(updateData.annualIncrementRate), updateData.yearsToGoal);
+        updateData.isAchievable = updateData.forecastedSalary * 0.3 * updateData.yearsToGoal >= updateData.adjustedTargetAmount;
+      }
+    }
+
+    // Update the goal
+    const updatedGoal = await prisma.lifeGoal.update({
+      where: { id },
+      data: updateData,
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        }
+      }
+    });
+
+    return NextResponse.json({ success: true, data: updatedGoal }, { status: 200 });
+  } catch (error) {
+    console.error('PUT error:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        message: 'Failed to update goal',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  try {
+    const { userId } = params;
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, message: 'Goal ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Verify the goal exists and belongs to the user
+    const existingGoal = await prisma.lifeGoal.findFirst({
+      where: { id, userId },
+    });
+
+    if (!existingGoal) {
+      return NextResponse.json(
+        { success: false, message: 'Goal not found or unauthorized' },
+        { status: 404 }
+      );
+    }
+
+    // Delete the goal
+    await prisma.lifeGoal.delete({
+      where: { id }
+    });
+
+    return NextResponse.json(
+      { success: true, message: 'Goal deleted successfully' },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('DELETE error:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        message: 'Failed to delete goal',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  try {
+    const { userId } = params;
+    const body = await req.json();
+    const {
+      title,
+      targetAmount,
+      amountRequired,
+      yearsToGoal,
+      category,
+      currentSalary,
+      annualIncrementRate,
+      priority = 3,
+    } = body;
+
+    // Validate required fields
+    const missingFields = [];
+    if (!title) missingFields.push('title');
+    if (!targetAmount) missingFields.push('targetAmount');
+    if (!amountRequired) missingFields.push('amountRequired');
+    if (!yearsToGoal) missingFields.push('yearsToGoal');
+    if (!category) missingFields.push('category');
+    if (!currentSalary) missingFields.push('currentSalary');
+    if (!annualIncrementRate) missingFields.push('annualIncrementRate');
+
+    if (missingFields.length > 0) {
+      return NextResponse.json(
+        { success: false, message: 'Missing required fields', missingFields },
+        { status: 400 }
+      );
+    }
+
+    // Validate priority
+    if (priority < 1 || priority > 3) {
+      return NextResponse.json(
+        { success: false, message: 'Priority must be between 1 and 3' },
+        { status: 400 }
+      );
+    }
+
+    // Calculate financial metrics
+    const inflationRate = inflationRates[category as CategoryType] || inflationRates.general;
+    const adjustedTargetAmount = amountRequired * Math.pow(1 + inflationRate, yearsToGoal);
+    const forecastedSalary = currentSalary * Math.pow(1 + Number(annualIncrementRate), yearsToGoal);
+    const isAchievable = forecastedSalary * 0.3 * yearsToGoal >= adjustedTargetAmount;
+
+    // Handle priority 1 goals
+    if (priority === 1) {
+      await prisma.lifeGoal.updateMany({
+        where: { userId, priority: 1 },
+        data: { priority: 2 },
+      });
+    }
+
+    // Create the goal
+    const goal = await prisma.lifeGoal.create({
+      data: {
+        userId,
+        title,
+        targetAmount: Number(targetAmount),
+        amountRequired: Number(amountRequired),
+        adjustedTargetAmount,
+        yearsToGoal: Number(yearsToGoal),
+        category,
+        currentSalary: Number(currentSalary),
+        annualIncrementRate: Number(annualIncrementRate),
+        forecastedSalary,
+        isAchievable,
+        priority,
+      },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        }
+      }
+    });
+
+    return NextResponse.json({ success: true, data: goal }, { status: 201 });
+  } catch (error) {
+    console.error('POST error:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        message: 'Failed to create goal',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  try {
+    const { userId } = params;
+    const body = await req.json();
+    const {
+      id,
+      title,
+      targetAmount,
+      amountRequired,
+      yearsToGoal,
+      category,
+      currentSalary,
+      annualIncrementRate,
+      priority,
+    } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, message: 'Goal ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Verify the goal exists and belongs to the user
+    const existingGoal = await prisma.lifeGoal.findFirst({
+      where: { id, userId },
+    });
+
+    if (!existingGoal) {
+      return NextResponse.json(
+        { success: false, message: 'Goal not found or unauthorized' },
+        { status: 404 }
+      );
+    }
+
+    // Prepare update data
+    const updateData: any = {};
+    if (title !== undefined) updateData.title = title;
+    if (targetAmount !== undefined) updateData.targetAmount = Number(targetAmount);
+    if (amountRequired !== undefined) updateData.amountRequired = Number(amountRequired);
+    if (yearsToGoal !== undefined) updateData.yearsToGoal = Number(yearsToGoal);
+    if (category !== undefined) updateData.category = category;
+    if (currentSalary !== undefined) updateData.currentSalary = Number(currentSalary);
+    if (annualIncrementRate !== undefined) updateData.annualIncrementRate = Number(annualIncrementRate);
+
+    // Handle priority updates
+    if (priority !== undefined) {
+      if (priority < 1 || priority > 3) {
+        return NextResponse.json(
+          { success: false, message: 'Priority must be between 1 and 3' },
+          { status: 400 }
+        );
+      }
+      updateData.priority = priority;
+
+      // Handle priority 1 updates
+      if (priority === 1) {
+        await prisma.lifeGoal.updateMany({
+          where: { 
+            userId, 
+            priority: 1,
+            NOT: { id }
+          },
+          data: { priority: 2 },
+        });
+      }
+    }
+
+    // Recalculate financial metrics if necessary fields are present
+    if (amountRequired !== undefined && yearsToGoal !== undefined && category !== undefined) {
+      const inflationRate = inflationRates[category as CategoryType] || inflationRates.general;
+      updateData.adjustedTargetAmount = updateData.amountRequired * Math.pow(1 + inflationRate, updateData.yearsToGoal);
+      
+      if (currentSalary !== undefined && annualIncrementRate !== undefined) {
+        updateData.forecastedSalary = updateData.currentSalary * Math.pow(1 + Number(updateData.annualIncrementRate), updateData.yearsToGoal);
+        updateData.isAchievable = updateData.forecastedSalary * 0.3 * updateData.yearsToGoal >= updateData.adjustedTargetAmount;
+      }
+    }
+
+    // Update the goal
+    const updatedGoal = await prisma.lifeGoal.update({
+      where: { id },
+      data: updateData,
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        }
+      }
+    });
+
+    return NextResponse.json({ success: true, data: updatedGoal }, { status: 200 });
+  } catch (error) {
+    console.error('PUT error:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        message: 'Failed to update goal',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  try {
+    const { userId } = params;
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, message: 'Goal ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Verify the goal exists and belongs to the user
+    const existingGoal = await prisma.lifeGoal.findFirst({
+      where: { id, userId },
+    });
+
+    if (!existingGoal) {
+      return NextResponse.json(
+        { success: false, message: 'Goal not found or unauthorized' },
+        { status: 404 }
+      );
+    }
+
+    // Delete the goal
+    await prisma.lifeGoal.delete({
+      where: { id }
+    });
+
+    return NextResponse.json(
+      { success: true, message: 'Goal deleted successfully' },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('DELETE error:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        message: 'Failed to delete goal',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
+  }
+} 

@@ -31,10 +31,12 @@ const parseNumber = (value: string): number => {
 
 export default function DebtEdit() {
   const router = useRouter();
-  const [financials] = useAtom(financialAtom);
-  const [debt] = useAtom(debtAtom);
+  const [financials, setFinancial] = useAtom(financialAtom);
+  const [debt, setDebt] = useAtom(debtAtom);
   const [totalScore, setTotalScore] = useState(0);
-  const user = useUser();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { user } = useUser();
 
   const [formValues, setFormValues] = useState({
     loan: "",
@@ -52,6 +54,10 @@ export default function DebtEdit() {
     time: 100000000000,
     interest: 100000000000,
     emi: 100000000000,
+    income: 100000000000,
+    basic: 100000000000,
+    extra: 100000000000,
+    insurance: 100000000000,
   };
 
   useEffect(() => {
@@ -101,39 +107,52 @@ export default function DebtEdit() {
   const savings = totalIncome - totalExpenses;
 
   const handleSubmit = async () => {
-    const userId = debt?.data?.data?.userId;
-    if (!userId) {
-      console.error("User ID not found in debt data");
+    if (!user?.id) {
+      setError("User not authenticated");
       return;
     }
 
-    const payload = {
-      userId,
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // Update debt information
+      const debtPayload = {
       loanAmount: parseNumber(formValues.loan),
       loanTenure: parseNumber(formValues.time),
       interestRate: parseFloat(formValues.interest),
       emiAmount: parseNumber(formValues.emi),
     };
 
-    try {
-      // Update debt information
-      await axios.put("/api/debt/", payload);
+      await axios.put(`/api/debt/${user.id}`, debtPayload);
       
-      // Also update financials if needed
+      // Update financials
       const financialPayload = {
-        userId,
-        income: parseNumber(formValues.income),
-        basic: parseNumber(formValues.basic),
-        extra: parseNumber(formValues.extra),
-        emi: parseNumber(formValues.emi),
-        insurance: parseNumber(formValues.insurance),
+        userId: user.id,
+        salary: parseNumber(formValues.income),
+        expenses: parseNumber(formValues.basic),
+        extraExpenses: parseNumber(formValues.extra),
+        insurancePremium: parseNumber(formValues.insurance),
       };
       
-      await axios.put("/api/financials/", financialPayload);
+      await axios.put(`/api/financials/${user.id}`, financialPayload);
+      
+      // Refresh the data
+      const [debtResponse, financialResponse] = await Promise.all([
+        axios.get(`/api/debt/${user.id}`),
+        axios.get(`/api/financials/${user.id}`)
+      ]);
+      
+      // Update the atoms with new data
+      setDebt(debtResponse.data);
+      setFinancial(financialResponse.data);
       
       router.push("/user/financial-checkup");
     } catch (err) {
       console.error("Submit failed", err);
+      setError("Failed to update information. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -160,6 +179,12 @@ export default function DebtEdit() {
           <p className={montserrat}>Tell us about your outstanding loans</p>
         </div>
       </div>
+
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <span className="block sm:inline">{error}</span>
+        </div>
+      )}
 
       <div className="flex border-2 gap-5 items-center w-[60%] rounded-[15px] px-5 py-2">
         <div>
@@ -202,6 +227,7 @@ export default function DebtEdit() {
                   item.key as keyof typeof formValues
                 )}
                 className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out`}
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -234,18 +260,26 @@ export default function DebtEdit() {
       </div>
 
       <div className="flex gap-5">
-        <div
+        <button
           onClick={handleSubmit}
-          className="flex justify-center items-center bg-[#6F39C5] px-6 py-2 rounded-[25px] text-white cursor-pointer"
+          disabled={isLoading}
+          className={`flex justify-center items-center bg-[#6F39C5] px-6 py-2 rounded-[25px] text-white cursor-pointer ${
+            isLoading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
-          <p className={`${montserrat} font-semibold`}>Submit</p>
-        </div>
-        <div
+          <p className={`${montserrat} font-semibold`}>
+            {isLoading ? "Updating..." : "Submit"}
+          </p>
+        </button>
+        <button
           onClick={() => router.push("/user/financial-checkup")}
-          className="flex justify-center items-center text-[#6F39C5] border-2 border-[#6F39C5] px-5 py-2 rounded-[25px] cursor-pointer"
+          disabled={isLoading}
+          className={`flex justify-center items-center text-[#6F39C5] border-2 border-[#6F39C5] px-5 py-2 rounded-[25px] cursor-pointer ${
+            isLoading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
           <p className={`${montserrat} font-semibold`}>Cancel</p>
-        </div>
+        </button>
       </div>
     </div>
   );
