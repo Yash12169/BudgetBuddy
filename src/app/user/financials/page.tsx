@@ -2,17 +2,24 @@
 import { useRouter } from "next/navigation"
 import { FormEvent } from 'react'
 import axios from "axios";
+import { useUser } from "@clerk/nextjs";
 
 export default function Home() {
     const router = useRouter()
+    const { user } = useUser();
     
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => { 
         e.preventDefault()
+        if (!user?.id) {
+            console.error("User not authenticated");
+            return;
+        }
+
         const formData = new FormData(e.currentTarget)
         const formValues = Object.fromEntries(formData.entries())
-        console.log(formData)
+        
         try {
-            const res = await axios.post("/api/financials",formValues,{
+            const res = await axios.post(`/api/financials/${user.id}`, formValues, {
                 headers: { "Content-Type": "application/json" },
             })            
             router.push("/user/dashboard")
@@ -37,34 +44,23 @@ export default function Home() {
                 </div>
                 
                 <div>
-                    <label htmlFor="basicExpenses" className="block text-sm font-medium text-gray-700">Basic Expenses</label>
+                    <label htmlFor="expenses" className="block text-sm font-medium text-gray-700">Basic Expenses</label>
                     <input 
                         type="text" 
-                        id="basicExpenses"
-                        name="basicExpenses" 
+                        id="expenses"
+                        name="expenses" 
                         placeholder="Rent, utilities, etc." 
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
                     />
                 </div>
                 
                 <div>
-                    <label htmlFor="insurance" className="block text-sm font-medium text-gray-700">Insurance</label>
+                    <label htmlFor="insurancePremium" className="block text-sm font-medium text-gray-700">Insurance</label>
                     <input 
                         type="text" 
-                        id="insurance"
-                        name="insurance" 
+                        id="insurancePremium"
+                        name="insurancePremium" 
                         placeholder="Health, car, etc." 
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                    />
-                </div>
-                
-                <div>
-                    <label htmlFor="emi" className="block text-sm font-medium text-gray-700">EMIs</label>
-                    <input 
-                        type="text" 
-                        id="emi"
-                        name="emi" 
-                        placeholder="Loan payments" 
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
                     />
                 </div>
