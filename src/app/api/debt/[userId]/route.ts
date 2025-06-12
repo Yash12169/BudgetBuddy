@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-
 const prisma = new PrismaClient();
-
 export async function GET(
   request: Request,
   { params }: { params: { userId: string } }
@@ -21,7 +19,29 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(debt);
+    // Get user's salary from financials
+    const financials = await prisma.financials.findUnique({
+      where: {
+        userId: params.userId,
+      },
+    });
+
+    if (!financials) {
+      return NextResponse.json(
+        { error: "Financial details not found" },
+        { status: 404 }
+      );
+    }
+
+    // Calculate EMI load as percentage of salary
+    const debtLoad = (debt.emiAmount / financials.salary) * 100;
+
+    return NextResponse.json({
+      data: {
+        data: debt,
+        debtLoad: Math.round(debtLoad)
+      }
+    });
   } catch (error) {
     console.error("Error fetching debt:", error);
     return NextResponse.json(
@@ -72,7 +92,29 @@ export async function POST(
       },
     });
 
-    return NextResponse.json(debt, { status: 201 });
+    // Get user's salary from financials
+    const financials = await prisma.financials.findUnique({
+      where: {
+        userId: params.userId,
+      },
+    });
+
+    if (!financials) {
+      return NextResponse.json(
+        { error: "Financial details not found" },
+        { status: 404 }
+      );
+    }
+
+    // Calculate EMI load as percentage of salary
+    const debtLoad = (debt.emiAmount / financials.salary) * 100;
+
+    return NextResponse.json({
+      data: {
+        data: debt,
+        debtLoad: Math.round(debtLoad)
+      }
+    }, { status: 201 });
   } catch (error) {
     console.error("Error creating debt:", error);
     return NextResponse.json(
@@ -111,7 +153,29 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(debt);
+    // Get user's salary from financials
+    const financials = await prisma.financials.findUnique({
+      where: {
+        userId: params.userId,
+      },
+    });
+
+    if (!financials) {
+      return NextResponse.json(
+        { error: "Financial details not found" },
+        { status: 404 }
+      );
+    }
+
+    // Calculate EMI load as percentage of salary
+    const debtLoad = (debt.emiAmount / financials.salary) * 100;
+
+    return NextResponse.json({
+      data: {
+        data: debt,
+        debtLoad: Math.round(debtLoad)
+      }
+    });
   } catch (error) {
     console.error("Error updating debt:", error);
     return NextResponse.json(
