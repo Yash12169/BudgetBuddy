@@ -4,7 +4,13 @@ const nextConfig: NextConfig = {
   
   /* config options here */
   images: {
-    domains: ['img.clerk.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+        pathname: '/**',
+      },
+    ],
   },
 };
 

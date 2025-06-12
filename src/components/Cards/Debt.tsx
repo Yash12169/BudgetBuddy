@@ -14,15 +14,15 @@ import { useRouter } from "next/navigation";
 const formatAmount = (amount: number): string => {
   if (amount >= 10000000) { // 1 Crore
     const crores = amount / 10000000;
-    return `₹${crores.toFixed(1)} Cr`;
+    return `₹ ${crores.toFixed(1)}Cr`;
   } else if (amount >= 100000) { // 1 Lakh
     const lakhs = amount / 100000;
-    return `₹${lakhs.toFixed(1)} L`;
+    return `₹ ${lakhs.toFixed(1)}L`;
   } else if (amount >= 1000) { // 1 Thousand
     const thousands = amount / 1000;
-    return `₹${thousands.toFixed(1)} K`;
+    return `₹ ${thousands.toFixed(1)}K`;
   }
-  return `₹${amount.toLocaleString()}`;
+  return `₹ ${amount.toLocaleString()}`;
 };
 
 export default function Debt() {

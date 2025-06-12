@@ -1,13 +1,7 @@
 "use client"
 
 import * as React from "react"
-import {
-  GalleryVerticalEnd,
-  Goal,
-  LayoutDashboardIcon,
-  PieChart,
-  User2,Wallet
-} from "lucide-react"
+import { Wallet } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
 import { TeamSwitcher } from "@/components/team-switcher"
@@ -17,6 +11,15 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import finalgoalGif from "../assets/finalgoal.gif";
+import finalgoalPng from "../assets/finalgoal.png";
+import dashboardGif from "../assets/dashboardi.gif";
+import dashboardPng from "../assets/dashboardi.png";
+import analysisGif from "../assets/analysis.gif";
+import analysisPng from "../assets/analysis.png";
+import profileGif from "../assets/profilei.gif";
+import profilePng from "../assets/profilei.png";
+
 const data = {
   teams: [
     {
@@ -29,32 +32,38 @@ const data = {
     {
       title: "Dashboard",
       url: "/user/dashboard",
-      webmIcon: "/assets/dashboardi.gif",
-      staticIcon: "/assets/dashboardi.png",
+      webmIcon: dashboardGif.src,
+      staticIcon: dashboardPng.src,
       isActive: true,
     },
     {
       title: "Financial Checkup",
       url: "/user/financial-checkup",
-      webmIcon: "/assets/analysis.gif",
-      staticIcon: "/assets/analysis.png",
+      webmIcon: analysisGif.src,
+      staticIcon: analysisPng.src,
       isActive: true,
     },
     {
       title: "My Goals",
       url: "/user/goals",
-      webmIcon: "/assets/finalgoal.gif",
-      staticIcon: "/assets/finalgoal.png",
+      webmIcon: finalgoalGif.src,
+      staticIcon: finalgoalPng.src,
       isActive: true,
     },
     {
       title: "Profile",
       url: "/user/profile",
-      webmIcon: "/assets/profilei.gif",
-      staticIcon: "/assets/profilei.png",
+      webmIcon: profileGif.src,
+      staticIcon: profilePng.src,
       isActive: true,
     },
-  ],
+  ] as {
+    title: string;
+    url: string;
+    webmIcon?: string;
+    staticIcon?: string;
+    isActive?: boolean;
+  }[],
   projects: [],
 }
 
