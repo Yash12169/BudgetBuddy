@@ -41,7 +41,7 @@ export default function StarterCard() {
       <div className="bg--500 flex flex-col text-center items-center gap-4">
         <div className="rounded-full h-36  p-2 w-36 flex justify-center  border-4 border-purple-500 shadow-[0_0_15px_#A020F0]">
           <Image
-            src={userImg}
+            src={userImg || "/default-avatar.svg"}
             draggable={false}
             width={144}
             height={144}

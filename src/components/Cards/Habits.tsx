@@ -9,6 +9,20 @@ import YellowBadge from "../ui/yellowBadge";
 import RedBadge from "../ui/redBadge";
 import { useRouter } from "next/navigation";
 
+const formatAmount = (amount: number): string => {
+  if (amount >= 10000000) { // 1 Crore
+    const crores = amount / 10000000;
+    return `₹ ${crores.toFixed(1)}Cr`;
+  } else if (amount >= 100000) { // 1 Lakh
+    const lakhs = amount / 100000;
+    return `₹ ${lakhs.toFixed(1)}L`;
+  } else if (amount >= 1000) { // 1 Thousand
+    const thousands = amount / 1000;
+    return `₹ ${thousands.toFixed(1)}K`;
+  }
+  return `₹ ${amount.toLocaleString()}`;
+};
+
 export default function Habits() {
   const router = useRouter();
   const [financials] = useAtom(financialAtom);
@@ -58,7 +72,7 @@ export default function Habits() {
               <p>Monthly Income:</p>
             </div>
             <div className="font-semibold text-lg">
-              <p>₹{financials.allData.salary.toLocaleString()}</p>
+              <p>{formatAmount(financials.allData.salary)}</p>
             </div>
           </div>
 
@@ -67,7 +81,7 @@ export default function Habits() {
               <p>Expenses:</p>
             </div>
             <div className="font-semibold text-lg">
-              <p>₹{totalExpenses.toLocaleString()}</p>
+              <p>{formatAmount(totalExpenses)}</p>
             </div>
           </div>
         </div>

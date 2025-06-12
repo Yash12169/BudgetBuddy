@@ -10,6 +10,21 @@ import { debtAtom } from "@/atoms/atoms";
 import YellowBadge from "../ui/yellowBadge";
 import RedBadge from "../ui/redBadge";
 import { useRouter } from "next/navigation";
+
+const formatAmount = (amount: number): string => {
+  if (amount >= 10000000) { // 1 Crore
+    const crores = amount / 10000000;
+    return `₹${crores.toFixed(1)} Cr`;
+  } else if (amount >= 100000) { // 1 Lakh
+    const lakhs = amount / 100000;
+    return `₹${lakhs.toFixed(1)} L`;
+  } else if (amount >= 1000) { // 1 Thousand
+    const thousands = amount / 1000;
+    return `₹${thousands.toFixed(1)} K`;
+  }
+  return `₹${amount.toLocaleString()}`;
+};
+
 export default function Debt() {
   const [salary, setSalary] = useState("");
   const [savings, setSavings] = useState("");
@@ -46,7 +61,7 @@ export default function Debt() {
               <p>Total Loans:</p>
             </div>
             <div className="font-semibold text-lg">
-              <p>{debt.loanAmount}</p>
+              <p>{formatAmount(debt.data.data.loanAmount)}</p>
             </div>
           </div>
 
@@ -55,7 +70,7 @@ export default function Debt() {
               <p>Total EMI's:</p>
             </div>
             <div className="font-semibold text-lg">
-              <p>{debt.emiAmount}</p>
+              <p>{formatAmount(debt.data.data.emiAmount)}</p>
             </div>
           </div>
         </div>
