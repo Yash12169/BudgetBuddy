@@ -37,39 +37,21 @@ export default function FinancialSidebar() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/user/dashboard">
+                  <BreadcrumbLink href="/user/financial-checkup">
                     Financial Checkup
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbLink href="/user/financials">
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                <BreadcrumbLink href="/user/financial-checkup/spending-habits">
+                  <BreadcrumbPage>Spending Habits</BreadcrumbPage>
                 </BreadcrumbLink>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <ThemeController />
-          <SignOutButton />
+          {/* <ThemeController /> */}
+          {/* <SignOutButton /> */}
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          {/* <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
-          <FinancialScore />
-          </div>
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="aspect-video rounded-xl bg-accent shadow-lg">
-              <Habits />
-            </div>
-            <div className="aspect-video rounded-xl bg-accent shadow-lg">
-              <Debt />
-            </div>
-            <div className="aspect-video rounded-xl bg-accent shadow-lg">
-              <EmergencyFund />
-            </div>
-          </div> */}
           <HabitEdit/>
           <Disclaimer />
         </div>

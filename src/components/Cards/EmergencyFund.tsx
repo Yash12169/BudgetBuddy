@@ -109,7 +109,7 @@ export default function EmergencyFund() {
             <p className={`${poppins.className} font-semibold text-sm`}>View</p>
           </div>
           <div 
-            onClick={() => router.push("/user/emergency-fund/edit")}
+            onClick={() => router.push("/user/financial-checkup/emergency-fund")}
             className="flex justify-center items-center border-2 border-black hover:bg-black hover:text-white transition duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer"
           >
             <p className={`${poppins.className} font-semibold text-sm`}>
