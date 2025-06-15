@@ -9,6 +9,22 @@ import YellowBadge from "../ui/yellowBadge";
 import RedBadge from "../ui/redBadge";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { 
+  Wallet, 
+  Receipt, 
+  PlusCircle, 
+  Shield, 
+  TrendingUp, 
+  PiggyBank, 
+  Percent 
+} from "lucide-react";
 
 const formatAmount = (amount: number): string => {
   if (amount >= 10000000) { // 1 Crore
@@ -28,6 +44,7 @@ export default function Habits() {
   const router = useRouter();
   const [financials] = useAtom(financialAtom);
   const [isNavigating, setIsNavigating] = useState(false);
+  const [isViewOpen, setIsViewOpen] = useState(false);
 
   if (!financials) {
     return (
@@ -59,6 +76,10 @@ export default function Habits() {
   const handleReCheck = () => {
     setIsNavigating(true);
     router.push("/user/financial-checkup/spending-habits");
+  };
+
+  const handleView = () => {
+    setIsViewOpen(true);
   };
 
   return (
@@ -119,9 +140,119 @@ export default function Habits() {
       <div className="flex flex-col gap-5">
         <div className="bg-[#c9cac88b] rounded-full h-[1px] w-full"></div>
         <div className="flex justify-between">
-          <div className="bg-black text-white rounded-[30px] px-5 py-1 cursor-pointer flex justify-center items-center">
-            <p className={`${poppins} font-semibold text-sm`}>View</p>
-          </div>
+
+
+          <Dialog open={isViewOpen} onOpenChange={setIsViewOpen}>
+            <DialogTrigger asChild>
+              <div 
+                onClick={handleView}
+                className="bg-black text-white rounded-[30px] px-5 py-1 cursor-pointer flex justify-center items-center hover:bg-black/90 transition-all duration-300"
+              >
+                <p className={`${poppins} font-semibold text-sm`}>View</p>
+              </div>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px] bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800">
+              <DialogHeader className="pb-4 border-b border-gray-100 dark:border-gray-800">
+                <DialogTitle className={`${montserrat} text-xl flex items-center gap-3 text-gray-800 dark:text-gray-200`}>
+                  <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <Wallet className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  Spending Breakdown
+                </DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-6 py-4">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 mb-1">
+                    <div className="w-1.5 h-5 bg-blue-500 rounded-full"></div>
+                    <div className="text-base font-semibold text-gray-700 dark:text-gray-300">Expenses</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 gap-4">
+                      <div className="flex items-center gap-3">
+                        <span className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                          <Receipt className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        </span>
+                        <span className={`${poppins} text-base font-medium text-gray-700 dark:text-gray-300`}>Basic Expenses</span>
+                      </div>
+                      <span className={`${poppins} text-lg font-semibold text-gray-900 dark:text-gray-100`}>{formatAmount(financials.allData.expenses || 0)}</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 gap-4">
+                      <div className="flex items-center gap-3">
+                        <span className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                          <PlusCircle className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        </span>
+                        <span className={`${poppins} text-base font-medium text-gray-700 dark:text-gray-300`}>Extra Expenses</span>
+                      </div>
+                      <span className={`${poppins} text-lg font-semibold text-gray-900 dark:text-gray-100`}>{formatAmount(financials.allData.extraExpenses || 0)}</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 gap-4">
+                      <div className="flex items-center gap-3">
+                        <span className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                          <Shield className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        </span>
+                        <span className={`${poppins} text-base font-medium text-gray-700 dark:text-gray-300`}>Insurance</span>
+                      </div>
+                      <span className={`${poppins} text-lg font-semibold text-gray-900 dark:text-gray-100`}>{formatAmount(financials.allData.insurancePremium || 0)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 mb-1">
+                    <div className="w-1.5 h-5 bg-purple-500 rounded-full"></div>
+                    <div className="text-base font-semibold text-gray-700 dark:text-gray-300">Summary</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-900/30 gap-4">
+                      <div className="flex items-center gap-3">
+                        <span className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                          <TrendingUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                        </span>
+                        <span className={`${poppins} text-base font-medium text-purple-700 dark:text-purple-400`}>Total Expenses</span>
+                      </div>
+                      <span className={`${poppins} text-lg font-semibold text-purple-800 dark:text-purple-200`}>{formatAmount(totalExpenses)}</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-900/30 gap-4">
+                      <div className="flex items-center gap-3">
+                        <span className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                          <Wallet className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                        </span>
+                        <span className={`${poppins} text-base font-medium text-purple-700 dark:text-purple-400`}>Monthly Income</span>
+                      </div>
+                      <span className={`${poppins} text-lg font-semibold text-purple-800 dark:text-purple-200`}>{formatAmount(financials.allData.salary)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 mb-1">
+                    <div className="w-1.5 h-5 bg-green-500 rounded-full"></div>
+                    <div className="text-base font-semibold text-gray-700 dark:text-gray-300">Savings</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-900/30 gap-4">
+                      <div className="flex items-center gap-3">
+                        <span className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                          <PiggyBank className="w-5 h-5 text-green-600 dark:text-green-400" />
+                        </span>
+                        <span className={`${poppins} text-base font-medium text-green-700 dark:text-green-400`}>Monthly Savings</span>
+                      </div>
+                      <span className={`${poppins} text-lg font-semibold text-green-800 dark:text-green-300`}>{formatAmount(savings)}</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-900/30 gap-4">
+                      <div className="flex items-center gap-3">
+                        <span className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                          <Percent className="w-5 h-5 text-green-600 dark:text-green-400" />
+                        </span>
+                        <span className={`${poppins} text-base font-medium text-green-700 dark:text-green-400`}>Savings Rate</span>
+                      </div>
+                      <span className={`${poppins} text-lg font-semibold text-green-800 dark:text-green-300`}>{savingsPercent.toFixed(2)}%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>          
           <div 
             onClick={handleReCheck}
             className="flex justify-center items-center border-2 border-black hover:bg-black hover:text-white transition-all duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer relative overflow-hidden group"
