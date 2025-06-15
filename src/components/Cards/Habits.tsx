@@ -8,6 +8,7 @@ import { financialAtom } from "@/atoms/atoms";
 import YellowBadge from "../ui/yellowBadge";
 import RedBadge from "../ui/redBadge";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const formatAmount = (amount: number): string => {
   if (amount >= 10000000) { // 1 Crore
@@ -26,6 +27,7 @@ const formatAmount = (amount: number): string => {
 export default function Habits() {
   const router = useRouter();
   const [financials] = useAtom(financialAtom);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   if (!financials) {
     return (
@@ -53,6 +55,11 @@ export default function Habits() {
   };
 
   const savingStatus = getSavingStatus(savingsPercent);
+
+  const handleReCheck = () => {
+    setIsNavigating(true);
+    router.push("/user/financial-checkup/spending-habits");
+  };
 
   return (
     <div className="flex flex-col p-5 h-[45vh] justify-between text-black">
@@ -116,10 +123,18 @@ export default function Habits() {
             <p className={`${poppins} font-semibold text-sm`}>View</p>
           </div>
           <div 
-            onClick={() => router.push("/user/financial-checkup/spending-habits")} 
-            className="flex justify-center items-center border-2 border-black hover:bg-black hover:text-white transition duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer"
+            onClick={handleReCheck}
+            className="flex justify-center items-center border-2 border-black hover:bg-black hover:text-white transition-all duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer relative overflow-hidden group"
           >
-            <p className={`${poppins} font-semibold text-sm`}>Re-Check</p>
+            <p className={`${poppins} font-semibold text-sm transition-opacity duration-300 ${isNavigating ? 'opacity-0' : 'opacity-100'}`}>
+              Re-Check
+            </p>
+            {isNavigating && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            )}
+            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
           </div>
         </div>
       </div>

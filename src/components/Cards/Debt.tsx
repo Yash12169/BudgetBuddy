@@ -29,8 +29,15 @@ export default function Debt() {
   const [salary, setSalary] = useState("");
   const [savings, setSavings] = useState("");
   const [expenses, setExpenses] = useState();
-  const router = useRouter()
+  const [isNavigating, setIsNavigating] = useState(false);
+  const router = useRouter();
   const [debt] = useAtom(debtAtom);
+
+  const handleReCheck = () => {
+    setIsNavigating(true);
+    router.push("/user/financial-checkup/debt");
+  };
+
   if (!debt) {
     return (
       <div className="flex gap-4 flex-col h-[100%] px-5 py-9 bg-neutral text-neutral-content rounded-[30px]">
@@ -104,8 +111,19 @@ export default function Debt() {
           <div className="bg-black text-white rounded-[30px] px-5 py-1 cursor-pointer flex justify-center items-center">
             <p className={`${[poppins]} font-semibold text-sm`}>View</p>
           </div>
-          <div className="flex justify-center items-center border-2  border-black hover:bg-black hover:text-white transition duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer">
-            <p className={`${poppins} font-semibold text-sm`} onClick={()=>router.push("/user/financial-checkup/debt")}>Re-Check</p>
+          <div 
+            onClick={handleReCheck}
+            className="flex justify-center items-center border-2 border-black hover:bg-black hover:text-white transition-all duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer relative overflow-hidden group"
+          >
+            <p className={`${poppins} font-semibold text-sm transition-opacity duration-300 ${isNavigating ? 'opacity-0' : 'opacity-100'}`}>
+              Re-Check
+            </p>
+            {isNavigating && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            )}
+            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
           </div>
         </div>
       </div>

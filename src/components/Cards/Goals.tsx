@@ -10,18 +10,20 @@ import WealthHoverCard from "../ui/WealthHoverCard";
 import CarHoverCard from "../ui/CarHoverCard";
 import HouseHoverCard from "../ui/HouseHoverCard";
 import RetirementHoverCard from "../ui/RetirementHoverCard";
-
+import { useRouter } from "next/navigation";
 export default function Goals() {
+  const router = useRouter();
   return (
     <div className="flex flex-col bg-accent text-accent-foreground shadow-lg rounded-[30px] p-7 gap-7">
       <div className="flex flex-col w-[100%] h-[100%] gap-7 ">
         <div className="flex flex-col">
           <div className=" text-xl text-black font-semibold">
-            <p className={`${montserrat}`}>My Goals</p>
+            <p className={`${montserrat}`}>Create Goals</p>
           </div>
           <div className="text-sm ">
             <p className={`${montserrat}`}>
-              A summary of your Goals and possibility
+              Create a goal to help you stay on track and achieve your financial
+              goals.
             </p>
           </div>
         </div>
@@ -44,8 +46,8 @@ export default function Goals() {
             </p>
           </div>
           <div className="flex justify-center items-center text-secondary cursor-pointer w-[10%] h-[75%]  rounded-full bg-neutral hover:bg-neutral-200 transition">
-            <p className={`text-[12px] font-semibold ${poppins}`}>
-              Financial Checkup
+            <p className={`text-[12px] font-semibold ${poppins}`} onClick={() => router.push("/user/goals")}>
+              Create Goals
             </p>
           </div>
         </div>

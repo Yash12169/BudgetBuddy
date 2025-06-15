@@ -27,9 +27,6 @@ export async function POST(req: NextRequest) {
         emi,
       },
     });
-
-    console.log("Stored new financial data:", newRecord);
-
     return NextResponse.json(
       { success: true, message: "Financial data stored", data: newRecord },
       { status: 201 }

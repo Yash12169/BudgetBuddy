@@ -10,6 +10,7 @@ import { Menu, X } from "lucide-react";
 
 export default function Navbar2() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
   const shimmerRef = useRef<HTMLSpanElement>(null);
   const searchRef = useRef<SVGSVGElement>(null);
   const shimmerParentRef = useRef<HTMLButtonElement>(null);
@@ -69,6 +70,11 @@ export default function Navbar2() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleDashboardNavigation = () => {
+    setIsNavigating(true);
+    router.push("/user/dashboard");
+  };
+
   return (
     <nav className="flex flex-col fixed w-full bg-[#1c1f58] text-white z-[1000]">
       <div className="flex justify-between items-center shadow-md px-4 md:px-8 lg:px-16 py-3 md:py-4">
@@ -111,10 +117,15 @@ export default function Navbar2() {
 
             {userC.isSignedIn && (
               <div
-                onClick={() => router.push("/user/dashboard")}
-                className={`${montserrat} bg-green-500 px-5 py-2 rounded-lg font-semibold cursor-pointer text-white hover:bg-green-600 transition-colors`}
+                onClick={handleDashboardNavigation}
+                className={`${montserrat} bg-green-500 px-5 py-2 rounded-lg font-semibold cursor-pointer text-white hover:bg-green-600 transition-all duration-300 relative overflow-hidden`}
               >
-                <p>Dashboard</p>
+                <p className={`transition-opacity duration-300 ${isNavigating ? 'opacity-0' : 'opacity-100'}`}>Dashboard</p>
+                {isNavigating && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -164,12 +175,17 @@ export default function Navbar2() {
             {userC.isSignedIn && (
               <div
                 onClick={() => {
-                  router.push("/user/dashboard");
+                  handleDashboardNavigation();
                   setIsMenuOpen(false);
                 }}
-                className={`${montserrat} bg-green-500 px-5 py-3 rounded-lg font-semibold cursor-pointer text-white text-center hover:bg-green-600 transition-colors mt-4 border-t border-gray-700`}
+                className={`${montserrat} bg-green-500 px-5 py-3 rounded-lg font-semibold cursor-pointer text-white text-center hover:bg-green-600 transition-all duration-300 relative overflow-hidden mt-4 border-t border-gray-700`}
               >
-                <p>Dashboard</p>
+                <p className={`transition-opacity duration-300 ${isNavigating ? 'opacity-0' : 'opacity-100'}`}>Dashboard</p>
+                {isNavigating && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                )}
               </div>
             )}
           </div>

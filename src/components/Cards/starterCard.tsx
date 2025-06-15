@@ -9,9 +9,6 @@ import { useUser } from "@clerk/nextjs";
 import YellowBadge from "../ui/yellowBadge";
 import GreenBadge from "../ui/greenBadge";
 export default function StarterCard() {
-
-
-
   const userC = useUser()
   const id = userC.user?.id
   const [user] = useAtom(userAtom);
@@ -22,9 +19,8 @@ export default function StarterCard() {
       setUserImg(userC.user?.imageUrl)
     }
   },[userC.isLoaded,userC.user?.imageUrl])
-
-
   if (!user || !financials) {
+  
     return (
       <div className="flex gap-4 flex-col h-[100%] px-5 py-9 bg-neutral text-neutral-content rounded-[30px]">
         <div className="flex w-full flex-col gap-4">
@@ -55,7 +51,6 @@ export default function StarterCard() {
           </p>
         </div>
       </div>
-
       <div className={`flex justify-between ${poppins}`}>
         <div className="flex flex-col gap-1">
           <div className="text-sm">
@@ -70,10 +65,9 @@ export default function StarterCard() {
             <p>Your financial Health</p>
           </div>
           <div>
-            {financials.data.savingStatus === "Weak" && (<RedBadge text="Weak" />)}
-            {financials.data.savingStatus === "Moderate" && (<YellowBadge text="Moderate" />)}
-            {financials.data.savingStatus === "Strong" && (<GreenBadge text="Strong" />)}
-            
+            {financials.data.savingStatus === "weak" && (<RedBadge text="Weak" />)}
+            {financials.data.savingStatus === "moderate" && (<YellowBadge text="Moderate" />)}
+            {financials.data.savingStatus === "strong" && (<GreenBadge text="Strong" />)}
           </div>
         </div>
       </div>

@@ -19,7 +19,14 @@ export default function FinancialScore() {
   const [emergencyFund] = useAtom(emergencyFundAtom);
   const [totalScore,setTotalScore] = useState(0);
   const [width,setWidth] = useState(0);
+  const [isNavigating, setIsNavigating] = useState(false);
   const router = useRouter();
+
+  const handleFinancialCheckup = () => {
+    setIsNavigating(true);
+    router.push("/user/financial-checkup");
+  };
+
   useEffect(()=>{
     if(financials && emergencyFund){
        const FinancialScore = financials.data.savingScore;
@@ -171,8 +178,19 @@ export default function FinancialScore() {
               <span className="font-semibold">Reminder!</span>  Recheck your financial health regularly to track improvements.
             </p>
           </div>
-          <div className="flex justify-center items-center text-secondary cursor-pointer w-[10%] h-[75%]  rounded-full bg-neutral">
-            <p className={`text-[12px] font-semibold ${poppins}`} onClick={()=>router.push("/user/financial-checkup")}>Financial Checkup</p>
+          <div 
+            onClick={handleFinancialCheckup}
+            className="flex justify-center items-center text-secondary cursor-pointer w-[10%] h-[75%] rounded-full bg-neutral hover:bg-neutral/90 transition-all duration-300 relative overflow-hidden group"
+          >
+            <p className={`text-[12px] font-semibold ${poppins} transition-opacity duration-300 ${isNavigating ? 'opacity-0' : 'opacity-100'}`}>
+              Financial Checkup
+            </p>
+            {isNavigating && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-4 h-4 border-2 border-secondary border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            )}
+            <div className="absolute inset-0 bg-secondary opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
           </div>
         </div>
       </div>

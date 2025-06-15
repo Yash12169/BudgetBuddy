@@ -114,7 +114,6 @@ export default function EmergencyFundEdit() {
       </div>
     );
   }
-  console.log("yeh hai financials",financials.allData.salary)
   const currentMonthsCovered = emergencyFund.emergencyFundStatus.monthsCovered;
   const recommendedMin = emergencyFund.emergencyFundStatus.recommendedMin;
   const recommendedIdeal = emergencyFund.emergencyFundStatus.recommendedIdeal;

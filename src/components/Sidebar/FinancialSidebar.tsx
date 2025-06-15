@@ -66,9 +66,6 @@ export default function FinancialSidebar() {
             </div>
           </div>
           <Disclaimer />
-
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-pink-300 md:min-h-min" />
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-pink-300 md:min-h-min" />
         </div>
       </SidebarInset>
     </SidebarProvider>
