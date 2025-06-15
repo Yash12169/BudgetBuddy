@@ -116,7 +116,6 @@ export default function DebtEdit() {
     setError(null);
 
     try {
-      // Update debt information
       const debtPayload = {
       loanAmount: parseNumber(formValues.loan),
       loanTenure: parseNumber(formValues.time),
@@ -126,7 +125,6 @@ export default function DebtEdit() {
 
       await axios.put(`/api/debt/${user.id}`, debtPayload);
       
-      // Update financials
       const financialPayload = {
         userId: user.id,
         salary: parseNumber(formValues.income),
@@ -137,13 +135,11 @@ export default function DebtEdit() {
       
       await axios.put(`/api/financials/${user.id}`, financialPayload);
       
-      // Refresh the data
       const [debtResponse, financialResponse] = await Promise.all([
         axios.get(`/api/debt/${user.id}`),
         axios.get(`/api/financials/${user.id}`)
       ]);
       
-      // Update the atoms with new data
       setDebt(debtResponse.data);
       setFinancial(financialResponse.data);
       

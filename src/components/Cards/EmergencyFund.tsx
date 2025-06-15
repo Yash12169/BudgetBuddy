@@ -139,7 +139,6 @@ export default function EmergencyFund() {
                 </DialogTitle>
               </DialogHeader>
               <div className="grid gap-6 py-4">
-                {/* Fund Details */}
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 mb-1">
                     <div className="w-1.5 h-5 bg-green-500 rounded-full"></div>
@@ -166,7 +165,6 @@ export default function EmergencyFund() {
                     </div>
                   </div>
                 </div>
-                {/* Coverage & Status */}
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 mb-1">
                     <div className="w-1.5 h-5 bg-blue-500 rounded-full"></div>
@@ -203,7 +201,6 @@ export default function EmergencyFund() {
                     </div>
                   </div>
                 </div>
-                {/* Recommendations */}
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 mb-1">
                     <div className="w-1.5 h-5 bg-purple-500 rounded-full"></div>

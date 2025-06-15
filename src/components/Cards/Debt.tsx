@@ -20,13 +20,13 @@ import {
 import { Banknote, Calendar, Percent, TrendingDown, AlertTriangle, BadgeDollarSign } from "lucide-react";
 
 const formatAmount = (amount: number): string => {
-  if (amount >= 10000000) { // 1 Crore
+  if (amount >= 10000000) { 
     const crores = amount / 10000000;
     return `₹ ${crores.toFixed(1)}Cr`;
-  } else if (amount >= 100000) { // 1 Lakh
+  } else if (amount >= 100000) { 
     const lakhs = amount / 100000;
     return `₹ ${lakhs.toFixed(1)}L`;
-  } else if (amount >= 1000) { // 1 Thousand
+  } else if (amount >= 1000) { 
     const thousands = amount / 1000;
     return `₹ ${thousands.toFixed(1)}K`;
   }
@@ -172,7 +172,6 @@ export default function Debt() {
                     </div>
                   </div>
                 </div>
-                {/* EMI & Risk */}
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 mb-1">
                     <div className="w-1.5 h-5 bg-yellow-500 rounded-full"></div>

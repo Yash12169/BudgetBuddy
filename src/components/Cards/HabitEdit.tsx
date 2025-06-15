@@ -117,10 +117,8 @@ export default function HabitEdit() {
       
       await axios.put(`/api/financials/${user.id}`, payload);
       
-      // Refresh the data
       const response = await axios.get(`/api/financials/${user.id}`);
       
-      // Update the atom with new data
       setFinancial(response.data);
       
       router.push("/user/financial-checkup");

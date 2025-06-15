@@ -80,17 +80,14 @@ export default function EmergencyFundEdit() {
     setError(null);
 
     try {
-      // Update emergency fund
       const payload = {
         emergencyFund: parseNumber(formValues.emergencyFund),
       };
       
       await axios.put(`/api/emergency-fund/${user.id}`, payload);
       
-      // Refresh the data
       const response = await axios.get(`/api/emergency-fund/${user.id}`);
       
-      // Update the atom with new data
       setEmergencyFund(response.data);
       
       router.push("/user/financial-checkup");
