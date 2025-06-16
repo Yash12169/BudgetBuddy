@@ -51,6 +51,14 @@ export default function EmergencyFund() {
     );
   }
 
+  // Fallback values for database-fetched data
+  const salary = financials?.data?.salary || 0;
+  const emergencyFundAmount = emergencyFund?.emergencyFundAmount || 0;
+  const monthsCovered = emergencyFund?.emergencyFundStatus?.monthsCovered || 0;
+  const status = emergencyFund?.emergencyFundStatus?.status || "critical";
+  const recommendedMin = emergencyFund?.emergencyFundStatus?.recommendedMin || 3;
+  const recommendedIdeal = emergencyFund?.emergencyFundStatus?.recommendedIdeal || 6;
+
   return (
     <div className="flex flex-col p-5 h-[45vh] justify-between text-black">
       <div className="flex flex-col items-center gap-5">
@@ -69,7 +77,7 @@ export default function EmergencyFund() {
               <p>Monthly Salary</p>
             </div>
             <div className="font-semibold text-lg">
-              <p>{financials.data.salary}</p>
+              <p>{salary.toLocaleString()}</p>
             </div>
           </div>
 
@@ -78,7 +86,7 @@ export default function EmergencyFund() {
               <p>Emergency Fund:</p>
             </div>
             <div className="font-semibold text-lg">
-              <p>{emergencyFund.emergencyFundAmount}</p>
+              <p>{emergencyFundAmount.toLocaleString()}</p>
             </div>
           </div>
         </div>
@@ -89,7 +97,7 @@ export default function EmergencyFund() {
               <p>Months Covered:</p>
             </div>
             <div className="font-semibold text-lg">
-              <p>{emergencyFund.emergencyFundStatus.monthsCovered}</p>
+              <p>{monthsCovered}</p>
             </div>
           </div>
           <div className="gap-1 flex flex-col">
@@ -97,19 +105,19 @@ export default function EmergencyFund() {
               <p>Your Status:</p>
             </div>
             <div>
-              {emergencyFund.emergencyFundStatus.status === "critical" && (
+              {status === "critical" && (
                 <RedBadge text="Critical" />
               )}
-              {emergencyFund.emergencyFundStatus.status === "danger" && (
+              {status === "danger" && (
                 <RedBadge text="Danger" />
               )}
-              {emergencyFund.emergencyFundStatus.status === "warning" && (
+              {status === "warning" && (
                 <YellowBadge text="Warning" />
               )}
-              {emergencyFund.emergencyFundStatus.status === "moderate" && (
+              {status === "moderate" && (
                 <YellowBadge text="Moderate" />
               )}
-              {emergencyFund.emergencyFundStatus.status === "secure" && (
+              {status === "secure" && (
                 <GreenBadge text="Secure" />
               )}
             </div>
@@ -152,7 +160,7 @@ export default function EmergencyFund() {
                         </span>
                         <span className={`${poppins.className} text-base font-medium text-gray-700 dark:text-gray-300`}>Monthly Salary</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-gray-900 dark:text-gray-100`}>{financials.data.salary}</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-gray-900 dark:text-gray-100`}>${salary.toLocaleString()}</span>
                     </div>
                     <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 gap-4">
                       <div className="flex items-center gap-3">
@@ -161,7 +169,7 @@ export default function EmergencyFund() {
                         </span>
                         <span className={`${poppins.className} text-base font-medium text-gray-700 dark:text-gray-300`}>Emergency Fund</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-gray-900 dark:text-gray-100`}>{emergencyFund.emergencyFundAmount}</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-gray-900 dark:text-gray-100`}>${emergencyFundAmount.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
@@ -178,7 +186,7 @@ export default function EmergencyFund() {
                         </span>
                         <span className={`${poppins.className} text-base font-medium text-blue-700 dark:text-blue-400`}>Months Covered</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-blue-800 dark:text-blue-200`}>{emergencyFund.emergencyFundStatus.monthsCovered}</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-blue-800 dark:text-blue-200`}>{monthsCovered}</span>
                     </div>
                     <div className="flex items-center justify-between p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/30 gap-4">
                       <div className="flex items-center gap-3">
@@ -189,7 +197,6 @@ export default function EmergencyFund() {
                       </div>
                       <span className={`${poppins.className} text-lg font-semibold text-blue-800 dark:text-blue-200`}>
                         {(() => {
-                          const status = emergencyFund.emergencyFundStatus.status;
                           if (status === "critical") return "Critical";
                           if (status === "danger") return "Danger";
                           if (status === "warning") return "Warning";
@@ -214,7 +221,7 @@ export default function EmergencyFund() {
                         </span>
                         <span className={`${poppins.className} text-base font-medium text-purple-700 dark:text-purple-400`}>Minimum Coverage</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-purple-800 dark:text-purple-200`}>{emergencyFund.emergencyFundStatus.recommendedMin} months</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-purple-800 dark:text-purple-200`}>{recommendedMin} months</span>
                     </div>
                     <div className="flex items-center justify-between p-4 rounded-xl bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-900/30 gap-4">
                       <div className="flex items-center gap-3">
@@ -223,7 +230,7 @@ export default function EmergencyFund() {
                         </span>
                         <span className={`${poppins.className} text-base font-medium text-purple-700 dark:text-purple-400`}>Ideal Coverage</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-purple-800 dark:text-purple-200`}>{emergencyFund.emergencyFundStatus.recommendedIdeal} months</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-purple-800 dark:text-purple-200`}>{recommendedIdeal} months</span>
                     </div>
                   </div>
                 </div>
