@@ -21,7 +21,6 @@ export function LottieIcon({
   className = "" 
 }: LottieIconProps) {
   useEffect(() => {
-    // Debug logging
     console.log('LottieIcon attempting to load:', {
       src,
       size,
@@ -30,13 +29,11 @@ export function LottieIcon({
       hover
     });
 
-    // Verify the file exists
     fetch(src)
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        console.log(`Successfully found file at ${src}`);
         return response.json();
       })
       .then(data => {

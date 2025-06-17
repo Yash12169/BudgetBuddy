@@ -1,7 +1,7 @@
 "use client";
 import { AppSidebar } from "@/components/app-sidebar";
-import DebtEdit from "@/components/Cards/DebtEdit";
 import Disclaimer from "@/components/Cards/Disclaimer";
+import EmergencyFundEdit from "@/components/Cards/EmergencyFundEdit";
 import HabitEdit from "@/components/Cards/HabitEdit";
 import ThemeController from "@/components/ThemeController/themeController";
 import {
@@ -24,11 +24,9 @@ import { useEffect } from "react";
 
 export default function FinancialSidebar() {
   const router = useRouter();
-  
   useEffect(() => {
     router.refresh();
   }, [router]);
-
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -45,8 +43,8 @@ export default function FinancialSidebar() {
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbLink href="/user/financial-checkup/debt">
-                  <BreadcrumbPage>Debt</BreadcrumbPage>
+                <BreadcrumbLink href="/user/financial-checkup/emergency-fund">
+                  <BreadcrumbPage>Emergency Fund</BreadcrumbPage>
                 </BreadcrumbLink>
               </BreadcrumbList>
             </Breadcrumb>
@@ -55,7 +53,7 @@ export default function FinancialSidebar() {
           {/* <SignOutButton /> */}
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <DebtEdit/>
+          <EmergencyFundEdit/>
           <Disclaimer />
         </div>
       </SidebarInset>

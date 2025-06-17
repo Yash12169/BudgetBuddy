@@ -12,11 +12,7 @@ import { userAtom } from "@/atoms/atoms";
 import { useUser } from "@clerk/nextjs";
 import StackedChart from "../ui/StackedChart";
 export default function GoalTracker() {
-    const user = useUser()
-    if(user) {
-        console.log(user);
-    }
-  return (
+    return (
     <div className="bg-gradient-to-br from-gray-800 to-black flex gap-4 flex-col w-[100%] h-[100%] px-7 py-8 text-neutral-content rounded-[30px]">
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
