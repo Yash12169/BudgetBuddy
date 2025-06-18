@@ -2,15 +2,9 @@
 import Image from "next/image";
 import house from "../../assets/dash-house-goal.svg"
 import car from "../../assets/dash-car-goal.svg"
-
 import tracker from '../../assets/dash-goal-tracker.svg'
-import { montserrat, poppins } from "@/fonts/fonts";
-import RedBadge from "../ui/redBadge";
-import { useEffect, useState } from "react";
-import { useAtom } from "jotai";
-import { userAtom } from "@/atoms/atoms";
-import { useUser } from "@clerk/nextjs";
-import StackedChart from "../ui/StackedChart";
+import { montserrat } from "@/fonts/fonts";
+
 export default function GoalTracker() {
     return (
     <div className="bg-gradient-to-br from-gray-800 to-black flex gap-4 flex-col w-[100%] h-[100%] px-7 py-8 text-neutral-content rounded-[30px]">

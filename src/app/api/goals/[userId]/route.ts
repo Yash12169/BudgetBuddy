@@ -26,9 +26,9 @@ interface GoalUpdateData {
   isAchievable?: boolean;
 }
 
-export async function GET(req: NextRequest, { params }: { params: { userId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ userId: string }> }) {
   try {
-    const userId = params.userId;
+    const { userId } = await params;
     if (!userId) {
       return NextResponse.json({ success: false, message: 'Missing userId' }, { status: 400 });
     }
@@ -66,9 +66,9 @@ export async function GET(req: NextRequest, { params }: { params: { userId: stri
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { userId: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ userId: string }> }) {
   try {
-    const { userId } = params;
+    const { userId } = await params;
     const body = await req.json();
     const {
       title,
@@ -153,9 +153,9 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { userId: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ userId: string }> }) {
   try {
-    const { userId } = params;
+    const { userId } = await params;
     const body = await req.json();
     const {
       id,
@@ -252,9 +252,9 @@ export async function PUT(req: NextRequest, { params }: { params: { userId: stri
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { userId: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ userId: string }> }) {
   try {
-    const { userId } = params;
+    const { userId } = await params;
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
 

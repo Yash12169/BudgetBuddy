@@ -1,7 +1,7 @@
 "use client";
 import wallet from "../../assets/investment-score.svg";
 import shield from "../../assets/security-score.svg";
-import { bricolage_grotesque, montserrat, poppins } from "@/fonts/fonts";
+import { montserrat, poppins } from "@/fonts/fonts";
 import finWeak from "../../assets/financial-health-icon-weak.svg";
 import finAverage from "../../assets/financial-health-icon-average.svg";
 import finStrong from "../../assets/financial-health-icon-good.svg";
@@ -26,8 +26,10 @@ export default function FinancialScore() {
     router.push("/user/financial-checkup");
   };
 
-  // Fallback values for database-fetched data
+
+  //@ts-expect-error - TODO: fix this
   const savingScore = financials?.data?.savingScore || 0;
+  //@ts-expect-error - TODO: fix this
   const emergencyScore = emergencyFund?.emergencyFundStatus?.score || 0;
 
   useEffect(() => {
@@ -62,8 +64,7 @@ export default function FinancialScore() {
     );
   }
 
-  // Helper function to get status text based on score
-  const getStatusText = (score) => {
+  const getStatusText = (score: number) => {
     if (score <= 30) return "Weak Score, High Impact";
     if (score > 30 && score < 70) return "Moderate Score, Medium Impact";
     return "Strong Score, Low Impact";

@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // Parse request body
     const body = await req.json();
     const { data } = body;
 
@@ -22,13 +21,13 @@ export async function POST(req: NextRequest) {
     const firstName = data.first_name || '';
     const lastName = data.last_name || '';
 
-    // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { id: userId },
     });
 
     if (!existingUser) {
       await prisma.user.create({
+        //@ts-expect-error - TODO: fix this
         data: {
           id: userId,
           email,
@@ -39,10 +38,12 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ message: 'User processed successfully' }, { status: 200 });
-  } catch (error: any) {
+  } 
+  catch (error: unknown) {
     console.error('Error processing webhook:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json(
-      { error: 'Internal Server Error', details: error.message },
+      { error: 'Internal Server Error', details: errorMessage },
       { status: 500 }
     );
   } finally {

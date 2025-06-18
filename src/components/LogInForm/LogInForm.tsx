@@ -32,8 +32,11 @@ export function LogInForm() {
       if (result.status === "complete") {
         router.push("/user/dashboard");
       }
-    } catch (err: any) {
-      setError(err.errors?.[0]?.message || "An error occurred during sign in");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error && 'errors' in err && Array.isArray((err as { errors: Array<{ message: string }> }).errors) 
+        ? (err as { errors: Array<{ message: string }> }).errors[0]?.message 
+        : "An error occurred during sign in";
+      setError(errorMessage);
     }
   };
 
@@ -45,8 +48,11 @@ export function LogInForm() {
         redirectUrl: "/user/dashboard",
         redirectUrlComplete: "/user/dashboard",
       });
-    } catch (err: any) {
-      setError(err.errors?.[0]?.message || "An error occurred during OAuth sign in");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error && 'errors' in err && Array.isArray((err as { errors: Array<{ message: string }> }).errors) 
+        ? (err as { errors: Array<{ message: string }> }).errors[0]?.message 
+        : "An error occurred during OAuth sign in";
+      setError(errorMessage);
     }
   };
 

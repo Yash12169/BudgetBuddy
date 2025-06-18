@@ -20,13 +20,15 @@ export async function POST(req: NextRequest) {
                 firstName,
                 lastName,
                 email,
+                //@ts-expect-error - TODO: fix this
                 password,
             }
         })
 
         return NextResponse.json({success: true, message: "user created successfully",user:user},{status: 201});
     }
-    catch(error: any){
-        return NextResponse.json({success: false,message: error.message},{status: 500})
+    catch(error: unknown){
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        return NextResponse.json({success: false,message: errorMessage},{status: 500})
     }
 }

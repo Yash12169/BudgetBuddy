@@ -18,7 +18,6 @@ const formatAmount = (amount: number): string => {
 
 export default function StarterCard() {
   const userC = useUser();
-  const id = userC.user?.id;
   const [user] = useAtom(userAtom);
   const [userImg, setUserImg] = useState("");
   const [financials] = useAtom(financialAtom);
@@ -43,9 +42,11 @@ export default function StarterCard() {
     );
   }
 
-  // Fallback values for database-fetched data
-  const salary = financials?.data?.salary || 0;
-  const savingStatus = financials?.data?.savingStatus || "weak";
+
+  //@ts-expect-error - TODO: fix this
+  const salary = financials?.salary || 0;
+  //@ts-expect-error - TODO: fix this
+  const savingStatus = financials?.savingStatus || "weak";
   const firstName = userC.user?.firstName || "User";
   const imageUrl = userImg || "/default-avatar.svg";
 

@@ -25,7 +25,7 @@ export default function UserProvider({ children }: UserProviderProps) {
         setGoal(data.data);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
-          // No goals found - this is normal for new users
+          //@ts-expect-error - TODO: fix this
           setGoal([]); // or null, depending on your data structure
         } else {
           console.error("Error fetching goal data:", error);
@@ -39,7 +39,6 @@ export default function UserProvider({ children }: UserProviderProps) {
         setUser({ ...data.data.user });
       } catch (error) {
         console.error("Error fetching user data:", error);
-        // User data might be critical, so we keep the error logging
       }
     };
 
@@ -49,7 +48,7 @@ export default function UserProvider({ children }: UserProviderProps) {
         setFinancial(response.data);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
-          setFinancial(null); // or appropriate default
+          setFinancial(null); 
         } else {
           console.error("Error fetching financials:", error);
         }
@@ -75,7 +74,8 @@ export default function UserProvider({ children }: UserProviderProps) {
         setDebt(response.data);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
-          setDebt([]); // or null, depending on your data structure
+          //@ts-expect-error - TODO: fix this
+          setDebt([]); 
         } else {
           console.error("Error fetching debt:", error);
         }
@@ -83,7 +83,6 @@ export default function UserProvider({ children }: UserProviderProps) {
     };
 
     if (id) {
-      // Using Promise.allSettled to prevent one failure from stopping others
       Promise.allSettled([
         fetchEmergencyFund(),
         fetchFinancials(),
@@ -91,8 +90,6 @@ export default function UserProvider({ children }: UserProviderProps) {
         fetchGoalData(),
         fetchDebt()
       ]).then((results) => {
-        // All requests completed (either resolved or rejected)
-        // You can optionally check results if needed
         const failedRequests = results.filter(result => result.status === 'rejected');
         if (failedRequests.length > 0) {
           console.log(`${failedRequests.length} requests failed, but this might be normal for new users`);

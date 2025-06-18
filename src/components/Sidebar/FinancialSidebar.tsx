@@ -5,8 +5,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -14,19 +12,11 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import Allocation from "../Cards/Allocation";
-import RiskProfile from "../Cards/RiskProfile";
 import Disclaimer from "../Cards/Disclaimer";
-import NetWorth from "../Cards/NetWorth";
-import StarterCard from "../Cards/starterCard";
 import FinancialScore from "../Cards/FinancialScore";
 import Habits from "../Cards/Habits";
 import Debt from "../Cards/Debt";
-import ThemeController from "../ThemeController/themeController";
-import { SignOutButton } from "@clerk/nextjs";
 import EmergencyFund from "../Cards/EmergencyFund";
-import Goals from "../Cards/Goals";
-import GoalTracker from "../Cards/GoalTracker";
 
 export default function FinancialSidebar() {
   return (

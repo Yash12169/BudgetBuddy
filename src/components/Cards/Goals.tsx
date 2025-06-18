@@ -1,16 +1,13 @@
 "use client";
-import wallet from "../../assets/investment-score.svg";
-import shield from "../../assets/security-score.svg";
-import { bricolage_grotesque, montserrat, poppins } from "@/fonts/fonts";
-import finWeak from "../../assets/financial-health-icon-weak.svg";
 import Image from "next/image";
 import img2 from "../../assets/dash-icon-bulb.svg";
-import HoverCard from "../ui/HoverCard";
 import WealthHoverCard from "../ui/WealthHoverCard";
 import CarHoverCard from "../ui/CarHoverCard";
 import HouseHoverCard from "../ui/HouseHoverCard";
 import RetirementHoverCard from "../ui/RetirementHoverCard";
 import { useRouter } from "next/navigation";
+import { montserrat, poppins } from "@/fonts/fonts";
+
 export default function Goals() {
   const router = useRouter();
   return (
@@ -46,7 +43,7 @@ export default function Goals() {
             </p>
           </div>
           <div className="flex justify-center items-center text-secondary cursor-pointer w-[10%] h-[75%]  rounded-full bg-neutral hover:bg-neutral-200 transition">
-            <p className={`text-[12px] font-semibold ${poppins}`} onClick={() => router.push("/user/goals")}>
+            <p className={`text-[12px] font-semibold ${poppins}`} onClick={() => router.push("/user/goals")}> 
               Create Goals
             </p>
           </div>

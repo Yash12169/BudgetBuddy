@@ -1,48 +1,73 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAtom } from "jotai";
 import { financialAtom } from "@/atoms/atoms";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { useToast } from "../ui/use-toast";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 
+interface EmergencyFundStatus {
+  monthsCovered: number;
+  status: string;
+  message: string;
+  score: number;
+  recommendedMin: number;
+  recommendedIdeal: number;
+}
+
+interface EmergencyFundData {
+  emergencyFundStatus?: EmergencyFundStatus;
+  [key: string]: unknown;
+}
+
 export default function EmergencyFundEdit() {
   const { user } = useUser();
-  const [financials, setFinancials] = useAtom(financialAtom);
+  const [financials] = useAtom(financialAtom);
   const [monthsCovered, setMonthsCovered] = useState(3); // Default to 3 months
   const [isEditing, setIsEditing] = useState(false);
-  const { toast } = useToast();
+  const [emergencyFundData, setEmergencyFundData] = useState<EmergencyFundData | null>(null);
 
-  // Update monthsCovered when financials data is loaded
-  useEffect(() => {
-    if (financials?.monthsCovered) {
-      setMonthsCovered(financials.monthsCovered);
+  // Fetch emergency fund data
+  const fetchEmergencyFundData = useCallback(async () => {
+    if (!user) return;
+    
+    try {
+      const response = await axios.get(`/api/emergency-fund/${user.id}`);
+      if (response.data.success) {
+        setEmergencyFundData(response.data);
+        if (response.data.emergencyFundStatus?.monthsCovered) {
+          setMonthsCovered(response.data.emergencyFundStatus.monthsCovered);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching emergency fund data:", error);
     }
-  }, [financials]);
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchEmergencyFundData();
+    }
+  }, [user, fetchEmergencyFundData]);
 
   const handleSave = async () => {
-    if (!user) return;
+    if (!user || !financials?.allData?.salary) return;
 
     try {
-      const response = await axios.put(`/api/financial/${user.id}`, {
-        monthsCovered: monthsCovered,
+      // Calculate emergency fund amount based on months covered
+      const emergencyFundAmount = (financials.allData.salary * monthsCovered) / 12;
+      
+      const response = await axios.put(`/api/emergency-fund/${user.id}`, {
+        emergencyFund: emergencyFundAmount,
       });
 
-      setFinancials(response.data);
-      setIsEditing(false);
-      toast({
-        title: "Success",
-        description: "Emergency fund months updated successfully",
-      });
+      if (response.data.success) {
+        setEmergencyFundData(response.data);
+        setIsEditing(false);
+      }
     } catch (error) {
       console.error("Error updating emergency fund:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update emergency fund months",
-        variant: "destructive",
-      });
     }
   };
 
@@ -59,6 +84,8 @@ export default function EmergencyFundEdit() {
       </div>
     );
   }
+
+  const currentMonthsCovered = emergencyFundData?.emergencyFundStatus?.monthsCovered || 0;
 
   return (
     <div className="space-y-4">
@@ -94,7 +121,7 @@ export default function EmergencyFundEdit() {
               variant="outline"
               onClick={() => {
                 setIsEditing(false);
-                setMonthsCovered(financials.monthsCovered || 3);
+                setMonthsCovered(currentMonthsCovered || 3);
               }}
             >
               Cancel
@@ -107,7 +134,7 @@ export default function EmergencyFundEdit() {
             Target: {monthsCovered} months of expenses
           </p>
           <p className="text-sm text-muted-foreground">
-            Current: {financials.currentEmergencyFund || 0} months
+            Current: {currentMonthsCovered.toFixed(1)} months
           </p>
         </div>
       )}

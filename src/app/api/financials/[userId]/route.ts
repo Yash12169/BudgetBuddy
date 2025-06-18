@@ -30,10 +30,10 @@ const formatAmount = (amount: number): string => {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const userId = params.userId;
+    const { userId } = await params;
     const data = await prisma.financials.findUnique({
       where: { userId },
     });
@@ -69,9 +69,10 @@ export async function GET(
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json(
-      { success: false, message: "Error fetching data", error: error.message },
+      { success: false, message: "Error fetching data", error: errorMessage },
       { status: 500 }
     );
   }
@@ -79,10 +80,10 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const userId = params.userId;
+    const { userId } = await params;
     const data = await req.json();
 
     if (!data.salary || !data.expenses) {
@@ -117,9 +118,10 @@ export async function POST(
       { success: true, message: "Financial data created successfully", data: newRecord },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json(
-      { success: false, message: "Error creating financial data", error: error.message },
+      { success: false, message: "Error creating financial data", error: errorMessage },
       { status: 500 }
     );
   }
@@ -127,10 +129,10 @@ export async function POST(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const userId = params.userId;
+    const { userId } = await params;
     const data = await req.json();
 
     if (!data.salary || !data.expenses) {
@@ -165,9 +167,10 @@ export async function PUT(
       { success: true, message: "Financial data updated successfully", data: updatedRecord },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json(
-      { success: false, message: "Error updating financial data", error: error.message },
+      { success: false, message: "Error updating financial data", error: errorMessage },
       { status: 500 }
     );
   }
@@ -175,10 +178,10 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const userId = params.userId;
+    const { userId } = await params;
 
     const existingRecord = await prisma.financials.findUnique({
       where: { userId },
@@ -199,9 +202,10 @@ export async function DELETE(
       { success: true, message: "Financial data deleted successfully" },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json(
-      { success: false, message: "Error deleting financial data", error: error.message },
+      { success: false, message: "Error deleting financial data", error: errorMessage },
       { status: 500 }
     );
   }

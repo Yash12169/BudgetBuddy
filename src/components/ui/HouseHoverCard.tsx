@@ -5,7 +5,6 @@ import {
   useMotionValue,
   useSpring,
 } from "framer-motion";
-import { FiMousePointer } from "react-icons/fi";
 import Image from "next/image";
 import house from "../../assets/Building-bro.png"
 import { montserrat } from "@/fonts/fonts";

@@ -60,7 +60,9 @@ export function SignupForm() {
         console.log("Signup complete, setting active session...");
         await setActive({ session: result.createdSessionId });
         router.push("/user/dashboard");
-      } else if (result.status === "needs_verification") {
+      } 
+      //@ts-expect-error - TODO: fix this
+      else if (result.status === "needs_verification") {
         console.log("Email verification needed");
         setFormError("Please check your email for verification link");
       } else if (result.status === "missing_requirements") {
@@ -70,14 +72,15 @@ export function SignupForm() {
         console.log("Signup not complete, status:", result.status);
         setFormError(`Signup not complete. Status: ${result.status}`);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Signup error:", err);
-      if (err.errors?.[0]?.code === "form_identifier_exists") {
+      const error = err as { errors?: Array<{ code?: string; message?: string }> };
+      if (error.errors?.[0]?.code === "form_identifier_exists") {
         setFormError("An account with this email already exists");
-      } else if (err.errors?.[0]?.code === "form_password_pwned") {
+      } else if (error.errors?.[0]?.code === "form_password_pwned") {
         setFormError("This password has been compromised. Please choose a different one.");
       } else {
-        setFormError(err.errors?.[0]?.message || "An error occurred during sign up");
+        setFormError(error.errors?.[0]?.message || "An error occurred during sign up");
       }
     } finally {
       setIsLoading(false);
@@ -91,8 +94,9 @@ export function SignupForm() {
         redirectUrl: "/user/dashboard",
         redirectUrlComplete: "/user/dashboard",
       });
-    } catch (err: any) {
-      setFormError(err.errors?.[0]?.message || `Error signing up with ${strategy}`);
+    } catch (err: unknown) {
+      const error = err as { errors?: Array<{ message?: string }> };
+      setFormError(error.errors?.[0]?.message || `Error signing up with ${strategy}`);
     }
   };
 
@@ -219,6 +223,6 @@ const BottomGradient = () => (
   </>
 );
 
-const LabelInputContainer = ({ children, className }) => (
+const LabelInputContainer = ({ children, className }: { children: React.ReactNode, className?: string }) => (
   <div className={cn("flex flex-col space-y-2 w-full", className)}>{children}</div>
 );

@@ -3,8 +3,7 @@ import Image from "next/image";
 import card from "../../assets/dash-debt-tool.svg";
 import GreenBadge from "../ui/greenBadge";
 import { montserrat, poppins } from "@/fonts/fonts";
-import axios from "axios";
-import { useActionState, useEffect, useState } from "react";
+import { useState } from "react";
 import { useAtom } from "jotai";
 import { debtAtom } from "@/atoms/atoms";
 import YellowBadge from "../ui/yellowBadge";
@@ -34,9 +33,6 @@ const formatAmount = (amount: number): string => {
 };
 
 export default function Debt() {
-  const [salary, setSalary] = useState("");
-  const [savings, setSavings] = useState("");
-  const [expenses, setExpenses] = useState();
   const [isNavigating, setIsNavigating] = useState(false);
   const router = useRouter();
   const [debt] = useAtom(debtAtom);
@@ -83,7 +79,7 @@ export default function Debt() {
 
           <div className="gap-1 flex flex-col">
             <div className="text-sm text-[#36454F]">
-              <p>Total EMI's:</p>
+              <p>Total EMI&apos;s:</p>
             </div>
             <div className="font-semibold text-lg">
               <p>{formatAmount(debt.data.data.emiAmount)}</p>
