@@ -10,7 +10,7 @@ export default function Hero() {
     >
       <div className="w-full md:w-[50%] flex flex-col pt-[8%] gap-7 items-center md:items-end">
         <div className="flex w-full md:w-[71%] justify-center md:justify-end px-4 md:px-0">
-          <p className={`${bricolage_grotesque} font-[600] text-4xl md:text-7xl text-center md:text-left w-full md:w-[120%] leading-tight`}>
+          <p className={`${bricolage_grotesque} font-[600] text-3xl md:text-7xl text-center md:text-left w-full md:w-[120%] leading-tight`}>
             How will you spend your{" "}
             <span className="line-through decoration-green-400">money</span>{" "}
             life?

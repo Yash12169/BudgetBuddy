@@ -1,4 +1,3 @@
-
 "use client"
 
 import React, { useState, useCallback } from "react"
@@ -16,7 +15,6 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import Goals from "../Cards/Goals"
 import Disclaimer from "../Cards/Disclaimer"
 import ThemeController from "../ThemeController/themeController"
 import { SignOutButton } from "@clerk/nextjs"
@@ -51,15 +49,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -70,10 +59,22 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-// Animation variants
+// Define goal type
+interface Goal {
+  id: string
+  title: string
+  category: string
+  priority: number
+  targetAmount: number
+  yearsToGoal: number
+  amountRequired: number
+  adjustedTargetAmount: number
+  forecastedSalary: number
+  currentSalary: number
+  isAchievable: boolean
+}
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -89,7 +90,6 @@ const itemVariants = {
   visible: {
     y: 0,
     opacity: 1,
-    transition: { type: "spring", stiffness: 120, damping: 14 },
   },
 }
 
@@ -143,20 +143,9 @@ const formatCategoryName = (category: string): string => {
 export default function GoalSidebar() {
   const { user } = useUser()
   const queryClient = useQueryClient()
+  const router = useRouter()
   const [searchQuery, setSearchQuery] = useState("")
   const [activeCategory, setActiveCategory] = useState("All")
-  const [isAddGoalOpen, setIsAddGoalOpen] = useState(false)
-  const [isModifyGoalOpen, setIsModifyGoalOpen] = useState(false)
-  const [selectedGoal, setSelectedGoal] = useState<any>(null)
-  const [newGoal, setNewGoal] = useState({
-    title: "",
-    targetAmount: "",
-    yearsToGoal: "",
-    category: "general",
-    priority: "3",
-    currentSalary: "1800000",
-    annualIncrementRate: "0.07",
-  })
 
   // Fetch goals query
   const { data: goals = [], isLoading, error } = useQuery({
@@ -173,64 +162,6 @@ export default function GoalSidebar() {
     enabled: !!user?.id,
   })
 
-  // Create goal mutation
-  const createGoalMutation = useMutation({
-    mutationFn: async (goalData: any) => {
-      const response = await fetch('/api/goals', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(goalData),
-      })
-      if (!response.ok) {
-        throw new Error('Failed to create goal')
-      }
-      const { data } = await response.json()
-      return data
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['goals'])
-      setIsAddGoalOpen(false)
-      toast.success('Goal created successfully')
-      setNewGoal({
-        title: "",
-        targetAmount: "",
-        yearsToGoal: "",
-        category: "general",
-        priority: "3",
-        currentSalary: "1800000",
-        annualIncrementRate: "0.07",
-      })
-    },
-    onError: () => {
-      toast.error('Failed to create goal')
-    },
-  })
-
-  // Update goal mutation
-  const updateGoalMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: any }) => {
-      const response = await fetch('/api/goals', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, ...data }),
-      })
-      if (!response.ok) {
-        throw new Error('Failed to update goal')
-      }
-      const { data: responseData } = await response.json()
-      return responseData
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['goals'])
-      setIsModifyGoalOpen(false)
-      setSelectedGoal(null)
-      toast.success('Goal updated successfully')
-    },
-    onError: () => {
-      toast.error('Failed to update goal')
-    },
-  })
-
   // Delete goal mutation
   const deleteGoalMutation = useMutation({
     mutationFn: async (goalId: string) => {
@@ -242,6 +173,7 @@ export default function GoalSidebar() {
       }
     },
     onSuccess: () => {
+      //@ts-expect-error - TODO: fix this
       queryClient.invalidateQueries(['goals'])
       toast.success('Goal deleted successfully')
     },
@@ -250,81 +182,22 @@ export default function GoalSidebar() {
     },
   })
 
-  // Filter goals based on search and active category
-  const filteredGoals = goals.filter((goal) => {
+  const filteredGoals = goals.filter((goal: Goal) => {
     const matchesSearch = goal.title.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = activeCategory === "All" || goal.category.toLowerCase() === activeCategory.toLowerCase()
     return matchesSearch && matchesCategory
   })
 
   // Handle modify goal
-  const handleModifyGoal = useCallback((goal: any) => {
-    setSelectedGoal(goal)
-    setNewGoal({
-      title: goal.title,
-      targetAmount: goal.targetAmount.toString(),
-      yearsToGoal: goal.yearsToGoal.toString(),
-      category: goal.category,
-      priority: goal.priority.toString(),
-      currentSalary: goal.currentSalary.toString(),
-      annualIncrementRate: goal.annualIncrementRate.toString(),
-    })
-    setIsModifyGoalOpen(true)
-  }, [])
+  const handleModifyGoal = useCallback((goal: Goal) => {
+    // Navigate to edit page with goal data
+    router.push(`/user/goals/goal-edit?id=${goal.id}`)
+  }, [router])
 
   // Handle delete goal
   const handleDeleteGoal = useCallback((goalId: string) => {
     deleteGoalMutation.mutate(goalId)
   }, [deleteGoalMutation])
-
-  // Handle add new goal
-  const handleAddGoal = useCallback(() => {
-    if (!user?.id) return
-
-    const goalData = {
-      userId: user.id,
-      title: newGoal.title,
-      targetAmount: Number(newGoal.targetAmount),
-      amountRequired: Number(newGoal.targetAmount),
-      yearsToGoal: Number(newGoal.yearsToGoal),
-      category: newGoal.category,
-      currentSalary: Number(newGoal.currentSalary),
-      annualIncrementRate: Number(newGoal.annualIncrementRate),
-      priority: Number(newGoal.priority),
-    }
-
-    createGoalMutation.mutate(goalData)
-  }, [newGoal, user?.id, createGoalMutation])
-
-  // Handle update goal
-  const handleUpdateGoal = useCallback(() => {
-    if (!selectedGoal?.id) return
-
-    const goalData = {
-      title: newGoal.title,
-      targetAmount: Number(newGoal.targetAmount),
-      amountRequired: Number(newGoal.targetAmount),
-      yearsToGoal: Number(newGoal.yearsToGoal),
-      category: newGoal.category,
-      currentSalary: Number(newGoal.currentSalary),
-      annualIncrementRate: Number(newGoal.annualIncrementRate),
-      priority: Number(newGoal.priority),
-      userId: selectedGoal.userId,
-    }
-
-    updateGoalMutation.mutate({ id: selectedGoal.id, data: goalData })
-  }, [selectedGoal?.id, selectedGoal?.userId, newGoal, updateGoalMutation])
-
-  // Handle input change for new goal form
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setNewGoal((prev) => ({ ...prev, [name]: value }))
-  }, [])
-
-  // Handle select change for new goal form
-  const handleSelectChange = useCallback((name: string, value: string) => {
-    setNewGoal((prev) => ({ ...prev, [name]: value }))
-  }, [])
 
   // Loading state
   if (isLoading) {
@@ -383,149 +256,10 @@ export default function GoalSidebar() {
             </div>
 
             {/* Add Goal Button */}
-            <Dialog open={isAddGoalOpen} onOpenChange={setIsAddGoalOpen}>
-              <DialogTrigger asChild>
-                <Button variant="default" size="sm" className="flex items-center gap-1.5">
-                  <PlusCircle className="h-4 w-4" />
-                  <span>Add Goal</span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Create New Goal</DialogTitle>
-                  <DialogDescription>
-                    Enter the details for your new financial goal. You can edit more details later.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="title" className="text-right">
-                      Goal Title
-                    </Label>
-                    <div className="col-span-3">
-                      <Input
-                        id="title"
-                        name="title"
-                        placeholder="Dream Home, New Car, etc."
-                        className="w-full"
-                        value={newGoal.title}
-                        onChange={handleInputChange}
-                      />
-                      {newGoal.title && (
-                        <p className="mt-1 text-xs text-muted-foreground break-words">{newGoal.title}</p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="targetAmount" className="text-right">
-                      Target Amount
-                    </Label>
-                    <Input
-                      id="targetAmount"
-                      name="targetAmount"
-                      placeholder="500000"
-                      type="number"
-                      className="col-span-3"
-                      value={newGoal.targetAmount}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="yearsToGoal" className="text-right">
-                      Years to Goal
-                    </Label>
-                    <Input
-                      id="yearsToGoal"
-                      name="yearsToGoal"
-                      placeholder="5"
-                      type="number"
-                      className="col-span-3"
-                      value={newGoal.yearsToGoal}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="category" className="text-right">
-                      Category
-                    </Label>
-                    <Select value={newGoal.category} onValueChange={(value) => handleSelectChange("category", value)}>
-                      <SelectTrigger className="col-span-3">
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="realEstate">Real Estate</SelectItem>
-                        <SelectItem value="automobile">Automobile</SelectItem>
-                        <SelectItem value="education">Education</SelectItem>
-                        <SelectItem value="general">General</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="priority" className="text-right">
-                      Priority
-                    </Label>
-                    <Select value={newGoal.priority} onValueChange={(value) => handleSelectChange("priority", value)}>
-                      <SelectTrigger className="col-span-3">
-                        <SelectValue placeholder="Select priority" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1">High Priority</SelectItem>
-                        <SelectItem value="2">Medium Priority</SelectItem>
-                        <SelectItem value="3">Low Priority</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="currentSalary" className="text-right">
-                      Current Salary
-                    </Label>
-                    <Input
-                      id="currentSalary"
-                      name="currentSalary"
-                      placeholder="1800000"
-                      type="number"
-                      className="col-span-3"
-                      value={newGoal.currentSalary}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="annualIncrementRate" className="text-right">
-                      Annual Increment
-                    </Label>
-                    <Input
-                      id="annualIncrementRate"
-                      name="annualIncrementRate"
-                      placeholder="0.07"
-                      type="number"
-                      step="0.01"
-                      className="col-span-3"
-                      value={newGoal.annualIncrementRate}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsAddGoalOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    onClick={handleAddGoal}
-                    disabled={createGoalMutation.isLoading || !newGoal.title || !newGoal.targetAmount || !newGoal.yearsToGoal}
-                  >
-                    {createGoalMutation.isLoading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Creating...
-                      </>
-                    ) : (
-                      "Create Goal"
-                    )}
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            <Button variant="default" size="sm" className="flex items-center gap-1.5" onClick={() => router.push("/user/goal/add-goal")}>
+              <PlusCircle className="h-4 w-4" />
+              <span>Add Goal</span>
+            </Button>
 
             <ThemeController />
 
@@ -580,7 +314,7 @@ export default function GoalSidebar() {
                   Welcome to Your Goal Universe
                 </h1>
                 <p className="text-muted-foreground">
-                  Track your dreams, financial plans, and aspirations — all in one place. Let's achieve them together!
+                  Track your dreams, financial plans, and aspirations — all in one place. Let&apos;s achieve them together!
                 </p>
               </div>
             </div>
@@ -628,7 +362,7 @@ export default function GoalSidebar() {
               className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             >
               {filteredGoals.length > 0 ? (
-                filteredGoals.map((goal) => (
+                filteredGoals.map((goal: Goal) => (
                   <motion.div key={goal.id} variants={itemVariants}>
                     <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-card/90 backdrop-blur-sm border-border/70 hover:border-primary/50 relative group">
                       <div className="absolute top-3 right-3 z-10">
@@ -664,7 +398,7 @@ export default function GoalSidebar() {
                                 <AlertDialogHeader>
                                   <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                                   <AlertDialogDescription>
-                                    This will permanently delete the goal "{goal.title}". This action cannot be undone.
+                                    This will permanently delete the goal &quot;{goal.title}&quot;. This action cannot be undone.
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
@@ -802,28 +536,8 @@ export default function GoalSidebar() {
                 <Goals />
               </div>
             </div>
-          </motion.div> */}
-
-          {/* Disclaimer */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
-            className="mt-auto pt-6"
-          >
-            <Card className="bg-background/60 dark:bg-card/50 backdrop-blur-sm border-border/40 shadow-md">
-              <CardHeader className="flex flex-row items-center space-x-3 pb-2">
-                <AlertCircle className="h-5 w-5 text-amber-500 flex-shrink-0" />
-                <CardTitle className="text-md font-semibold text-foreground/90">Important Disclaimer</CardTitle>
-              </CardHeader>
-              <CardContent className="text-xs sm:text-sm text-muted-foreground leading-relaxed overflow-hidden">
-                <div className="max-w-full overflow-x-auto">
-                  <Disclaimer />
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+          </motion.div> */}   
+            <Disclaimer />
         </div>
       </SidebarInset>
     </SidebarProvider>

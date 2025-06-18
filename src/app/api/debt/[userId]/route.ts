@@ -3,12 +3,13 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 export async function GET(
   request: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     const debt = await prisma.debt.findUnique({
       where: {
-        userId: params.userId,
+        userId: userId,
       },
     });
 
@@ -22,7 +23,7 @@ export async function GET(
     // Get user's salary from financials
     const financials = await prisma.financials.findUnique({
       where: {
-        userId: params.userId,
+        userId: userId,
       },
     });
 
@@ -54,9 +55,10 @@ export async function GET(
 // POST - Create new debt details for a user
 export async function POST(
   request: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     const body = await request.json();
     const { loanAmount, loanTenure, interestRate, emiAmount } = body;
 
@@ -71,7 +73,7 @@ export async function POST(
     // Check if debt already exists for user
     const existingDebt = await prisma.debt.findUnique({
       where: {
-        userId: params.userId,
+        userId: userId,
       },
     });
 
@@ -84,7 +86,7 @@ export async function POST(
 
     const debt = await prisma.debt.create({
       data: {
-        userId: params.userId,
+        userId: userId,
         loanAmount,
         loanTenure,
         interestRate,
@@ -95,7 +97,7 @@ export async function POST(
     // Get user's salary from financials
     const financials = await prisma.financials.findUnique({
       where: {
-        userId: params.userId,
+        userId: userId,
       },
     });
 
@@ -127,9 +129,10 @@ export async function POST(
 // PUT - Update debt details for a user
 export async function PUT(
   request: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     const body = await request.json();
     const { loanAmount, loanTenure, interestRate, emiAmount } = body;
 
@@ -143,7 +146,7 @@ export async function PUT(
 
     const debt = await prisma.debt.update({
       where: {
-        userId: params.userId,
+        userId: userId,
       },
       data: {
         loanAmount,
@@ -156,7 +159,7 @@ export async function PUT(
     // Get user's salary from financials
     const financials = await prisma.financials.findUnique({
       where: {
-        userId: params.userId,
+        userId: userId,
       },
     });
 
@@ -188,12 +191,13 @@ export async function PUT(
 // DELETE - Delete debt details for a user
 export async function DELETE(
   request: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     await prisma.debt.delete({
       where: {
-        userId: params.userId,
+        userId: userId,
       },
     });
 

@@ -3,10 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = params.id;
+    const { id } = await params;
     const user = await prisma.user.findUnique({
       where: { id: String(id) },
       include: {financial: true,debt: true},
@@ -21,9 +21,10 @@ export async function GET(
       { success: true, message: "user found", user: user },
       { status: 200 }
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
     return NextResponse.json(
-      { success: false, message: err.message },
+      { success: false, message: errorMessage },
       { status: 500 }
     );
   }

@@ -1,7 +1,7 @@
 "use client";
 import { AppSidebar } from "@/components/app-sidebar";
 import Disclaimer from "@/components/Cards/Disclaimer";
-import GoalEditCard from "@/components/Cards/GoalEditCard";
+import EmergencyFundEdit from "@/components/Cards/EmergencyFundEdit";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,7 +16,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { SignOutButton } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -36,40 +35,22 @@ export default function FinancialSidebar() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/user/dashboard">
+                  <BreadcrumbLink href="/user/financial-checkup">
                     Financial Checkup
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
-                {/* <BreadcrumbLink href="/user/financials">
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbLink> */}
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
+                <BreadcrumbLink href="/user/financial-checkup/emergency-fund">
+                  <BreadcrumbPage>Emergency Fund</BreadcrumbPage>
+                </BreadcrumbLink>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
           {/* <ThemeController /> */}
-          <SignOutButton />
+          {/* <SignOutButton /> */}
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          {/* <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
-          <FinancialScore />
-          </div>
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="aspect-video rounded-xl bg-accent shadow-lg">
-              <Habits />
-            </div>
-            <div className="aspect-video rounded-xl bg-accent shadow-lg">
-              <Debt />
-            </div>
-            <div className="aspect-video rounded-xl bg-accent shadow-lg">
-              <EmergencyFund />
-            </div>
-          </div> */}
-          <GoalEditCard/>
+          <EmergencyFundEdit/>
           <Disclaimer />
         </div>
       </SidebarInset>

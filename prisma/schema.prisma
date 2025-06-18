@@ -25,10 +25,10 @@ model User {
 model financials {
   id               String   @id @default(cuid())
   userId           String   @unique
-  salary           Int
-  expenses         Int
-  extraExpenses    Int
-  insurancePremium Int
+  salary           Int @default(0)
+  expenses         Int @default(0)
+  extraExpenses    Int @default(0)
+  insurancePremium Int @default(0)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -37,10 +37,10 @@ model financials {
 model debt {
   id           String   @id @default(cuid())
   userId       String   @unique
-  loanAmount   Int
-  loanTenure   Int
-  interestRate Float
-  emiAmount    Int
+  loanAmount   Int @default(0)
+  loanTenure   Int @default(0)
+  interestRate Float @default(0)
+  emiAmount    Int @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -49,7 +49,7 @@ model debt {
 model emergencyFund {
   id            String   @id @default(cuid())
   userId        String   @unique
-  emergencyFund Float
+  emergencyFund Float @default(0)
   status        String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -60,15 +60,15 @@ model LifeGoal {
   id                   String   @id @default(uuid())
   userId               String
   title                String
-  targetAmount         Float
-  adjustedTargetAmount Float
-  amountRequired        Float
-  yearsToGoal          Int
+  targetAmount         Float @default(0)
+  adjustedTargetAmount Float @default(0)
+  amountRequired        Float @default(0)
+  yearsToGoal          Int @default(0)
   category             String
-  currentSalary        Float
-  annualIncrementRate  Float
-  forecastedSalary     Float
-  isAchievable         Boolean
+  currentSalary        Float @default(0)
+  annualIncrementRate  Float @default(0)
+  forecastedSalary     Float @default(0)
+  isAchievable         Boolean @default(false)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   priority             Int      @default(3)
   createdAt            DateTime @default(now())

@@ -5,8 +5,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -14,12 +12,9 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import Allocation from "../Cards/Allocation";
 import Disclaimer from "../Cards/Disclaimer";
-import NetWorth from "../Cards/NetWorth";
 import StarterCard from "../Cards/starterCard";
 import FinancialScore from "../Cards/FinancialScore";
-import ThemeController from "../ThemeController/themeController";
 import { SignOutButton } from "@clerk/nextjs";
 import Goals from "../Cards/Goals";
 import GoalTracker from "../Cards/GoalTracker";
@@ -41,19 +36,11 @@ export default function Sidebar() {
                     Dashboard
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbLink href="/user/financials">
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbLink>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <ThemeController />
-          <SignOutButton />
+          {/* <ThemeController /> */}
+          <SignOutButton/>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <div className="grid auto-rows-min gap-4 md:grid-cols-3">
@@ -68,23 +55,9 @@ export default function Sidebar() {
           <FinancialScore />
           </div>
           <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
-          
             <Goals />
-          </div>
-          <div className="grid auto-rows-min gap-4 md:grid-cols-2">
-            <div className="aspect-video rounded-xl bg-green-500">
-              <NetWorth />
-            </div>
-            <div className="aspect-video rounded-xl bg-red-500">
-              <Allocation />
-            </div>
-          </div>
-
-          
+          </div>          
           <Disclaimer />
-
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-pink-300 md:min-h-min" />
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-pink-300 md:min-h-min" />
         </div>
       </SidebarInset>
     </SidebarProvider>

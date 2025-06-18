@@ -1,8 +1,6 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
 import { Dispatch, SetStateAction, useState } from "react";
-import { FiAlertCircle } from "react-icons/fi";
-import { SignupForm } from "./SignUpForm";
 import { montserrat } from "@/fonts/fonts";
 import { LogInForm } from "./LogInForm";
 

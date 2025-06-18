@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import card from "../../assets/fincheckcard.svg";
 import gem from '../../assets/dash-wealth-goal.svg'
 import { montserrat, poppins } from "@/fonts/fonts";
 import { useRouter } from "next/navigation";

@@ -2,8 +2,6 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import DebtEdit from "@/components/Cards/DebtEdit";
 import Disclaimer from "@/components/Cards/Disclaimer";
-import HabitEdit from "@/components/Cards/HabitEdit";
-import ThemeController from "@/components/ThemeController/themeController";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,7 +16,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { SignOutButton } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -40,23 +37,19 @@ export default function FinancialSidebar() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/user/dashboard">
+                  <BreadcrumbLink href="/user/financial-checkup">
                     Financial Checkup
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbLink href="/user/financials">
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                <BreadcrumbLink href="/user/financial-checkup/debt">
+                  <BreadcrumbPage>Debt</BreadcrumbPage>
                 </BreadcrumbLink>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-          <ThemeController />
-          <SignOutButton />
+          {/* <ThemeController /> */}
+          {/* <SignOutButton /> */}
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <DebtEdit/>

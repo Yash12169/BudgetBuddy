@@ -1,4 +1,3 @@
-import Goals from "@/components/Cards/Goals";
 import Layout from "@/components/Layout/layout";
 import GoalSidebar from "@/components/Sidebar/GoalSidebar";
 

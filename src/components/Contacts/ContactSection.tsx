@@ -35,7 +35,7 @@ export default function ContactSection() {
         <div className="absolute inset-0 bg-white bg-opacity-70 backdrop-blur-sm z-0" />
         <div className="relative z-10 max-w-5xl mx-auto p-6 rounded-xl shadow-lg">
           <h2
-            className={`${montserrat.className} text-3xl font-bold mb-12 text-center text-gray-900`}
+            className={`${montserrat} text-3xl font-bold mb-12 text-center text-gray-900`}
           >
             Meet Our Team
           </h2>

@@ -74,10 +74,10 @@ const calculateEmergencyStatus = (
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const userId = params.userId;
+    const { userId } = await params;
     const data = await req.json();
     
     if (!data.emergencyFund || isNaN(Number(data.emergencyFund)) || Number(data.emergencyFund) < 0) {
@@ -144,10 +144,10 @@ export async function POST(
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const userId = params.userId;
+    const { userId } = await params;
     const finData = await prisma.financials.findFirst({
       where: { userId: userId }
     });
@@ -192,10 +192,10 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const userId = params.userId;
+    const { userId } = await params;
     const data = await req.json();
     
     if (!data.emergencyFund || isNaN(Number(data.emergencyFund)) || Number(data.emergencyFund) < 0) {
@@ -256,10 +256,10 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const userId = params.userId;
+    const { userId } = await params;
 
     const existingFund = await prisma.emergencyFund.findFirst({
       where: { userId: userId }

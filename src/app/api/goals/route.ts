@@ -113,6 +113,21 @@ export async function POST(req: NextRequest) {
   }
 }
 
+interface UpdateData {
+  title?: string;
+  targetAmount?: number;
+  amountRequired?: number;
+  yearsToGoal?: number;
+  category?: string;
+  currentSalary?: number;
+  annualIncrementRate?: number;
+  userId?: string;
+  priority?: number;
+  adjustedTargetAmount?: number;
+  forecastedSalary?: number;
+  isAchievable?: boolean;
+}
+
 export async function PUT(req: NextRequest) {
   try {
     const body = await req.json();
@@ -162,7 +177,7 @@ export async function PUT(req: NextRequest) {
       }
     }
 
-    const updateData: any = {};
+    const updateData: UpdateData = {};
     if (title !== undefined) updateData.title = title;
     if (targetAmount !== undefined) updateData.targetAmount = Number(targetAmount);
     if (amountRequired !== undefined) updateData.amountRequired = Number(amountRequired);
@@ -185,11 +200,11 @@ export async function PUT(req: NextRequest) {
     
     if (amountRequired !== undefined && yearsToGoal !== undefined && category !== undefined) {
       const inflationRate = inflationRates[category as CategoryType] || inflationRates.general;
-      updateData.adjustedTargetAmount = updateData.amountRequired * Math.pow(1 + inflationRate, updateData.yearsToGoal);
+      updateData.adjustedTargetAmount = updateData.amountRequired! * Math.pow(1 + inflationRate, updateData.yearsToGoal!);
       
       if (currentSalary !== undefined && annualIncrementRate !== undefined) {
-        updateData.forecastedSalary = updateData.currentSalary * Math.pow(1 + Number(updateData.annualIncrementRate), updateData.yearsToGoal);
-        updateData.isAchievable = updateData.forecastedSalary * 0.3 * updateData.yearsToGoal >= updateData.adjustedTargetAmount;
+        updateData.forecastedSalary = updateData.currentSalary! * Math.pow(1 + Number(updateData.annualIncrementRate), updateData.yearsToGoal!);
+        updateData.isAchievable = updateData.forecastedSalary! * 0.3 * updateData.yearsToGoal! >= updateData.adjustedTargetAmount!;
       }
     }
 

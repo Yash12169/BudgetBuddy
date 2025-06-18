@@ -19,16 +19,20 @@ import { z } from "zod";
 
 import { signInSchema } from "@/lib/zod";
 import LoadingButton from "@/components/loading-button";
-import {
-    handleCredentialsSignin,
-    handleGithubSignin,
-} from "@/app/actions/authActions";
+
+import { useSignIn } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { OAuthStrategy } from "@clerk/types";
 import { useState } from "react";
 import ErrorMessage from "@/components/error-message";
 import { Button } from "@/components/ui/button";
 
 export default function SignIn() {
+    const { signIn, isLoaded } = useSignIn();
+    const router = useRouter();
     const [globalError, setGlobalError] = useState<string>("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    
     const form = useForm<z.infer<typeof signInSchema>>({
         resolver: zodResolver(signInSchema),
         defaultValues: {
@@ -38,13 +42,44 @@ export default function SignIn() {
     });
 
     const onSubmit = async (values: z.infer<typeof signInSchema>) => {
+        if (!isLoaded) return;
+        
+        setIsSubmitting(true);
+        setGlobalError("");
+        
         try {
-            const result = await handleCredentialsSignin(values);
-            if (result?.message) {
-                setGlobalError(result.message);
+            const result = await signIn.create({
+                identifier: values.email,
+                password: values.password,
+            });
+
+            if (result.status === "complete") {
+                router.push("/user/dashboard");
             }
-        } catch (error) {
-            console.log("An unexpected error occurred. Please try again.");
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error && 'errors' in error && Array.isArray((error as { errors: Array<{ message: string }> }).errors) 
+                ? (error as { errors: Array<{ message: string }> }).errors[0]?.message 
+                : "An error occurred during sign in";
+            setGlobalError(errorMessage);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleGithubSignin = async () => {
+        if (!isLoaded) return;
+        
+        try {
+            await signIn.authenticateWithRedirect({
+                strategy: "oauth_github" as OAuthStrategy,
+                redirectUrl: "/user/dashboard",
+                redirectUrlComplete: "/user/dashboard",
+            });
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error && 'errors' in error && Array.isArray((error as { errors: Array<{ message: string }> }).errors) 
+                ? (error as { errors: Array<{ message: string }> }).errors[0]?.message 
+                : "An error occurred during GitHub sign in";
+            setGlobalError(errorMessage);
         }
     };
 
@@ -100,9 +135,8 @@ export default function SignIn() {
                                 )}
                             />
 
-                            {/* Submit button will go here */}
                             <LoadingButton
-                                pending={form.formState.isSubmitting}
+                                pending={isSubmitting}
                             />
                         </form>
                     </Form>
@@ -110,16 +144,15 @@ export default function SignIn() {
                     <span className="text-sm text-gray-500 text-center block my-2">
                         or
                     </span>
-                    <form className="w-full" action={handleGithubSignin}>
-                        <Button
-                            variant="outline"
-                            className="w-full"
-                            type="submit"
-                        >
-                            <GitHubLogoIcon className="h-4 w-4 mr-2" />
-                            Sign in with GitHub
-                        </Button>
-                    </form>
+                    <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={handleGithubSignin}
+                        disabled={!isLoaded}
+                    >
+                        <GitHubLogoIcon className="h-4 w-4 mr-2" />
+                        Sign in with GitHub
+                    </Button>
                 </CardContent>
             </Card>
         </div>

@@ -5,10 +5,10 @@ import {
   useMotionValue,
   useSpring,
 } from "framer-motion";
-import { FiMousePointer } from "react-icons/fi";
 import Image from "next/image";
 import house from "../../assets/Building-bro.png"
 import { montserrat } from "@/fonts/fonts";
+import { useRouter } from "next/navigation";
 const HouseHoverCard = () => {
   return (
       <TiltCard />
@@ -20,7 +20,7 @@ const HALF_ROTATION_RANGE = 32.5 / 2;
 
 const TiltCard = () => {
   const ref = useRef<HTMLDivElement | null>(null);
-
+  const router = useRouter();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -61,6 +61,7 @@ const TiltCard = () => {
         transformStyle: "preserve-3d",
         transform,
       }}
+      onClick={() => router.push("/user/goals")}
       className="relative h-96 w-72 rounded-xl bg-[#c3bebea1] cursor-pointer"
     >
       <div

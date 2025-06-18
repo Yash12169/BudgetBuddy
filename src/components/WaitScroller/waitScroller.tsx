@@ -1,12 +1,9 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/all";
 import { bricolage_grotesque } from "@/fonts/fonts";
-import Hero from "../Hero/hero";
-import LandFooter from "../Footer/LandFooter/landFooter";
 gsap.registerPlugin(ScrollTrigger);
 interface article {
   id: number;
@@ -21,9 +18,8 @@ interface article {
 }
 
 export default function WaitScroller() {
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
   const pages = 5;
-  const numberOfPages = Math.ceil(article_data.length / pages);
   const startIndex = (page - 1) * pages;
   const endIndex = startIndex + pages;
   const currentArticles = article_data.slice(startIndex, endIndex);
@@ -137,7 +133,7 @@ export default function WaitScroller() {
             <div>
               <p>
                 YNAB guides you through the practice of giving every dollar a
-                job—it’s like having a life coach for your money. Here are five
+                job—it&apos;s like having a life coach for your money. Here are five
                 questions that can help guide you through it.
               </p>
             </div>
@@ -310,7 +306,7 @@ const article_data: article[] = [
     image: "/images/uilib.webp",
     views: "1.2k",
     description:
-      "In today’s fast-paced world of web development, delivering intuitive, visually appealing, and responsive user interfaces (UI) is essential. However, building UIs ...",
+      "In today's fast-paced world of web development, delivering intuitive, visually appealing, and responsive user interfaces (UI) is essential. However, building UIs ...",
     author: "Yash Jewalkar",
   },
   {
@@ -329,7 +325,7 @@ const article_data: article[] = [
   {
     id: 2,
     title:
-      "Why You Should Choose TypeScript Over JavaScript: A Developer’s Perspective",
+      "Why You Should Choose TypeScript Over JavaScript: A Developer's Perspective",
     slug: "tsvsjs",
     pub_date: "Jul 19, 2024",
     read_time: "2 min read",
@@ -385,7 +381,7 @@ const article_data: article[] = [
     image: "/images/portfolio.png",
     views: "59",
     description:
-      "In today’s competitive job market, having a standout portfolio is crucial for developers seeking to showcase their skills and attract potential employers ...",
+      "In today's competitive job market, having a standout portfolio is crucial for developers seeking to showcase their skills and attract potential employers ...",
     author: "Yash Jewalkar",
   },
 ];

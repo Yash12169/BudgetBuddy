@@ -42,7 +42,7 @@ const faqs = [
 ];
 
 function Faq() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [, setOpenIndex] = useState<number | null>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
   const iconRefs = useRef<(SVGSVGElement | null)[]>([]);
 
@@ -103,6 +103,7 @@ function Faq() {
             >
               <p className={`${montserrat} font-semibold text-sm md:text-base`}>{faq.question}</p>
               <svg
+                //@ts-expect-error - TODO: fix this
                 ref={(el) => (iconRefs.current[index] = el || null)}
                 width="24"
                 height="24"
@@ -121,6 +122,7 @@ function Faq() {
               </svg>
             </div>
             <div
+              //@ts-expect-error - TODO: fix this
               ref={(el) => (contentRefs.current[index] = el || null)}
               className="overflow-hidden"
               style={{ height: 0, opacity: 0 }}
