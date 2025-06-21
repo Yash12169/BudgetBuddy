@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
     const email = data.email_addresses?.[0]?.email_address || '';
     const firstName = data.first_name || '';
     const lastName = data.last_name || '';
+    const profileImage = data.image_url || '';
 
     const existingUser = await prisma.user.findUnique({
       where: { id: userId },
@@ -27,12 +28,12 @@ export async function POST(req: NextRequest) {
 
     if (!existingUser) {
       await prisma.user.create({
-        //@ts-expect-error - TODO: fix this
         data: {
           id: userId,
           email,
           firstName,
           lastName,
+          profileImage,
         },
       });
     }

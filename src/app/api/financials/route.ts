@@ -10,7 +10,6 @@ export async function POST(req: NextRequest) {
     const expenses = Number(data.expenses) || 0;
     const extraExpenses = Number(data.extraExpenses) || 0;
     const insurancePremium = Number(data.insurancePremium) || 0;
-    const emi = Number(data.emi) || 0;
 
     const newRecord = await prisma.financials.create({
       data: {
@@ -19,8 +18,6 @@ export async function POST(req: NextRequest) {
         expenses,
         extraExpenses,
         insurancePremium,
-        //@ts-expect-error - TODO: fix this
-        emi,
       },
     });
     return NextResponse.json(
@@ -29,9 +26,9 @@ export async function POST(req: NextRequest) {
     );
   } catch (err) {
     console.error("Error processing financial data:", err);
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
     return NextResponse.json(
-      //@ts-expect-error - TODO: fix this
-      { success: false, message: "Failed to store data", error: err.message },
+      { success: false, message: "Failed to store data", error: errorMessage },
       { status: 500 }
     );
   }
