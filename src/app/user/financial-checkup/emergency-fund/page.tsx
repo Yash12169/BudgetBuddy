@@ -1,7 +1,5 @@
 "use client";
 import { AppSidebar } from "@/components/app-sidebar";
-import Disclaimer from "@/components/Cards/Disclaimer";
-import EmergencyFundEdit from "@/components/Cards/EmergencyFundEdit";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,6 +16,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import EmergencyFundEdit from "@/components/Cards/EmergencyFundEdit";
 
 export default function FinancialSidebar() {
   const router = useRouter();
@@ -51,7 +50,6 @@ export default function FinancialSidebar() {
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <EmergencyFundEdit/>
-          <Disclaimer />
         </div>
       </SidebarInset>
     </SidebarProvider>

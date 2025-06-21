@@ -1,136 +1,110 @@
-"use client";
+import { useEffect, useState } from "react";
+import { useUser  } from "@clerk/nextjs";
 import Image from "next/image";
-import house from "../../assets/dash-house-goal.svg"
-import car from "../../assets/dash-car-goal.svg"
-import tracker from '../../assets/dash-goal-tracker.svg'
+import tracker from '../../assets/dash-goal-tracker.svg';
 import { montserrat } from "@/fonts/fonts";
 
+
+type Goal = {
+  id: string; 
+  title: string;
+  category: string;
+  yearsToGoal: number; 
+  priority: string; 
+  adjustedTargetAmount: number; 
+  isAchievable: boolean; 
+};
+
+
+const ICONS = {
+  realestate: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3e0.svg", 
+  education: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f393.svg", 
+  general: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f4b0.svg", 
+  automobile: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f697.svg", 
+};
+
+const getGoalIcon = (category: string) => {
+  switch (category.toLowerCase()) {
+    case "realestate":
+      return ICONS.realestate;
+    case "education":
+      return ICONS.education;
+    case "general":
+      return ICONS.general;
+    case "automobile":
+      return ICONS.automobile;
+    default:
+      return ICONS.general;
+  }
+};
+
 export default function GoalTracker() {
-    return (
-    <div className="bg-gradient-to-br from-gray-800 to-black flex gap-4 flex-col w-[100%] h-[100%] px-7 py-8 text-neutral-content rounded-[30px]">
+  const { user } = useUser ();
+  const [goals, setGoals] = useState<Goal[]>([]); 
+
+  useEffect(() => {
+    if (!user?.id) return;
+    fetch(`/api/goals/${user.id}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setGoals(data.data);
+        }
+      })
+      .catch(err => console.error("Error fetching goals:", err));
+  }, [user?.id]);
+
+  return (
+    <div className="bg-gradient-to-br from-gray-800 to-black flex flex-col gap-4 px-4 py-4 md:px-7 md:py-8 text-neutral-content rounded-[30px] w-full md:max-w-3xl md:mx-auto">
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-            <div>
-                <Image src={tracker} height={36} width={36} alt="tracker"/>
-            </div>
-        <div className=" text-xl text-white font-semibold">
-          <p className={`${montserrat}`}>Top Goals</p>
+          <span className="hidden md:inline-block">
+            <Image src={tracker} height={36} width={36} alt="tracker" />
+          </span>
+          <p className={`text-xl text-white font-semibold ${montserrat}`}>Top Goals</p>
         </div>
-        </div>
-        <div className="text-sm ">
-          <p className={`${montserrat}`}>
-            A summary of your Top Goals and possibility
-          </p>
-        </div>
+        <p className={`text-sm ${montserrat}`}>A summary of your Top Goals and possibility</p>
       </div>
 
-      <div className="flex border justify-between rounded-[15px] px-5 py-3">
-        <div className="flex gap-3">
-            <div className="flex justify-center">
-                <Image src={house} alt="house"/>
+      {goals.map((goal: Goal) => (
+        <div key={goal.id} className="flex border justify-between rounded-[15px] px-3 py-2 md:px-5 md:py-3 w-full mb-2 md:mb-3">
+          <div className="flex gap-2 md:gap-3 items-center">
+            <span className="hidden md:inline-block">
+              <Image
+                src={getGoalIcon(goal.category)}
+                alt={goal.category}
+                width={40}
+                height={40}
+                className="object-contain"
+              />
+            </span>
+            <div className="flex flex-col">
+              <p className={`font-semibold text-white ${montserrat}`}>{goal.title}</p>
+              <p className="text-sm">Target to achieve in {new Date().getFullYear() + goal.yearsToGoal}</p>
+            </div>
+          </div>
+          <div className="flex text-sm gap-3 md:gap-6">
+            <div className="flex flex-col">
+              <p>Priority</p>
+              <p className="font-semibold">{goal.priority}</p>
+            </div>
+            <div className={`flex flex-col ${montserrat}`}> 
+              <p>Amount</p>
+              <p className="font-semibold">{Math.round(goal.adjustedTargetAmount / 100000)} Lakh</p>
             </div>
             <div className="flex flex-col">
-                <div className="font-semibold  text-white">
-                    <p className={`${montserrat}`}>House</p>
-                </div>
-                <div className="text-sm">
-                    <p>Target to achieve in 2034</p>
-                </div>
+              <p>Target Year</p>
+              <p className="font-semibold">{new Date().getFullYear() + goal.yearsToGoal}</p>
             </div>
+          </div>
+          <div className={`text-sm flex flex-col text-white ${montserrat}`}> 
+            <p>Goal Possibility</p>
+            <p className="font-semibold text-[#864be4]">
+              {goal.isAchievable ? "Possible" : "Not Possible"}
+            </p>
+          </div>
         </div>
-        
-        <div className="flex text-sm gap-9">
-            <div className="flex flex-col">
-                <div>
-                    <p>Priority</p>
-                </div>
-                <div>
-                    <p className="font-semibold">1</p>
-                </div>
-            </div>
-        <div className={`${montserrat} flex flex-col`}>
-                <div>
-                    <p>Amount</p>
-                </div>
-                <div>
-                    <p className="font-semibold ">70 Lakh</p>
-                </div>
-            </div>
-            <div className="flex flex-col">
-                <div>
-                    <p>Target Year</p>
-                </div>
-                <div>
-                    <p className="font-semibold">2034</p>
-                </div>
-            </div>
-        </div>
-
-        <div className={`${montserrat} text-sm flex flex-col text-white`}>
-            <div>
-                <p>Goal Possiblity</p>
-            </div>
-            <div className="font-semibold text-[#864be4]">
-                <p>Possible</p>
-            </div>
-        </div>
-
-      </div>
-
-      <div className="flex border justify-between rounded-[15px] px-5 py-3">
-        <div className="flex gap-3">
-            <div className="flex justify-center">
-                <Image src={car} alt="house"/>
-            </div>
-            <div className="flex flex-col">
-                <div className="font-semibold  text-white">
-                    <p className={`${montserrat}`}>Car</p>
-                </div>
-                <div className="text-sm">
-                    <p>Target to achieve in 2034</p>
-                </div>
-            </div>
-        </div>
-        
-        <div className="flex text-sm gap-9">
-            <div className="flex flex-col">
-                <div>
-                    <p>Priority</p>
-                </div>
-                <div>
-                    <p className="font-semibold">1</p>
-                </div>
-            </div>
-        <div className={`${montserrat} flex flex-col`}>
-                <div>
-                    <p>Amount</p>
-                </div>
-                <div>
-                    <p className="font-semibold ">70 Lakh</p>
-                </div>
-            </div>
-            <div className="flex flex-col">
-                <div>
-                    <p>Target Year</p>
-                </div>
-                <div>
-                    <p className="font-semibold">2034</p>
-                </div>
-            </div>
-        </div>
-
-        <div className={`${montserrat} text-sm flex flex-col text-white`}>
-            <div>
-                <p>Goal Possiblity</p>
-            </div>
-            <div className="font-semibold text-[#864be4]">
-                <p>Possible</p>
-            </div>
-        </div>
-
-      </div>
-
-
+      ))}
     </div>
   );
 }

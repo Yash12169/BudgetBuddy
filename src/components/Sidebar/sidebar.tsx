@@ -42,7 +42,7 @@ export default function Sidebar() {
           {/* <ThemeController /> */}
           <SignOutButton/>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex flex-1 flex-col gap-2 md:gap-4 p-4 pt-0">
           <div className="grid auto-rows-min gap-4 md:grid-cols-3">
             <div className="rounded-xl h-fit w-full">
               <StarterCard />
@@ -52,11 +52,11 @@ export default function Sidebar() {
             </div>
           </div>
           <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
-          <FinancialScore />
+            <FinancialScore />
           </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
+          <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min mt-2 mb-16 md:mb-4">
             <Goals />
-          </div>          
+          </div>
           <Disclaimer />
         </div>
       </SidebarInset>

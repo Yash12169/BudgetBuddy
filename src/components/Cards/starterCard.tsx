@@ -51,36 +51,38 @@ export default function StarterCard() {
   const imageUrl = userImg || "/default-avatar.svg";
 
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-black flex gap-4 flex-col w-[100%] h-[100%] px-5 py-5 text-neutral-content rounded-[30px]">
-      <div className="bg--500 flex flex-col text-center items-center gap-4">
-        <div className="rounded-full h-36 p-2 w-36 flex justify-center border-4 border-purple-500 shadow-[0_0_15px_#A020F0]">
+    <div className="bg-gradient-to-br from-gray-800 to-black flex flex-col gap-4 w-full h-full px-4 py-4 md:px-5 md:py-5 text-neutral-content rounded-[30px] max-w-sm mx-auto md:max-w-full">
+     
+      <div className="flex flex-col text-center items-center gap-2 md:gap-4">
+        <div className="rounded-full h-24 w-24 p-1 flex justify-center items-center border-4 border-purple-500 shadow-[0_0_10px_#A020F0] md:h-36 md:w-36 md:p-2 md:shadow-[0_0_15px_#A020F0]">
           <Image
             src={imageUrl}
             draggable={false}
             width={144}
             height={144}
             alt="icon"
-            className="w-full h-full object-cover rounded-full"
+            className="object-cover w-full h-full rounded-full"
           />
         </div>
         <div className="text-white">
-          <p className={`${montserrat}`}>
-            <span className="font-semibold text-lg">Hi</span>, 
+          <p className={`${montserrat} text-base md:text-lg`}>
+            <span className="font-semibold">Hi</span>,
             <span className="text-gray-300"> {firstName}</span>
           </p>
         </div>
       </div>
-      <div className={`flex justify-between ${poppins}`}>
-        <div className="flex flex-col gap-1">
-          <div className="text-sm">
+    
+      <div className={`flex justify-between ${poppins} mt-2`}>
+        <div className="flex flex-col gap-0.5 md:gap-1">
+          <div className="text-xs md:text-sm">
             <p>Your net Worth</p>
           </div>
-          <div className="font-semibold text-lg text-white">
+          <div className="font-semibold text-base text-white md:text-lg">
             <p>{formatAmount(salary)}</p>
           </div>
         </div>
-        <div className="flex flex-col gap-1">
-          <div className="text-sm">
+        <div className="flex flex-col gap-0.5 md:gap-1">
+          <div className="text-xs md:text-sm">
             <p>Your financial Health</p>
           </div>
           <div>
