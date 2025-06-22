@@ -1,16 +1,23 @@
 "use client";
 
 import { montserrat, poppins } from "@/fonts/fonts";
+import { Info } from "lucide-react";
 
 export default function Disclaimer() {
   return (
-    <div className="flex flex-col bg-neutral px-5 py-5 text-neutral-content gap-2 rounded-[30px]  ">
-        <div className={`${montserrat} font-[600] `}> 
-            <p className="text-[20px]">Disclaimer</p>
-        </div> 
-        <div className={`${poppins} text-[14px] flex`}>
-            <p>The risk profile used in this domain does not constitute a component of the Investment Advice process. The securities mentioned are for illustration purposes only and should not be considered as investment recommendations. Investments in the securities market are subject to various market risks, including volatility, liquidity, and economic factors. Past performance is not indicative of future results. Investors are advised to read all related documents carefully and conduct thorough due diligence before making any investment decisions. Seek professional financial advice if needed. <span className="underline cursor-pointer">Learn more</span></p>
+    <div className="flex items-start gap-3 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl px-4 py-3 shadow-sm">
+      <div className="mt-1 text-blue-500 dark:text-blue-400">
+        <Info className="w-5 h-5" />
+      </div>
+      <div className="flex flex-col">
+        <div className={`${montserrat} font-semibold text-base text-neutral-800 dark:text-neutral-100 mb-1`}>Disclaimer</div>
+        <div className={`${poppins} text-xs text-neutral-600 dark:text-neutral-300 leading-snug`}>
+          The risk profile used in this domain does not constitute a component of the Investment Advice process. The securities mentioned are for illustration purposes only and should not be considered as investment recommendations. Investments in the securities market are subject to various market risks, including volatility, liquidity, and economic factors. Past performance is not indicative of future results. Investors are advised to read all related documents carefully and conduct thorough due diligence before making any investment decisions. Seek professional financial advice if needed.{' '}
+          <span className="underline text-blue-600 dark:text-blue-400 cursor-pointer font-medium">Learn more</span>
         </div>
+      </div>
     </div>
-  )
+  );
 }
+
+

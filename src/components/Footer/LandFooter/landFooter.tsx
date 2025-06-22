@@ -1,4 +1,3 @@
-
 "use client";
 
 import { montserrat } from "@/fonts/fonts";
@@ -89,7 +88,7 @@ export default function LandFooter() {
   };
 
   return (
-    <div className="relative flex justify-center items-center p-3 bg-gradient-to-b from-[#FFF8ED] to-[#FFE4D6] overflow-hidden">
+    <div className="relative flex justify-center items-center p-3 bg-gradient-to-b from-[#f8fafc] to-[#f1f5f9] overflow-hidden">
       
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute w-96 h-96 bg-[#41d298] rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob -top-4 -left-4"></div>
@@ -151,7 +150,7 @@ export default function LandFooter() {
             </div>
           </div>
 
-          {/* Right Column - Quick Links */}
+        
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             <div className="space-y-4">
               <h3 className={`${montserrat} text-xl font-bold text-[#41d298]`}>Quick Links</h3>

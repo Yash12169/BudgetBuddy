@@ -1,7 +1,6 @@
 "use client";
 import { AppSidebar } from "@/components/app-sidebar";
 import DebtEdit from "@/components/Cards/DebtEdit";
-import Disclaimer from "@/components/Cards/Disclaimer";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -53,7 +52,6 @@ export default function FinancialSidebar() {
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <DebtEdit/>
-          <Disclaimer />
         </div>
       </SidebarInset>
     </SidebarProvider>

@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { useUser } from "@clerk/nextjs"
+import { useUser, SignOutButton } from "@clerk/nextjs"
 import { toast } from "sonner"
 import { AppSidebar } from "@/components/app-sidebar"
 import {
@@ -17,14 +17,10 @@ import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import Disclaimer from "../Cards/Disclaimer"
 import ThemeController from "../ThemeController/themeController"
-import { SignOutButton } from "@clerk/nextjs"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import {
   ChevronDown,
-  Search,
-  Settings,
-  TrendingUp,
   AlertCircle,
   Home,
   Car,
@@ -34,18 +30,19 @@ import {
   Loader2,
   Trash2,
   Edit,
+  Target,
+  TrendingUp,
+  Calendar,
+  LogOut,
 } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
 import {
@@ -60,7 +57,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-// Define goal type
 interface Goal {
   id: string
   title: string
@@ -76,30 +72,59 @@ interface Goal {
 }
 
 const containerVariants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
+    y: 0,
     transition: {
-      staggerChildren: 0.07,
+      duration: 0.5,
     },
   },
 }
 
 const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
+  hidden: { y: 30, opacity: 0, scale: 0.95 },
   visible: {
     y: 0,
     opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.4,
+    },
   },
 }
 
-// Format currency in Indian Rupees
+const statsVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
+}
+
+
 const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
     maximumFractionDigits: 0,
   }).format(amount)
+}
+
+
+const formatShortNumber = (amount: number) => {
+  if (amount >= 10000000) {
+    return (amount / 10000000).toFixed(amount % 10000000 === 0 ? 0 : 1) + 'Cr';
+  } else if (amount >= 100000) {
+    return (amount / 100000).toFixed(amount % 100000 === 0 ? 0 : 1) + 'L';
+  } else if (amount >= 1000) {
+    return (amount / 1000).toFixed(amount % 1000 === 0 ? 0 : 1) + 'k';
+  } else {
+    return amount.toString();
+  }
 }
 
 const getCategoryColor = (category: string): string => {
@@ -120,15 +145,15 @@ const getCategoryColor = (category: string): string => {
 const getCategoryIcon = (category: string): React.ReactNode => {
   switch (category.toLowerCase()) {
     case "realestate":
-      return <Home className="h-6 w-6" />
+      return <Home className="h-5 w-5" />
     case "automobile":
-      return <Car className="h-6 w-6" />
+      return <Car className="h-5 w-5" />
     case "education":
-      return <GraduationCap className="h-6 w-6" />
+      return <GraduationCap className="h-5 w-5" />
     case "general":
-      return <PiggyBank className="h-6 w-6" />
+      return <PiggyBank className="h-5 w-5" />
     default:
-      return <PiggyBank className="h-6 w-6" />
+      return <Target className="h-5 w-5" />
   }
 }
 
@@ -144,7 +169,6 @@ export default function GoalSidebar() {
   const { user } = useUser()
   const queryClient = useQueryClient()
   const router = useRouter()
-  const [searchQuery, setSearchQuery] = useState("")
   const [activeCategory, setActiveCategory] = useState("All")
 
   // Fetch goals query
@@ -162,7 +186,7 @@ export default function GoalSidebar() {
     enabled: !!user?.id,
   })
 
-  // Delete goal mutation
+  
   const deleteGoalMutation = useMutation({
     mutationFn: async (goalId: string) => {
       const response = await fetch(`/api/goals?id=${goalId}`, {
@@ -183,18 +207,21 @@ export default function GoalSidebar() {
   })
 
   const filteredGoals = goals.filter((goal: Goal) => {
-    const matchesSearch = goal.title.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = activeCategory === "All" || goal.category.toLowerCase() === activeCategory.toLowerCase()
-    return matchesSearch && matchesCategory
+    return matchesCategory
   })
 
-  // Handle modify goal
+ 
+  const totalGoals = goals.length
+  const achievableGoals = goals.filter((goal: Goal) => goal.isAchievable).length
+  //const totalTargetAmount = goals.reduce((sum: number, goal: Goal) => sum + goal.targetAmount, 0)
+  const highPriorityGoals = goals.filter((goal: Goal) => goal.priority === 1).length
+
+ 
   const handleModifyGoal = useCallback((goal: Goal) => {
-    // Navigate to edit page with goal data
     router.push(`/user/goals/goal-edit?id=${goal.id}`)
   }, [router])
 
-  // Handle delete goal
   const handleDeleteGoal = useCallback((goalId: string) => {
     deleteGoalMutation.mutate(goalId)
   }, [deleteGoalMutation])
@@ -202,19 +229,24 @@ export default function GoalSidebar() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-background via-background/95 to-primary/5">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto" />
+          <p className="text-muted-foreground">Loading your goals...</p>
+        </div>
       </div>
     )
   }
 
-  // Error state
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen gap-4">
-        <AlertCircle className="h-12 w-12 text-destructive" />
-        <h2 className="text-xl font-semibold">Failed to load goals</h2>
-        <p className="text-muted-foreground">Please try again later</p>
+      <div className="flex flex-col items-center justify-center h-screen gap-4 bg-gradient-to-br from-background via-background/95 to-destructive/5">
+        <AlertCircle className="h-16 w-16 text-destructive" />
+        <h2 className="text-2xl font-semibold">Failed to load goals</h2>
+        <p className="text-muted-foreground">Please refresh the page or try again later</p>
+        <Button onClick={() => window.location.reload()} variant="outline">
+          Retry
+        </Button>
       </div>
     )
   }
@@ -223,156 +255,148 @@ export default function GoalSidebar() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        {/* Enhanced Header with Glass Effect */}
-        <header className="sticky top-0 flex h-16 shrink-0 items-center justify-between px-4 bg-background/80 backdrop-blur-md border-b z-30">
+       
+        <header className="sticky top-0 flex h-16 shrink-0 items-center justify-between px-4 md:px-6 bg-background/90 backdrop-blur-xl border-b border-border/50 z-30">
           <div className="flex items-center gap-3">
             <SidebarTrigger className="text-muted-foreground hover:text-foreground transition-colors" />
             <Separator orientation="vertical" className="h-6" />
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/user/dashboard" className="text-muted-foreground hover:text-foreground">
+                  <BreadcrumbLink href="/user/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">
                     Dashboard
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block text-muted-foreground/50" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage className="font-medium">Goals Universe</BreadcrumbPage>
+                  <BreadcrumbPage className="font-semibold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+                    Goals Universe
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="relative hidden md:flex">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search goals..."
-                className="w-[200px] pl-8 rounded-full bg-muted/50 border-none focus-visible:ring-1 focus-visible:ring-primary/50"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            {/* Add Goal Button */}
-            <Button variant="default" size="sm" className="flex items-center gap-1.5" onClick={() => router.push("/user/goal/add-goal")}>
+            <Button 
+              variant="default" 
+              size="sm" 
+              className="flex items-center gap-2 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 shadow-lg hover:shadow-xl transition-all duration-200" 
+              onClick={() => router.push("/user/goal/add-goal")}
+            >
               <PlusCircle className="h-4 w-4" />
-              <span>Add Goal</span>
+              <span className="hidden sm:inline">Add Goal</span>
             </Button>
 
             <ThemeController />
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-2 h-9 px-2">
-                  <Avatar className="h-7 w-7">
-                    <AvatarImage src="https://github.com/shadcn.png" alt="User Avatar" />
-                    <AvatarFallback>U</AvatarFallback>
-                  </Avatar>
-                  <span className="hidden sm:inline text-sm font-medium">Account</span>
-                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <TrendingUp className="mr-2 h-4 w-4" />
-                  <span>Financial Overview</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <SignOutButton>
-                    <button className="w-full text-left">Sign Out</button>
-                  </SignOutButton>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <SignOutButton>
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <LogOut className="h-4 w-4" />
+                <span>Sign Out</span>
+              </Button>
+            </SignOutButton>
           </div>
         </header>
 
-        {/* Main Content Area with Gradient Background */}
-        <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8 bg-gradient-to-br from-background via-background/95 to-blue-50/20 dark:to-blue-950/20 min-h-[calc(100vh-4rem)]">
-          {/* Welcome Banner */}
+        
+        <div className="flex flex-col gap-8 p-4 md:p-6 lg:p-8 bg-gradient-to-br from-background via-background/95 to-primary/5 dark:to-primary/10 min-h-[calc(100vh-4rem)]">
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="relative overflow-hidden rounded-xl border bg-card shadow-sm"
+            transition={{ duration: 0.6, ease: [0.42, 0, 0.58, 1] }}
+            className="relative overflow-hidden rounded-2xl border bg-card/50 backdrop-blur-sm shadow-xl"
           >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/4 blur-3xl opacity-70"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/5 rounded-full translate-y-1/2 -translate-x-1/4 blur-3xl opacity-70"></div>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-primary/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/4 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-blue-500/10 to-transparent rounded-full translate-y-1/2 -translate-x-1/4 blur-3xl"></div>
 
             <div className="relative p-6 md:p-8">
-              <div className="space-y-2 max-w-2xl">
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-                  Welcome to Your Goal Universe
-                </h1>
-                <p className="text-muted-foreground">
-                  Track your dreams, financial plans, and aspirations — all in one place. Let&apos;s achieve them together!
-                </p>
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="space-y-3 max-w-2xl">
+                  <h1 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                    Your Goal Universe
+                  </h1>
+                  <p className="text-muted-foreground text-lg">
+                    Transform dreams into achievable milestones. Track your progress and build your future, one goal at a time.
+                  </p>
+                </div>
+                
+                {/* Stats Cards */}
+                <motion.div 
+                  variants={statsVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 gap-4 min-w-fit"
+                >
+                  <div className="text-center p-4 rounded-xl bg-background/60 backdrop-blur-sm border border-border/50">
+                    <Target className="h-6 w-6 mx-auto mb-2 text-primary" />
+                    <p className="text-2xl font-bold text-foreground">{totalGoals}</p>
+                    <p className="text-xs text-muted-foreground">Total Goals</p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-background/60 backdrop-blur-sm border border-border/50">
+                    <TrendingUp className="h-6 w-6 mx-auto mb-2 text-green-500" />
+                    <p className="text-2xl font-bold text-foreground">{achievableGoals}</p>
+                    <p className="text-xs text-muted-foreground">Achievable</p>
+                  </div>
+                  <div className="text-center p-4 rounded-xl bg-background/60 backdrop-blur-sm border border-border/50 col-span-2 md:col-span-1">
+                    <Calendar className="h-6 w-6 mx-auto mb-2 text-amber-500" />
+                    <p className="text-2xl font-bold text-foreground">{highPriorityGoals}</p>
+                    <p className="text-xs text-muted-foreground">High Priority</p>
+                  </div>
+                </motion.div>
               </div>
             </div>
           </motion.div>
 
-          {/* Search and Filter (Mobile) */}
-          <div className="flex md:hidden gap-2 mb-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search goals..."
-                className="w-full pl-8 bg-muted/50 border-input focus-visible:ring-1 focus-visible:ring-primary/50"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </div>
-
-          {/* Goals Dashboard */}
-          <div className="space-y-6">
-            {/* Category Filter Buttons */}
-            <div className="flex flex-wrap gap-2 items-center">
-              <p className="text-sm font-medium text-muted-foreground mr-2 hidden sm:block">Filter by:</p>
-              {categories.map((category) => (
-                <Button
-                  key={category}
-                  variant={activeCategory === category ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setActiveCategory(category)}
-                  className={`transition-all duration-150 ${
-                    activeCategory === category ? "shadow-md" : "hover:bg-muted/50"
-                  }`}
-                >
-                  {formatCategoryName(category)}
-                </Button>
-              ))}
+         
+          <div className="space-y-6 mb-16 md:mb-6">
+            <div className="flex flex-wrap gap-3 items-center p-4 rounded-xl bg-card/30 backdrop-blur-sm border border-border/50">
+              <div className="flex items-center gap-2">
+                <Target className="h-5 w-5 text-primary" />
+                <p className="font-semibold text-foreground">Filter Goals:</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => (
+                  <Button
+                    key={category}
+                    variant={activeCategory === category ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setActiveCategory(category)}
+                    className={`transition-all duration-200 ${
+                      activeCategory === category 
+                        ? "bg-gradient-to-r from-primary to-blue-600 shadow-lg scale-105" 
+                        : "hover:bg-muted/70 hover:scale-105"
+                    }`}
+                  >
+                    {formatCategoryName(category)}
+                  </Button>
+                ))}
+              </div>
             </div>
 
-            {/* Goals Grid */}
+           
             <motion.div
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+              className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             >
               {filteredGoals.length > 0 ? (
                 filteredGoals.map((goal: Goal) => (
                   <motion.div key={goal.id} variants={itemVariants}>
-                    <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-card/90 backdrop-blur-sm border-border/70 hover:border-primary/50 relative group">
-                      <div className="absolute top-3 right-3 z-10">
+                    <Card className="h-full flex flex-col overflow-hidden hover:shadow-2xl transition-all duration-300 bg-card/70 backdrop-blur-sm border-border/50 hover:border-primary/50 hover:scale-102 relative group">
+                     
+                      {goal.priority === 1 && (
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-400 to-orange-500"></div>
+                      )}
+                      
+                      <div className="absolute top-4 right-4 z-10">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 opacity-70 group-hover:opacity-100">
+                            <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity bg-background/80 hover:bg-background">
                               <ChevronDown className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
+                          <DropdownMenuContent align="end" className="bg-background/95 backdrop-blur-sm">
                             <DropdownMenuItem
                               onClick={(e) => {
                                 e.preventDefault()
@@ -394,7 +418,7 @@ export default function GoalSidebar() {
                                   <span>Delete Goal</span>
                                 </DropdownMenuItem>
                               </AlertDialogTrigger>
-                              <AlertDialogContent>
+                              <AlertDialogContent className="bg-background/95 backdrop-blur-sm">
                                 <AlertDialogHeader>
                                   <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                                   <AlertDialogDescription>
@@ -415,6 +439,7 @@ export default function GoalSidebar() {
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
+                      
                       <div
                         className="w-full h-full cursor-pointer"
                         onClick={(e) => {
@@ -423,75 +448,72 @@ export default function GoalSidebar() {
                           handleModifyGoal(goal)
                         }}
                       >
-                        <CardHeader className="pb-3">
-                          <div className="flex items-start mb-2">
-                            <div className="flex-1">
-                              <Badge
-                                variant="outline"
-                                className={`font-medium text-xs px-2 py-1 ${
-                                  goal.priority === 1
-                                    ? "border-amber-400 bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-700"
-                                    : "border-border"
-                                }`}
-                              >
-                                {formatCategoryName(goal.category)} {goal.priority === 1 ? "• High Priority" : ""}
-                              </Badge>
-                            </div>
+                        <CardHeader className="pb-4">
+                          <div className="flex items-start justify-between mb-3">
+                            <Badge
+                              variant="outline"
+                              className={`font-medium text-xs px-3 py-1 ${
+                                goal.priority === 1
+                                  ? "border-amber-400 bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-700"
+                                  : "border-border bg-muted/50"
+                              }`}
+                            >
+                              {formatCategoryName(goal.category)}
+                            </Badge>
                             <div
-                              className={`p-2 rounded-full ${getCategoryColor(goal.category).replace(
+                              className={`p-2.5 rounded-full ${getCategoryColor(goal.category).replace(
                                 "bg-",
-                                "bg-opacity-10 ",
+                                "bg-opacity-20 ",
                               )} ${getCategoryColor(goal.category).replace("bg-", "text-")}`}
                             >
                               {getCategoryIcon(goal.category)}
                             </div>
                           </div>
-                          <CardTitle className="text-lg leading-tight truncate">{goal.title}</CardTitle>
-                          <CardDescription className="text-xs truncate">
-                            Target: {formatCurrency(goal.targetAmount)} by {new Date().getFullYear() + goal.yearsToGoal}
+                          <CardTitle className="text-lg leading-tight line-clamp-2 mb-2">{goal.title}</CardTitle>
+                          <CardDescription className="text-sm">
+                            Target: <span className="font-semibold">{formatCurrency(goal.targetAmount)}</span> by {new Date().getFullYear() + goal.yearsToGoal}
                           </CardDescription>
                         </CardHeader>
-                        <CardContent className="pb-3 flex-grow space-y-3">
-                          <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                            <div className="overflow-hidden">
-                              <p className="text-xs text-muted-foreground truncate">Amount Needed:</p>
-                              <p className="font-semibold truncate">{formatCurrency(goal.amountRequired)}</p>
+                        
+                        <CardContent className="pb-4 flex-grow space-y-4">
+                          <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                            <div className="space-y-1">
+                              <p className="text-xs text-muted-foreground">Monthly Required:</p>
+                              <p className="font-semibold text-foreground">{formatCurrency(goal.amountRequired / 12)}</p>
                             </div>
-                            <div className="overflow-hidden">
-                              <p className="text-xs text-muted-foreground truncate">Future Value:</p>
-                              <p className="font-semibold truncate">{formatCurrency(goal.adjustedTargetAmount)}</p>
+                            <div className="space-y-1">
+                              <p className="text-xs text-muted-foreground">Future Value:</p>
+                              <p className="font-semibold text-foreground">{formatCurrency(goal.adjustedTargetAmount)}</p>
                             </div>
-                            <div className="overflow-hidden">
-                              <p className="text-xs text-muted-foreground truncate">Target Year:</p>
-                            <p className="font-semibold truncate">{new Date().getFullYear() + goal.yearsToGoal}</p>
+                            <div className="space-y-1">
+                              <p className="text-xs text-muted-foreground">Target Year:</p>
+                              <p className="font-semibold text-foreground">{new Date().getFullYear() + goal.yearsToGoal}</p>
                             </div>
-                            <div className="overflow-hidden">
-                              <p className="text-xs text-muted-foreground truncate">Forecasted Salary:</p>
-                              <p className="font-semibold truncate">{formatCurrency(goal.forecastedSalary)}/yr</p>
+                            <div className="space-y-1">
+                              <p className="text-xs text-muted-foreground">Expected Salary:</p>
+                              <p className="font-semibold text-foreground">{formatShortNumber(Math.round(goal.forecastedSalary))}</p>
                             </div>
                           </div>
-                          <div>
-                            <div className="flex justify-between text-xs mb-1">
-                              <span className="text-muted-foreground truncate">Achievability:</span>
-                              <span
-                                className={`font-semibold truncate ${
-                                  goal.isAchievable
-                                    ? "text-green-600 dark:text-green-400"
-                                    : "text-red-600 dark:text-red-400"
-                                }`}
+                          
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-xs text-muted-foreground">Achievability:</span>
+                              <Badge
+                                variant={goal.isAchievable ? "default" : "destructive"}
+                                className="text-xs px-2 py-0.5"
                               >
                                 {goal.isAchievable ? "Likely Achievable" : "Challenging"}
-                              </span>
+                              </Badge>
                             </div>
-                            <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+                            <div className="h-2.5 w-full bg-muted rounded-full overflow-hidden">
                               <div
                                 className={`h-full rounded-full ${getCategoryColor(
                                   goal.category,
-                                )} transition-all duration-700 ease-out`}
+                                )} transition-all duration-1000 ease-out shadow-sm`}
                                 style={{
                                   width: goal.isAchievable
-                                    ? `${Math.min(100, (goal.targetAmount / goal.adjustedTargetAmount) * 100 + 20)}%`
-                                    : `${Math.max(10, (goal.currentSalary / goal.targetAmount) * 20)}%`,
+                                    ? `${Math.min(100, Math.max(20, (goal.targetAmount / goal.adjustedTargetAmount) * 100 + 30))}%`
+                                    : `${Math.max(15, (goal.currentSalary / goal.targetAmount) * 25)}%`,
                                 }}
                               />
                             </div>
@@ -502,42 +524,42 @@ export default function GoalSidebar() {
                   </motion.div>
                 ))
               ) : (
-                <div className="col-span-full flex flex-col justify-center items-center p-8 rounded-lg border-2 border-dashed border-border/50 min-h-[200px]">
-                  <PiggyBank className="w-16 h-16 text-muted-foreground/50 mb-4" />
-                  <h3 className="text-lg font-semibold mb-1 text-foreground">No Goals Found</h3>
-                  <p className="text-muted-foreground text-sm mb-4">
-                    Try adjusting your search or filters, or create a new goal!
+                <div className="col-span-full flex flex-col justify-center items-center p-12 rounded-2xl border-2 border-dashed border-border/50 bg-card/30 backdrop-blur-sm min-h-[300px]">
+                  <PiggyBank className="w-20 h-20 text-muted-foreground/50 mb-6" />
+                  <h3 className="text-xl font-semibold mb-2 text-foreground">No Goals Found</h3>
+                  <p className="text-muted-foreground text-center mb-6 max-w-md">
+                    {activeCategory !== "All" 
+                      ? `No goals found in the ${formatCategoryName(activeCategory)} category. Try a different category or create your first ${formatCategoryName(activeCategory).toLowerCase()} goal!`
+                      : "Start your journey by creating your first goal. Every great achievement begins with a single step!"
+                    }
                   </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setSearchQuery("")
-                      setActiveCategory("All")
-                    }}
-                  >
-                    Reset Filters
-                  </Button>
+                  <div className="flex gap-3">
+                    {activeCategory !== "All" && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setActiveCategory("All")}
+                        className="hover:bg-muted/70"
+                      >
+                        View All Goals
+                      </Button>
+                    )}
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={() => router.push("/user/goal/add-goal")}
+                      className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90"
+                    >
+                      <PlusCircle className="h-4 w-4 mr-2" />
+                      Create Goal
+                    </Button>
+                  </div>
                 </div>
               )}
             </motion.div>
           </div>
 
-          {/* Goals Summary Component
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
-            className="rounded-xl border bg-card/80 backdrop-blur-sm shadow-sm p-4 md:p-6"
-          >
-            <h2 className="text-xl font-semibold mb-4 text-foreground">Goals Summary</h2>
-            <div className="overflow-x-auto">
-              <div className="min-w-[600px] md:min-w-0">
-                <Goals />
-              </div>
-            </div>
-          </motion.div> */}   
-            <Disclaimer />
+          <Disclaimer />
         </div>
       </SidebarInset>
     </SidebarProvider>

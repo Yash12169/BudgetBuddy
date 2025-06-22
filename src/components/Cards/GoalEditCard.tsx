@@ -152,12 +152,11 @@ export default function GoalEditCard() {
 
   const handleInputChange = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
-    
     if (key === 'targetAmount' || key === 'yearsToGoal' || key === 'currentSalary' || key === 'annualIncrementRate') {
-      //@ts-expect-error - TODO: fix this
+      // Only allow numbers
+      value = value.replace(/[^\d.]/g, '');
       value = parseFloat(value) || 0;
     }
-    
     setFormValues((prev) => ({
       ...prev,
       [key]: value
@@ -184,23 +183,17 @@ export default function GoalEditCard() {
         ...(goalData || {}),
         ...formValues,
         adjustedTargetAmount: formValues.targetAmount,
-        forecastedSalary,
-        amountRequired,
+        forecastedSalary: Math.round(forecastedSalary),
+        amountRequired: Math.round(amountRequired),
         isAchievable: achievabilityScore > 40,
         userId: user?.id
       };
-      
-      //@ts-expect-error - TODO: fix this
       setGoalData(updatedGoal);
-
-      //@ts-expect-error - TODO: fix this
       if (goalData?.id) {
-        //@ts-expect-error - TODO: fix this
         await axios.put(`/api/goals/${goalData.id}`, updatedGoal);
       } else {
         await axios.post('/api/goals', updatedGoal);
       }
-      
       router.push("/user/goals");
     } catch (error) {
       console.error("Error saving goal:", error);
@@ -384,7 +377,7 @@ export default function GoalEditCard() {
           <div className="flex items-center gap-3">
             <p className="font-semibold text-lg">₹</p>
             <input
-              type="text"
+              type="number"
               value={formValues.currentSalary}
               onChange={handleInputChange("currentSalary")}
               className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-48`}
