@@ -118,7 +118,6 @@ export async function POST(
       data: {
         userId,
         emergencyFund,
-        status: statusData.status,
       },
     });
 
@@ -207,6 +206,17 @@ export async function PUT(
 
     const emergencyFund = Number(data.emergencyFund);
 
+    const existingFund = await prisma.emergencyFund.findFirst({
+      where: { userId: userId }
+    });
+
+    if (!existingFund) {
+      return NextResponse.json(
+        { success: false, message: "Emergency fund not found" },
+        { status: 404 }
+      );
+    }
+
     const finData = await prisma.financials.findFirst({
       where: { userId: userId }
     });
@@ -221,16 +231,10 @@ export async function PUT(
     const salary = finData.salary;
     const statusData = calculateEmergencyStatus(emergencyFund, salary);
 
-    const updatedRecord = await prisma.emergencyFund.upsert({
-      where: { userId: userId },
-      update: {
+    const updatedRecord = await prisma.emergencyFund.update({
+      where: { userId },
+      data: {
         emergencyFund,
-        status: statusData.status,
-      },
-      create: {
-        userId,
-        emergencyFund,
-        status: statusData.status,
       },
     });
 
@@ -238,10 +242,9 @@ export async function PUT(
       {
         success: true,
         message: "Emergency fund updated successfully",
-        data: {
-          record: updatedRecord,
-          analysis: statusData,
-        },
+        data: updatedRecord,
+        emergencyFundAmount: formatAmount(updatedRecord.emergencyFund),
+        emergencyFundStatus: statusData
       },
       { status: 200 }
     );
@@ -273,7 +276,7 @@ export async function DELETE(
     }
 
     await prisma.emergencyFund.delete({
-      where: { userId: userId }
+      where: { userId },
     });
 
     return NextResponse.json(

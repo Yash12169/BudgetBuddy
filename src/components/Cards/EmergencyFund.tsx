@@ -21,6 +21,13 @@ import { Wallet, Shield, Calendar, AlertTriangle, CheckCircle2, Info } from "luc
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["600"] });
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500"] });
 
+const formatAmount = (amount: number): string => {
+  if (!amount || isNaN(amount)) return "₹ 0";
+  if (amount < 100000) return `₹ ${Math.round(amount/1000)}K`;
+  if (amount < 10000000) return `₹ ${(amount/100000).toFixed(1)}L`;
+  return `₹ ${(amount/10000000).toFixed(1)}Cr`;
+};
+
 export default function EmergencyFund() {
   const [emergencyFund] = useAtom(emergencyFundAtom);
   const [financials] = useAtom(financialAtom);
@@ -46,7 +53,7 @@ export default function EmergencyFund() {
     );
   }
   //@ts-expect-error - TODO: fix this
-  const salary = financials?.salary || 0;
+  const salary = financials?.allData?.salary || 0;
   //@ts-expect-error - TODO: fix this
   const emergencyFundAmount = emergencyFund?.emergencyFundAmount || 0;
   //@ts-expect-error - TODO: fix this
@@ -76,7 +83,7 @@ export default function EmergencyFund() {
               <p>Monthly Salary</p>
             </div>
             <div className="font-semibold text-lg">
-              <p>{salary.toLocaleString()}</p>
+              <p>{formatAmount(salary)}</p>
             </div>
           </div>
 
@@ -159,7 +166,7 @@ export default function EmergencyFund() {
                         </span>
                         <span className={`${poppins.className} text-base font-medium text-gray-700 dark:text-gray-300`}>Monthly Salary</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-gray-900 dark:text-gray-100`}>${salary.toLocaleString()}</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-gray-900 dark:text-gray-100`}>₹{salary.toLocaleString()}</span>
                     </div>
                     <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 gap-4">
                       <div className="flex items-center gap-3">
@@ -168,7 +175,7 @@ export default function EmergencyFund() {
                         </span>
                         <span className={`${poppins.className} text-base font-medium text-gray-700 dark:text-gray-300`}>Emergency Fund</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-gray-900 dark:text-gray-100`}>${emergencyFundAmount.toLocaleString()}</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-gray-900 dark:text-gray-100`}>₹{emergencyFundAmount.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>

@@ -7,17 +7,21 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
     const salary = Number(data.salary) || 0;
+    const netWorth = Number(data.netWorth) || 0;
     const expenses = Number(data.expenses) || 0;
     const extraExpenses = Number(data.extraExpenses) || 0;
     const insurancePremium = Number(data.insurancePremium) || 0;
+    const annualIncrementRate = Number(data.annualIncrementRate) || 0.05;
 
     const newRecord = await prisma.financials.create({
       data: {
         userId: "1",
         salary,
+        netWorth,
         expenses,
         extraExpenses,
         insurancePremium,
+        annualIncrementRate,
       },
     });
     return NextResponse.json(
@@ -44,9 +48,11 @@ export async function PUT(req: NextRequest) {
       );
     }
     const salary = data.income;
+    const netWorth = data.netWorth || 0;
     const expenses = data.basic;
     const extraExpenses = data.extra;
     const insurancePremium = data.insurance;
+    const annualIncrementRate = data.annualIncrementRate || 0.05;
     const id = data.userId;
     const emi = data.emi;
     if (!id) {
@@ -65,9 +71,11 @@ export async function PUT(req: NextRequest) {
       where: {userId: id},
       data: {
         salary,
+        netWorth,
         expenses,
         extraExpenses,
         insurancePremium,
+        annualIncrementRate,
       },
     });
     return NextResponse.json(

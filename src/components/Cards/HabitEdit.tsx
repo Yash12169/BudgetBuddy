@@ -31,24 +31,27 @@ const parseNumber = (value: string): number => {
 
 export default function HabitEdit() {
   const router = useRouter();
-  const [financials, setFinancial] = useAtom(financialAtom);
-  const [totalScore, setTotalScore] = useState(0);
+  const [financials] = useAtom(financialAtom);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useUser();
 
   const [formValues, setFormValues] = useState({
     income: "",
+    netWorth: "",
     basic: "",
     extra: "",
     insurance: "",
+    annualIncrementRate: "",
   });
 
   const maxLimits = {
     income: 100000000000,
+    netWorth: 100000000000,
     basic: 100000000000,
     extra: 100000000000,
     insurance: 100000000000,
+    annualIncrementRate: 100,
   };
 
   useEffect(() => {
@@ -57,19 +60,13 @@ export default function HabitEdit() {
 
   useEffect(() => {
     if (financials) {
-      const totalExpenses = (financials.allData.expenses || 0) + 
-                           (financials.allData.extraExpenses || 0) + 
-                           (financials.allData.insurancePremium || 0);
-      const savings = financials.allData.salary - totalExpenses;
-      const savingsPercent = (savings / financials.allData.salary) * 100;
-      
-      setTotalScore(savingsPercent >= 50 ? 80 : savingsPercent >= 30 ? 50 : 30);
-
       setFormValues({
         income: formatNumber(financials.allData.salary || 0),
+        netWorth: formatNumber(financials.allData.netWorth || 0),
         basic: formatNumber(financials.allData.expenses || 0),
         extra: formatNumber(financials.allData.extraExpenses || 0),
         insurance: formatNumber(financials.allData.insurancePremium || 0),
+        annualIncrementRate: financials.allData.annualIncrementRate ? (financials.allData.annualIncrementRate * 100).toFixed(1) : "5.0",
       });
     }
   }, [financials]);
@@ -79,14 +76,28 @@ export default function HabitEdit() {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const rawValue = e.target.value.replace(/,/g, "");
 
-      if (/^\d*\.?\d*$/.test(rawValue)) {
-        const num = Number(rawValue);
-        if (num > (maxLimits[field] || Infinity)) return;
+      if (field === 'annualIncrementRate') {
+        // Handle percentage input for annual increment rate
+        if (/^\d*\.?\d*$/.test(rawValue)) {
+          const num = Number(rawValue);
+          if (num > (maxLimits[field] || Infinity)) return;
 
-        setFormValues((prev) => ({
-          ...prev,
-          [field]: formatNumber(num),
-        }));
+          setFormValues((prev) => ({
+            ...prev,
+            [field]: rawValue,
+          }));
+        }
+      } else {
+        // Handle regular number inputs
+        if (/^\d*\.?\d*$/.test(rawValue)) {
+          const num = Number(rawValue);
+          if (num > (maxLimits[field] || Infinity)) return;
+
+          setFormValues((prev) => ({
+            ...prev,
+            [field]: formatNumber(num),
+          }));
+        }
       }
     };
 
@@ -110,16 +121,14 @@ export default function HabitEdit() {
     try {
       const payload = {
         salary: parseNumber(formValues.income),
+        netWorth: parseNumber(formValues.netWorth),
         expenses: parseNumber(formValues.basic),
         extraExpenses: parseNumber(formValues.extra),
         insurancePremium: parseNumber(formValues.insurance),
+        annualIncrementRate: parseFloat(formValues.annualIncrementRate) / 100,
       };
       
       await axios.put(`/api/financials/${user.id}`, payload);
-      
-      const response = await axios.get(`/api/financials/${user.id}`);
-      
-      setFinancial(response.data);
       
       router.push("/user/financial-checkup");
     } catch (err) {
@@ -162,14 +171,14 @@ export default function HabitEdit() {
 
       <div className="flex border-2 gap-5 items-center w-[60%] rounded-[15px] px-5 py-2">
         <div>
-          {totalScore <= 30 && <Image src={finWeak} alt="weak financials" />}
-          {totalScore > 30 && totalScore < 70 && (
+          {financials.totalScore <= 30 && <Image src={finWeak} alt="weak financials" />}
+          {financials.totalScore > 30 && financials.totalScore < 70 && (
             <Image src={finAverage} alt="average financials" />
           )}
-          {totalScore >= 70 && <Image src={finStrong} alt="strong financials" />}
+          {financials.totalScore >= 70 && <Image src={finStrong} alt="strong financials" />}
         </div>
         <div className="text-black text-5xl">
-          <p className={`${montserrat} font-semibold`}>{totalScore}</p>
+          <p className={`${montserrat} font-semibold`}>{financials.totalScore}</p>
         </div>
         <div className={`${poppins}`}>
           <div className="text-black text-[14px]">
@@ -184,6 +193,7 @@ export default function HabitEdit() {
       <div className="flex flex-wrap gap-5">
         {[
           { label: "Monthly Income", key: "income" },
+          { label: "Net Worth", key: "netWorth" },
           { label: "Basic Expenses", key: "basic" },
           { label: "Extra Expenses", key: "extra" },
           { label: "Insurance Premium", key: "insurance" },
@@ -206,6 +216,23 @@ export default function HabitEdit() {
             </div>
           </div>
         ))}
+
+        <div className="flex flex-col gap-2">
+          <label className={poppins}>
+            Annual Increment Rate <span className="text-red-600 text-xl">*</span>
+          </label>
+          <div className="flex items-center gap-3">
+            <input
+              type="text"
+              value={formValues.annualIncrementRate}
+              onChange={handleInputChange("annualIncrementRate")}
+              className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out`}
+              disabled={isLoading}
+              placeholder="5.0"
+            />
+            <p className="font-semibold text-lg">%</p>
+          </div>
+        </div>
 
         <div className="flex flex-col gap-2 p-1">
           <label className={poppins}>Total Expenses</label>

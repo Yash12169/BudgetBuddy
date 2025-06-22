@@ -10,6 +10,7 @@ import { montserrat, poppins } from "@/fonts/fonts";
 import { goalAtom, financialAtom } from "@/atoms/atoms";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
+import { toast } from "sonner";
 
 const formatNumber = (num: number) => {
   return new Intl.NumberFormat('en-IN').format(num);
@@ -71,88 +72,68 @@ const sampleGoals = [
   }
 ];
 
-export default function GoalEditCard() {
+interface Goal {
+  id: string;
+  title: string;
+  targetAmount: number;
+  yearsToGoal: number;
+  category: string;
+  isAchievable?: boolean;
+}
+
+export default function GoalEditCard({ goal }: { goal: Goal }) {
   const router = useRouter();
   const { user } = useUser();
-  const [goalData, setGoalData] = useAtom(goalAtom);
+  const [goalData] = useAtom(goalAtom);
   const [financialData] = useAtom(financialAtom);
   
+  const [isLoading, setIsLoading] = useState(false);
   const [formValues, setFormValues] = useState({
-    title: "",
-    targetAmount: 0,
-    yearsToGoal: 1,
-    category: "Education",
-    currentSalary: 0,
-    annualIncrementRate: 5,
-    priority: 3
+    title: goal.title || "",
+    targetAmount: formatNumber(goal.targetAmount || 0),
+    yearsToGoal: goal.yearsToGoal?.toString() || "",
+    category: goal.category || "",
   });
+
+  const [isAchievable, setIsAchievable] = useState(goalData?.isAchievable || false);
+  const [achievabilityScore, setAchievabilityScore] = useState(0);
 
   useEffect(() => {
     if (goalData) {
       setFormValues({
-        //@ts-expect-error - TODO: fix this
         title: goalData.title || "",
-        //@ts-expect-error - TODO: fix this
-        targetAmount: goalData.targetAmount || 0,
-        //@ts-expect-error - TODO: fix this
-        yearsToGoal: goalData.yearsToGoal || 1,
-        //@ts-expect-error - TODO: fix this
-        category: goalData.category || "Education",
-        //@ts-expect-error - TODO: fix this
-        currentSalary: goalData.currentSalary || financialData?.income || 0,
-        //@ts-expect-error - TODO: fix this
-        annualIncrementRate: goalData.annualIncrementRate || 5,
-        //@ts-expect-error - TODO: fix this
-        priority: goalData.priority || 3
+        targetAmount: formatNumber(goalData.targetAmount || 0),
+        yearsToGoal: goalData.yearsToGoal?.toString() || "",
+        category: goalData.category || "",
       });
-
     } 
-    //@ts-expect-error - TODO: fix this
     else if (financialData?.income) {
       setFormValues(prev => ({
         ...prev,
-        //@ts-expect-error - TODO: fix this
         currentSalary: financialData.income
       }));
     }
   }, [goalData, financialData, setFormValues]);
 
-  const [achievabilityScore, setAchievabilityScore] = useState(0);
-  const [amountRequired, setAmountRequired] = useState(0);
-  const [forecastedSalary, setForecastedSalary] = useState(0);
-  const [showSampleGoals, setShowSampleGoals] = useState(false);
-    useEffect(() => {
-    if (!formValues.targetAmount || !formValues.yearsToGoal || !formValues.currentSalary) return;
+  useEffect(() => {
+    const calculateAchievability = () => {
+      if (!financialData?.income || !financialData?.annualIncrementRate) return;
+      
+      const inflationRate = inflationRates[formValues.category as keyof typeof inflationRates] || inflationRates.general;
+      const adjustedTargetAmount = formValues.targetAmount * Math.pow(1 + inflationRate, formValues.yearsToGoal);
+      const forecastedSalary = financialData.income * Math.pow(1 + financialData.annualIncrementRate, formValues.yearsToGoal);
+      const isAchievable = forecastedSalary * 0.3 * formValues.yearsToGoal >= adjustedTargetAmount;
+      
+      setIsAchievable(isAchievable);
+      setAchievabilityScore(isAchievable ? 85 : 45);
+    };
 
-    const forecast = formValues.currentSalary * Math.pow(
-      (1 + formValues.annualIncrementRate / 100), 
-      formValues.yearsToGoal
-    );
-    setForecastedSalary(forecast);
-
-    const monthlyRequired = formValues.targetAmount / (formValues.yearsToGoal * 12);
-    setAmountRequired(monthlyRequired);
-    const monthlySalary = formValues.currentSalary / 12;
-    const affordabilityRatio = monthlySalary > 0 ? monthlyRequired / monthlySalary : 0;
-    
-    let score = 0;
-    if (affordabilityRatio <= 0.1) score = 90; 
-    else if (affordabilityRatio <= 0.2) score = 75; 
-    else if (affordabilityRatio <= 0.3) score = 60; 
-    else if (affordabilityRatio <= 0.4) score = 45; 
-    else if (affordabilityRatio <= 0.5) score = 30; 
-    else score = 15; 
-    
-    if (formValues.yearsToGoal > 5) score += 10;
-    else if (formValues.yearsToGoal < 2) score -= 10;
-    
-    score = Math.max(0, Math.min(100, score));
-    setAchievabilityScore(Math.round(score));
-  }, [formValues, setForecastedSalary, setAmountRequired, setAchievabilityScore, setFormValues]);
+    calculateAchievability();
+  }, [formValues, setAchievabilityScore, financialData?.income, financialData?.annualIncrementRate]);
 
   const handleInputChange = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
-    if (key === 'targetAmount' || key === 'yearsToGoal' || key === 'currentSalary' || key === 'annualIncrementRate') {
+    if (key === 'targetAmount' || key === 'yearsToGoal' || key === 'currentSalary') {
       // Only allow numbers
       value = value.replace(/[^\d.]/g, '');
       value = parseFloat(value) || 0;
@@ -178,54 +159,38 @@ export default function GoalEditCard() {
   };
 
   const handleSubmit = async () => {
+    if (!user?.id) {
+      toast.error("User not authenticated");
+      return;
+    }
+
+    setIsLoading(true);
     try {
-      const updatedGoal = {
+      const updateData = {
         ...(goalData || {}),
         ...formValues,
-        adjustedTargetAmount: formValues.targetAmount,
-        forecastedSalary: Math.round(forecastedSalary),
-        amountRequired: Math.round(amountRequired),
-        isAchievable: achievabilityScore > 40,
+        isAchievable: isAchievable,
         userId: user?.id
       };
-      setGoalData(updatedGoal);
-      if (goalData?.id) {
-        await axios.put(`/api/goals/${goalData.id}`, updatedGoal);
-      } else {
-        await axios.post('/api/goals', updatedGoal);
-      }
+
+      await axios.put(`/api/goals/${goalData?.id}`, updateData);
+      toast.success("Goal updated successfully!");
       router.push("/user/goals");
     } catch (error) {
-      console.error("Error saving goal:", error);
+      console.error("Error updating goal:", error);
+      toast.error("Failed to update goal");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  interface SampleGoal {
-    id: string;
-    title: string;
-    targetAmount: number;
-    adjustedTargetAmount: number;
-    amountRequired: number;
-    yearsToGoal: number;
-    category: string;
-    currentSalary: number;
-    annualIncrementRate: number;
-    forecastedSalary: number;
-    isAchievable: boolean;
-    priority: number;
-  }
-
-  const loadSampleGoal = (sample: SampleGoal) => {
+  const loadSampleGoal = (sample: Goal) => {
     setFormValues({
       title: sample.title,
-      targetAmount: sample.targetAmount,
-      yearsToGoal: sample.yearsToGoal,
-      category: sample.category,
-      currentSalary: sample.currentSalary,
-      annualIncrementRate: sample.annualIncrementRate,
-      priority: sample.priority
+      targetAmount: formatNumber(sample.targetAmount),
+      yearsToGoal: sample.yearsToGoal?.toString() || "",
+      category: sample.category || "",
     });
-    setShowSampleGoals(false);
   };
 
   return (
@@ -342,16 +307,16 @@ export default function GoalEditCard() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className={poppins}>
-            Target Amount <span className="text-red-600 text-xl">*</span>
-          </label>
+          <label className={`${poppins} text-gray-700`}>Target Amount</label>
           <div className="flex items-center gap-3">
             <p className="font-semibold text-lg">₹</p>
             <input
               type="text"
               value={formValues.targetAmount}
               onChange={handleInputChange("targetAmount")}
-              className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-48`}
+              className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-full`}
+              disabled={isLoading}
+              placeholder="Enter amount"
             />
           </div>
         </div>
@@ -378,7 +343,7 @@ export default function GoalEditCard() {
             <p className="font-semibold text-lg">₹</p>
             <input
               type="number"
-              value={formValues.currentSalary}
+              value={financialData?.income || 0}
               onChange={handleInputChange("currentSalary")}
               className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-48`}
             />
@@ -387,17 +352,14 @@ export default function GoalEditCard() {
         
         <div className="flex flex-col gap-2">
           <label className={poppins}>
-            Annual Increment (%) <span className="text-red-600 text-xl">*</span>
+            Annual Increment Rate <span className="text-gray-500 text-sm">(from your financial profile)</span>
           </label>
           <div className="flex items-center gap-3">
             <input
               type="number"
-              value={formValues.annualIncrementRate}
-              onChange={handleInputChange("annualIncrementRate")}
-              min="0"
-              max="100"
-              step="0.5"
-              className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-32`}
+              value={financialData?.annualIncrementRate ? (financialData.annualIncrementRate * 100).toFixed(1) : "5.0"}
+              disabled
+              className={`bg-[#c3c3c38e] rounded-[15px] px-3 py-2 ${montserrat} border-2 border-[#747373] font-semibold w-32`}
             />
             <p className="font-semibold text-lg">%</p>
           </div>
@@ -410,7 +372,8 @@ export default function GoalEditCard() {
             <input
               type="text"
               disabled
-              value={formatNumber(Math.round(forecastedSalary))}
+              value={formatNumber(Math.round(financialData?.income && financialData?.annualIncrementRate ? 
+                financialData.income * Math.pow(1 + financialData.annualIncrementRate, formValues.yearsToGoal) : 0))}
               className={`bg-[#c3c3c38e] rounded-[15px] px-3 py-2 ${montserrat} border-2 border-[#747373] font-semibold w-48`}
             />
           </div>
@@ -423,7 +386,7 @@ export default function GoalEditCard() {
             <input
               type="text"
               disabled
-              value={formatNumber(Math.round(amountRequired))}
+              value={formatNumber(Math.round(formValues.targetAmount / (formValues.yearsToGoal * 12)))}
               className={`bg-[#c3c3c38e] rounded-[15px] px-3 py-2 ${montserrat} border-2 border-[#747373] font-semibold w-48`}
             />
           </div>

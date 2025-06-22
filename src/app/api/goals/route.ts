@@ -11,7 +11,7 @@ const inflationRates = {
 } as const;
 
 type CategoryType = keyof typeof inflationRates;
-type MissingField = 'userId' | 'title' | 'targetAmount' | 'amountRequired' | 'yearsToGoal' | 'category' | 'currentSalary' | 'annualIncrementRate';
+type MissingField = 'userId' | 'title' | 'targetAmount' | 'yearsToGoal' | 'category';
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,32 +20,27 @@ export async function POST(req: NextRequest) {
       userId,
       title,
       targetAmount,
-      amountRequired,
       yearsToGoal,
       category,
-      currentSalary,
-      annualIncrementRate,
       priority = 3,
     } = body;
 
+    // Validate required fields
     const missingFields: MissingField[] = [];
     if (!userId) missingFields.push('userId');
     if (!title) missingFields.push('title');
     if (!targetAmount) missingFields.push('targetAmount');
-    if (!amountRequired) missingFields.push('amountRequired');
     if (!yearsToGoal) missingFields.push('yearsToGoal');
     if (!category) missingFields.push('category');
-    if (!currentSalary) missingFields.push('currentSalary');
-    if (!annualIncrementRate) missingFields.push('annualIncrementRate');
 
     if (missingFields.length > 0) {
       return NextResponse.json(
-        { success: false, message: 'Missing required fields', missingFields },
+        { success: false, message: `Missing required fields: ${missingFields.join(', ')}` },
         { status: 400 }
       );
     }
 
-    
+    // Validate user exists
     const user = await prisma.user.findUnique({
       where: { id: userId }
     });
@@ -57,16 +52,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (priority < 1 || priority > 3) {
+    // Get financial data to calculate achievability
+    const financials = await prisma.financials.findUnique({
+      where: { userId }
+    });
+
+    if (!financials) {
       return NextResponse.json(
-        { success: false, message: 'Priority must be between 1 and 3' },
+        { success: false, message: 'Financial data not found. Please complete your financial checkup first.' },
         { status: 400 }
       );
     }
 
+    const currentSalary = financials.salary;
+    const annualIncrementRate = financials.annualIncrementRate;
     const inflationRate = inflationRates[category as CategoryType] || inflationRates.general;
-    const adjustedTargetAmount = amountRequired * Math.pow(1 + inflationRate, yearsToGoal);
-    const forecastedSalary = currentSalary * Math.pow(1 + Number(annualIncrementRate), yearsToGoal);
+    const adjustedTargetAmount = targetAmount * Math.pow(1 + inflationRate, yearsToGoal);
+    const forecastedSalary = currentSalary * Math.pow(1 + annualIncrementRate, yearsToGoal);
     const isAchievable = forecastedSalary * 0.3 * yearsToGoal >= adjustedTargetAmount;
 
     
@@ -82,13 +84,8 @@ export async function POST(req: NextRequest) {
         userId,
         title,
         targetAmount: Number(targetAmount),
-        amountRequired: Number(amountRequired),
-        adjustedTargetAmount,
         yearsToGoal: Number(yearsToGoal),
         category,
-        currentSalary: Number(currentSalary),
-        annualIncrementRate: Number(annualIncrementRate),
-        forecastedSalary,
         isAchievable,
         priority,
       },
@@ -116,15 +113,10 @@ export async function POST(req: NextRequest) {
 interface UpdateData {
   title?: string;
   targetAmount?: number;
-  amountRequired?: number;
   yearsToGoal?: number;
   category?: string;
-  currentSalary?: number;
-  annualIncrementRate?: number;
   userId?: string;
   priority?: number;
-  adjustedTargetAmount?: number;
-  forecastedSalary?: number;
   isAchievable?: boolean;
 }
 
@@ -135,11 +127,8 @@ export async function PUT(req: NextRequest) {
       id,
       title,
       targetAmount,
-      amountRequired,
       yearsToGoal,
       category,
-      currentSalary,
-      annualIncrementRate,
       priority,
       userId,
     } = body;
@@ -180,11 +169,8 @@ export async function PUT(req: NextRequest) {
     const updateData: UpdateData = {};
     if (title !== undefined) updateData.title = title;
     if (targetAmount !== undefined) updateData.targetAmount = Number(targetAmount);
-    if (amountRequired !== undefined) updateData.amountRequired = Number(amountRequired);
     if (yearsToGoal !== undefined) updateData.yearsToGoal = Number(yearsToGoal);
     if (category !== undefined) updateData.category = category;
-    if (currentSalary !== undefined) updateData.currentSalary = Number(currentSalary);
-    if (annualIncrementRate !== undefined) updateData.annualIncrementRate = Number(annualIncrementRate);
     if (userId !== undefined) updateData.userId = userId;
 
     if (priority !== undefined) {
@@ -197,27 +183,25 @@ export async function PUT(req: NextRequest) {
       updateData.priority = priority;
     }
 
-    
-    if (amountRequired !== undefined && yearsToGoal !== undefined && category !== undefined) {
-      const inflationRate = inflationRates[category as CategoryType] || inflationRates.general;
-      updateData.adjustedTargetAmount = updateData.amountRequired! * Math.pow(1 + inflationRate, updateData.yearsToGoal!);
-      
-      if (currentSalary !== undefined && annualIncrementRate !== undefined) {
-        updateData.forecastedSalary = updateData.currentSalary! * Math.pow(1 + Number(updateData.annualIncrementRate), updateData.yearsToGoal!);
-        updateData.isAchievable = updateData.forecastedSalary! * 0.3 * updateData.yearsToGoal! >= updateData.adjustedTargetAmount!;
-      }
-    }
+    // Recalculate isAchievable if relevant fields are updated
+    if (targetAmount !== undefined || yearsToGoal !== undefined || category !== undefined) {
+      const currentTargetAmount = targetAmount !== undefined ? targetAmount : existingGoal.targetAmount;
+      const currentYearsToGoal = yearsToGoal !== undefined ? yearsToGoal : existingGoal.yearsToGoal;
+      const currentCategory = category !== undefined ? category : existingGoal.category;
 
-    
-    if (priority === 1 && userId) {
-      await prisma.lifeGoal.updateMany({
-        where: {
-          userId,
-          priority: 1,
-          NOT: { id },
-        },
-        data: { priority: 2 },
+      // Get current salary and annual increment rate from financials
+      const financials = await prisma.financials.findUnique({
+        where: { userId: existingGoal.userId }
       });
+
+      if (financials) {
+        const currentSalary = financials.salary;
+        const annualIncrementRate = financials.annualIncrementRate;
+        const inflationRate = inflationRates[currentCategory as CategoryType] || inflationRates.general;
+        const adjustedTargetAmount = currentTargetAmount * Math.pow(1 + inflationRate, currentYearsToGoal);
+        const forecastedSalary = currentSalary * Math.pow(1 + annualIncrementRate, currentYearsToGoal);
+        updateData.isAchievable = forecastedSalary * 0.3 * currentYearsToGoal >= adjustedTargetAmount;
+      }
     }
 
     const updatedGoal = await prisma.lifeGoal.update({
@@ -234,7 +218,7 @@ export async function PUT(req: NextRequest) {
       }
     });
 
-    return NextResponse.json({ success: true, data: updatedGoal }, { status: 200 });
+    return NextResponse.json({ success: true, data: updatedGoal });
   } catch (error) {
     console.error('PUT error:', error);
     return NextResponse.json(
@@ -271,10 +255,7 @@ export async function DELETE(req: NextRequest) {
       where: { id }
     });
 
-    return NextResponse.json(
-      { success: true, message: 'Goal deleted successfully' },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, message: 'Goal deleted successfully' });
   } catch (error) {
     console.error('DELETE error:', error);
     return NextResponse.json(
