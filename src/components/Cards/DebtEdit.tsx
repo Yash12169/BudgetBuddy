@@ -1,17 +1,15 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
-import finWeak from "../../assets/financial-health-icon-weak.svg";
-import finAverage from "../../assets/financial-health-icon-average.svg";
-import finStrong from "../../assets/financial-health-icon-good.svg";
-import { montserrat, poppins } from "@/fonts/fonts";
 import { debtAtom, financialAtom } from "@/atoms/atoms";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+import { montserrat, poppins } from "@/fonts/fonts";
+import Image from "next/image";
+import finWeak from "../../assets/financial-health-icon-weak.svg";
+import finAverage from "../../assets/financial-health-icon-average.svg";
+import finStrong from "../../assets/financial-health-icon-good.svg";
 
 const formatNumber = (value: string | number): string => {
   const str = value.toString().replace(/,/g, "");
@@ -26,17 +24,14 @@ const formatNumber = (value: string | number): string => {
   return decimal ? `${formatted}.${decimal}` : formatted;
 };
 
-const parseNumber = (value: string | undefined): number => {
-  if (!value) return 0;
+const parseNumber = (value: string): number => {
   const clean = value.replace(/,/g, "");
   return isNaN(Number(clean)) ? 0 : Number(clean);
 };
 
 export default function DebtEdit() {
-  const router = useRouter();
-  const [financials, setFinancial] = useAtom(financialAtom);
   const [debt, setDebt] = useAtom(debtAtom);
-  const [totalScore, setTotalScore] = useState(0);
+  const [financials] = useAtom(financialAtom);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useUser();
@@ -54,20 +49,14 @@ export default function DebtEdit() {
   };
 
   useEffect(() => {
-    router.refresh();
-  }, [router]);
-
-  useEffect(() => {
     if (financials && debt) {
-      setTotalScore(debt.data.debtLoad <= 3 ? 80 : debt.data.debtLoad <= 5 ? 50 : 30);
-
       setFormValues({
         loan: formatNumber(debt.data.data.loanAmount),
         tenure: formatNumber(debt.data.data.loanTenure),
         emi: formatNumber(debt.data.data.emiAmount),
       });
     }
-  }, [financials, debt, setTotalScore, setFormValues]);
+  }, [financials, debt]);
 
   const handleInputChange = 
     (field: keyof typeof formValues) =>
@@ -107,7 +96,7 @@ export default function DebtEdit() {
       const debtResponse = await axios.get(`/api/debt/${user.id}`);
       setDebt(debtResponse.data);
       
-      router.push("/user/financial-checkup");
+      toast.success("Debt information updated successfully!");
     } catch (err) {
       console.error("Submit failed", err);
       setError("Failed to update information. Please try again.");
@@ -148,14 +137,14 @@ export default function DebtEdit() {
 
       <div className="flex border-2 gap-5 items-center w-[60%] rounded-[15px] px-5 py-2">
         <div>
-          {totalScore <= 30 && <Image src={finWeak} alt="weak financials" />}
-          {totalScore > 30 && totalScore < 70 && (
-            <Image src={finAverage} alt="average financials" />
+          {debt.data.debtLoad <= 30 && <Image src={finWeak} alt="weak financials" width={40} height={40} />}
+          {debt.data.debtLoad > 30 && debt.data.debtLoad < 70 && (
+            <Image src={finAverage} alt="average financials" width={40} height={40} />
           )}
-          {totalScore >= 70 && <Image src={finStrong} alt="strong financials" />}
+          {debt.data.debtLoad >= 70 && <Image src={finStrong} alt="strong financials" width={40} height={40} />}
         </div>
         <div className="text-black text-5xl">
-          <p className={`${montserrat} font-semibold`}>{totalScore}</p>
+          <p className={`${montserrat} font-semibold`}>{debt.data.debtLoad}</p>
         </div>
         <div className={`${poppins}`}>
           <div className="text-black text-[14px]">
@@ -199,7 +188,7 @@ export default function DebtEdit() {
             <input
               type="text"
               disabled
-              value={debt ? `${debt.data.debtLoad}%` : "0%"}
+              value={`${debt.data.debtLoad}%`}
               className={`bg-[#c3c3c38e] rounded-[15px] px-3 py-2 ${montserrat} border-2 border-[#747373] font-semibold`}
             />
              <p className="font-semibold text-lg">%</p>
@@ -211,7 +200,7 @@ export default function DebtEdit() {
             <input
               type="text"
               disabled
-              value={debt ? (debt.data.debtLoad <= 30 ? 'Low' : debt.data.debtLoad <= 50 ? 'Moderate' : 'High') : 'Low'}
+              value={debt.data.debtLoad <= 30 ? 'Low' : debt.data.debtLoad <= 50 ? 'Moderate' : 'High'}
               className={`bg-[#c3c3c38e] rounded-[15px] px-3 py-2 ${montserrat} border-2 border-[#747373] font-semibold`}
             />
           </div>
@@ -231,7 +220,7 @@ export default function DebtEdit() {
           </p>
         </button>
         <button
-          onClick={() => router.push("/user/financial-checkup")}
+          onClick={() => toast.success("Debt management cancelled")}
           disabled={isLoading}
           className={`flex justify-center items-center text-[#6F39C5] border-2 border-[#6F39C5] px-5 py-2 rounded-[25px] cursor-pointer hover:bg-[#6F39C5] hover:text-white transition-all duration-300 ${
             isLoading ? "opacity-50 cursor-not-allowed" : ""

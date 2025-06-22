@@ -7,7 +7,7 @@ import finWeak from "../../assets/financial-health-icon-weak.svg";
 import finAverage from "../../assets/financial-health-icon-average.svg";
 import finStrong from "../../assets/financial-health-icon-good.svg";
 import { montserrat, poppins } from "@/fonts/fonts";
-import { financialAtom, debtAtom } from "@/atoms/atoms";
+import { financialAtom } from "@/atoms/atoms";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 
@@ -31,9 +31,7 @@ const parseNumber = (value: string): number => {
 
 export default function HabitEdit() {
   const router = useRouter();
-  const [financials, setFinancial] = useAtom(financialAtom);
-  const [debt, setDebt] = useAtom(debtAtom);
-  const [totalScore, setTotalScore] = useState(0);
+  const [financials] = useAtom(financialAtom);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useUser();
@@ -62,14 +60,6 @@ export default function HabitEdit() {
 
   useEffect(() => {
     if (financials) {
-      const totalExpenses = (financials.allData.expenses || 0) + 
-                           (financials.allData.extraExpenses || 0) + 
-                           (financials.allData.insurancePremium || 0);
-      const savings = financials.allData.salary - totalExpenses;
-      const savingsPercent = (savings / financials.allData.salary) * 100;
-      
-      setTotalScore(savingsPercent >= 50 ? 80 : savingsPercent >= 30 ? 50 : 30);
-
       setFormValues({
         income: formatNumber(financials.allData.salary || 0),
         netWorth: formatNumber(financials.allData.netWorth || 0),
@@ -140,19 +130,6 @@ export default function HabitEdit() {
       
       await axios.put(`/api/financials/${user.id}`, payload);
       
-      // Refresh financial data
-      const financialResponse = await axios.get(`/api/financials/${user.id}`);
-      setFinancial(financialResponse.data);
-      
-      // Refresh debt data to update debt load calculation with new salary
-      try {
-        const debtResponse = await axios.get(`/api/debt/${user.id}`);
-        setDebt(debtResponse.data);
-      } catch (debtError) {
-        // If no debt data exists, that's fine - just continue
-        console.log("No debt data found, skipping debt refresh");
-      }
-      
       router.push("/user/financial-checkup");
     } catch (err) {
       console.error("Submit failed", err);
@@ -194,14 +171,14 @@ export default function HabitEdit() {
 
       <div className="flex border-2 gap-5 items-center w-[60%] rounded-[15px] px-5 py-2">
         <div>
-          {totalScore <= 30 && <Image src={finWeak} alt="weak financials" />}
-          {totalScore > 30 && totalScore < 70 && (
+          {financials.totalScore <= 30 && <Image src={finWeak} alt="weak financials" />}
+          {financials.totalScore > 30 && financials.totalScore < 70 && (
             <Image src={finAverage} alt="average financials" />
           )}
-          {totalScore >= 70 && <Image src={finStrong} alt="strong financials" />}
+          {financials.totalScore >= 70 && <Image src={finStrong} alt="strong financials" />}
         </div>
         <div className="text-black text-5xl">
-          <p className={`${montserrat} font-semibold`}>{totalScore}</p>
+          <p className={`${montserrat} font-semibold`}>{financials.totalScore}</p>
         </div>
         <div className={`${poppins}`}>
           <div className="text-black text-[14px]">

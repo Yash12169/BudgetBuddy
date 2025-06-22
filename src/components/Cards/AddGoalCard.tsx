@@ -1,14 +1,12 @@
 "use client";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAtom } from "jotai";
-import goalTracker from "../../assets/dash-goal-tracker.svg";
-import { montserrat, poppins } from "@/fonts/fonts";
-import { financialAtom } from "@/atoms/atoms";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
+import { montserrat, poppins } from "@/fonts/fonts";
+import goalTracker from "../../assets/dash-goal-tracker.svg";
+import Image from "next/image";
 
 const formatNumber = (value: string | number): string => {
   const str = value.toString().replace(/,/g, "");
@@ -30,7 +28,6 @@ const parseNumber = (value: string): number => {
 
 export default function AddGoalCard() {
   const router = useRouter();
-  const [financials] = useAtom(financialAtom);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useUser();

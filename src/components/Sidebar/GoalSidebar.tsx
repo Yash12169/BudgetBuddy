@@ -104,26 +104,12 @@ const statsVariants = {
   },
 }
 
-
 const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
     maximumFractionDigits: 0,
   }).format(amount)
-}
-
-
-const formatShortNumber = (amount: number) => {
-  if (amount >= 10000000) {
-    return (amount / 10000000).toFixed(amount % 10000000 === 0 ? 0 : 1) + 'Cr';
-  } else if (amount >= 100000) {
-    return (amount / 100000).toFixed(amount % 100000 === 0 ? 0 : 1) + 'L';
-  } else if (amount >= 1000) {
-    return (amount / 1000).toFixed(amount % 1000 === 0 ? 0 : 1) + 'k';
-  } else {
-    return amount.toString();
-  }
 }
 
 const getCategoryColor = (category: string): string => {

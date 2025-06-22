@@ -174,7 +174,7 @@ export default function BasicFinancialNumbers() {
               )}
               {savingsRate >= 20 && (
                 <p className={`text-xs text-green-600 dark:text-green-400 ${poppins}`}>
-                  ✅ Excellent savings rate! You're on track for financial goals.
+                  ✅ Excellent savings rate! You&apos;re on track for financial goals.
                 </p>
               )}
 
@@ -191,7 +191,7 @@ export default function BasicFinancialNumbers() {
               )}
               {emergencyFundMonths >= 6 && (
                 <p className={`text-xs text-green-600 dark:text-green-400 ${poppins}`}>
-                  🛡️ Strong emergency fund! You're well-protected against unexpected expenses.
+                  🛡️ Strong emergency fund! You&apos;re well-protected against unexpected expenses.
                 </p>
               )}
 
@@ -208,7 +208,7 @@ export default function BasicFinancialNumbers() {
               )}
               {debtAmount > 0 && debtToIncomeRatio <= 20 && (
                 <p className={`text-xs text-green-600 dark:text-green-400 ${poppins}`}>
-                  💳 Low debt burden. You're managing debt well.
+                  💳 Low debt burden. You&apos;re managing debt well.
                 </p>
               )}
               {debtAmount === 0 && (
@@ -230,14 +230,14 @@ export default function BasicFinancialNumbers() {
               )}
               {netWorth >= salary * 3 && (
                 <p className={`text-xs text-green-600 dark:text-green-400 ${poppins}`}>
-                  📊 Strong net worth! You're building solid financial foundation.
+                  📊 Strong net worth! You&apos;re building solid financial foundation.
                 </p>
               )}
 
               {/* Overall Financial Health */}
               {savingsRate >= 20 && emergencyFundMonths >= 6 && debtAmount === 0 && netWorth > 0 && (
                 <p className={`text-xs text-emerald-600 dark:text-emerald-400 ${poppins} font-semibold mt-2 pt-2 border-t border-emerald-200 dark:border-emerald-700`}>
-                  🏆 Outstanding financial health! You're setting an excellent example.
+                  🏆 Outstanding financial health! You&apos;re setting an excellent example.
                 </p>
               )}
             </div>

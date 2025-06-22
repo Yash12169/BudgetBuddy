@@ -1,7 +1,6 @@
 "use client";
 import { AppSidebar } from "@/components/app-sidebar";
 import BasicFinancialNumbers from "@/components/Cards/BasicFinancialNumbers";
-import DebtEdit from "@/components/Cards/DebtEdit";
 import Disclaimer from "@/components/Cards/Disclaimer";
 import ProfileCard from "@/components/Cards/ProfileCard";
 import {
@@ -9,8 +8,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 

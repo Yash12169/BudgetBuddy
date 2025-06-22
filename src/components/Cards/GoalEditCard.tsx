@@ -72,30 +72,39 @@ const sampleGoals = [
   }
 ];
 
-export default function GoalEditCard() {
+interface Goal {
+  id: string;
+  title: string;
+  targetAmount: number;
+  yearsToGoal: number;
+  category: string;
+  isAchievable?: boolean;
+}
+
+export default function GoalEditCard({ goal }: { goal: Goal }) {
   const router = useRouter();
   const { user } = useUser();
-  const [goalData, setGoalData] = useAtom(goalAtom);
+  const [goalData] = useAtom(goalAtom);
   const [financialData] = useAtom(financialAtom);
   
+  const [isLoading, setIsLoading] = useState(false);
   const [formValues, setFormValues] = useState({
-    title: goalData?.title || "",
-    targetAmount: goalData?.targetAmount || 0,
-    yearsToGoal: goalData?.yearsToGoal || 1,
-    category: goalData?.category || "Education",
+    title: goal.title || "",
+    targetAmount: formatNumber(goal.targetAmount || 0),
+    yearsToGoal: goal.yearsToGoal?.toString() || "",
+    category: goal.category || "",
   });
 
   const [isAchievable, setIsAchievable] = useState(goalData?.isAchievable || false);
   const [achievabilityScore, setAchievabilityScore] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (goalData) {
       setFormValues({
         title: goalData.title || "",
-        targetAmount: goalData.targetAmount || 0,
-        yearsToGoal: goalData.yearsToGoal || 1,
-        category: goalData.category || "Education",
+        targetAmount: formatNumber(goalData.targetAmount || 0),
+        yearsToGoal: goalData.yearsToGoal?.toString() || "",
+        category: goalData.category || "",
       });
     } 
     else if (financialData?.income) {
@@ -120,7 +129,7 @@ export default function GoalEditCard() {
     };
 
     calculateAchievability();
-  }, [formValues, setAchievabilityScore, setFormValues, financialData?.income, financialData?.annualIncrementRate]);
+  }, [formValues, setAchievabilityScore, financialData?.income, financialData?.annualIncrementRate]);
 
   const handleInputChange = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
@@ -175,48 +184,12 @@ export default function GoalEditCard() {
     }
   };
 
-  interface SampleGoal {
-    id: string;
-    title: string;
-    targetAmount: number;
-    yearsToGoal: number;
-    category: string;
-    isAchievable: boolean;
-  }
-
-  const sampleGoals: SampleGoal[] = [
-    {
-      id: "1",
-      title: "Dream Home",
-      targetAmount: 5000000,
-      yearsToGoal: 10,
-      category: "realEstate",
-      isAchievable: true,
-    },
-    {
-      id: "2",
-      title: "Luxury Car",
-      targetAmount: 3000000,
-      yearsToGoal: 5,
-      category: "automobile",
-      isAchievable: true,
-    },
-    {
-      id: "3",
-      title: "Child's Education",
-      targetAmount: 1500000,
-      yearsToGoal: 8,
-      category: "education",
-      isAchievable: true,
-    },
-  ];
-
-  const loadSampleGoal = (sample: SampleGoal) => {
+  const loadSampleGoal = (sample: Goal) => {
     setFormValues({
       title: sample.title,
-      targetAmount: sample.targetAmount,
-      yearsToGoal: sample.yearsToGoal,
-      category: sample.category,
+      targetAmount: formatNumber(sample.targetAmount),
+      yearsToGoal: sample.yearsToGoal?.toString() || "",
+      category: sample.category || "",
     });
   };
 
@@ -339,7 +312,7 @@ export default function GoalEditCard() {
             <p className="font-semibold text-lg">₹</p>
             <input
               type="text"
-              value={formatNumber(formValues.targetAmount)}
+              value={formValues.targetAmount}
               onChange={handleInputChange("targetAmount")}
               className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-full`}
               disabled={isLoading}
