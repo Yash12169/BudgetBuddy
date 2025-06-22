@@ -15,7 +15,7 @@ import {
 import Disclaimer from "../Cards/Disclaimer";
 import StarterCard from "../Cards/starterCard";
 import FinancialScore from "../Cards/FinancialScore";
-import { SignOutButton } from "@clerk/nextjs";
+
 import Goals from "../Cards/Goals";
 import GoalTracker from "../Cards/GoalTracker";
 export default function Sidebar() {
@@ -40,15 +40,17 @@ export default function Sidebar() {
             </Breadcrumb>
           </div>
           {/* <ThemeController /> */}
-          <SignOutButton/>
+          {/* <SignOutButton/> */}
         </header>
-        <div className="flex flex-1 flex-col gap-2 md:gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <div className="grid auto-rows-min gap-8 md:grid-cols-3">
             <div className="rounded-xl h-fit w-full">
               <StarterCard />
             </div>
             <div className="rounded-xl h-fit col-span-2 ">
-              <GoalTracker />
+              <div className="w-full">
+                <GoalTracker customClass="bg-blue-50 text-blue-900 md:max-w-5xl" />
+              </div>
             </div>
           </div>
           <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
