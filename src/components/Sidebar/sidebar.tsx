@@ -43,14 +43,12 @@ export default function Sidebar() {
           {/* <SignOutButton/> */}
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-8 md:grid-cols-3">
+          <div className="grid auto-rows-min md:grid-cols-3 gap-x-12 gap-y-8">
             <div className="rounded-xl h-fit w-full">
               <StarterCard />
             </div>
-            <div className="rounded-xl h-fit col-span-2 ">
-              <div className="w-full">
-                <GoalTracker customClass="bg-blue-50 text-blue-900 md:max-w-5xl" />
-              </div>
+            <div className="rounded-xl h-fit col-span-2 md:col-span-2">
+              <GoalTracker />
             </div>
           </div>
           <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
