@@ -7,7 +7,7 @@ import finWeak from "../../assets/financial-health-icon-weak.svg";
 import finAverage from "../../assets/financial-health-icon-average.svg";
 import finStrong from "../../assets/financial-health-icon-good.svg";
 import { montserrat, poppins } from "@/fonts/fonts";
-import { financialAtom } from "@/atoms/atoms";
+import { financialAtom, debtAtom } from "@/atoms/atoms";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 
@@ -32,6 +32,7 @@ const parseNumber = (value: string): number => {
 export default function HabitEdit() {
   const router = useRouter();
   const [financials, setFinancial] = useAtom(financialAtom);
+  const [debt, setDebt] = useAtom(debtAtom);
   const [totalScore, setTotalScore] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,16 +40,20 @@ export default function HabitEdit() {
 
   const [formValues, setFormValues] = useState({
     income: "",
+    netWorth: "",
     basic: "",
     extra: "",
     insurance: "",
+    annualIncrementRate: "",
   });
 
   const maxLimits = {
     income: 100000000000,
+    netWorth: 100000000000,
     basic: 100000000000,
     extra: 100000000000,
     insurance: 100000000000,
+    annualIncrementRate: 100,
   };
 
   useEffect(() => {
@@ -67,9 +72,11 @@ export default function HabitEdit() {
 
       setFormValues({
         income: formatNumber(financials.allData.salary || 0),
+        netWorth: formatNumber(financials.allData.netWorth || 0),
         basic: formatNumber(financials.allData.expenses || 0),
         extra: formatNumber(financials.allData.extraExpenses || 0),
         insurance: formatNumber(financials.allData.insurancePremium || 0),
+        annualIncrementRate: financials.allData.annualIncrementRate ? (financials.allData.annualIncrementRate * 100).toFixed(1) : "5.0",
       });
     }
   }, [financials]);
@@ -79,14 +86,28 @@ export default function HabitEdit() {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const rawValue = e.target.value.replace(/,/g, "");
 
-      if (/^\d*\.?\d*$/.test(rawValue)) {
-        const num = Number(rawValue);
-        if (num > (maxLimits[field] || Infinity)) return;
+      if (field === 'annualIncrementRate') {
+        // Handle percentage input for annual increment rate
+        if (/^\d*\.?\d*$/.test(rawValue)) {
+          const num = Number(rawValue);
+          if (num > (maxLimits[field] || Infinity)) return;
 
-        setFormValues((prev) => ({
-          ...prev,
-          [field]: formatNumber(num),
-        }));
+          setFormValues((prev) => ({
+            ...prev,
+            [field]: rawValue,
+          }));
+        }
+      } else {
+        // Handle regular number inputs
+        if (/^\d*\.?\d*$/.test(rawValue)) {
+          const num = Number(rawValue);
+          if (num > (maxLimits[field] || Infinity)) return;
+
+          setFormValues((prev) => ({
+            ...prev,
+            [field]: formatNumber(num),
+          }));
+        }
       }
     };
 
@@ -110,16 +131,27 @@ export default function HabitEdit() {
     try {
       const payload = {
         salary: parseNumber(formValues.income),
+        netWorth: parseNumber(formValues.netWorth),
         expenses: parseNumber(formValues.basic),
         extraExpenses: parseNumber(formValues.extra),
         insurancePremium: parseNumber(formValues.insurance),
+        annualIncrementRate: parseFloat(formValues.annualIncrementRate) / 100,
       };
       
       await axios.put(`/api/financials/${user.id}`, payload);
       
-      const response = await axios.get(`/api/financials/${user.id}`);
+      // Refresh financial data
+      const financialResponse = await axios.get(`/api/financials/${user.id}`);
+      setFinancial(financialResponse.data);
       
-      setFinancial(response.data);
+      // Refresh debt data to update debt load calculation with new salary
+      try {
+        const debtResponse = await axios.get(`/api/debt/${user.id}`);
+        setDebt(debtResponse.data);
+      } catch (debtError) {
+        // If no debt data exists, that's fine - just continue
+        console.log("No debt data found, skipping debt refresh");
+      }
       
       router.push("/user/financial-checkup");
     } catch (err) {
@@ -184,6 +216,7 @@ export default function HabitEdit() {
       <div className="flex flex-wrap gap-5">
         {[
           { label: "Monthly Income", key: "income" },
+          { label: "Net Worth", key: "netWorth" },
           { label: "Basic Expenses", key: "basic" },
           { label: "Extra Expenses", key: "extra" },
           { label: "Insurance Premium", key: "insurance" },
@@ -206,6 +239,23 @@ export default function HabitEdit() {
             </div>
           </div>
         ))}
+
+        <div className="flex flex-col gap-2">
+          <label className={poppins}>
+            Annual Increment Rate <span className="text-red-600 text-xl">*</span>
+          </label>
+          <div className="flex items-center gap-3">
+            <input
+              type="text"
+              value={formValues.annualIncrementRate}
+              onChange={handleInputChange("annualIncrementRate")}
+              className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out`}
+              disabled={isLoading}
+              placeholder="5.0"
+            />
+            <p className="font-semibold text-lg">%</p>
+          </div>
+        </div>
 
         <div className="flex flex-col gap-2 p-1">
           <label className={poppins}>Total Expenses</label>

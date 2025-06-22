@@ -84,11 +84,9 @@ export async function POST(req: Request) {
 
             const debt = await tx.debt.create({
               data: {
-                id: id,
                 userId: id,
                 loanAmount: 0,
                 loanTenure: 0,
-                interestRate: 0,
                 emiAmount: 0,
               },
             });
@@ -98,7 +96,7 @@ export async function POST(req: Request) {
                 id: id,
                 userId: id,
                 emergencyFund: 0,
-                status: '', // Set default status
+                status: '', 
               },
             });
 

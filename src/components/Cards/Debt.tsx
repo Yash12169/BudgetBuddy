@@ -157,14 +157,9 @@ export default function Debt() {
                       </div>
                       <span className={`${poppins} text-lg font-semibold text-gray-900 dark:text-gray-100`}>{debt.data.data.loanTenure}</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 gap-4">
-                      <div className="flex items-center gap-3">
-                        <span className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                          <Percent className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                        </span>
-                        <span className={`${poppins} text-base font-medium text-gray-700 dark:text-gray-300`}>Interest Rate</span>
-                      </div>
-                      <span className={`${poppins} text-lg font-semibold text-gray-900 dark:text-gray-100`}>{debt.data.data.interestRate}%</span>
+                    <div className="flex justify-between items-center">
+                      <p>Interest Rate:</p>
+                      <span className={`${poppins} text-lg font-semibold text-gray-900 dark:text-gray-100`}>N/A</span>
                     </div>
                   </div>
                 </div>

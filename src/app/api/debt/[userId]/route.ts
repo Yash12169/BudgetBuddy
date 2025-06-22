@@ -60,10 +60,10 @@ export async function POST(
   try {
     const { userId } = await params;
     const body = await request.json();
-    const { loanAmount, loanTenure, interestRate, emiAmount } = body;
+    const { loanAmount, loanTenure, emiAmount } = body;
 
     // Validate required fields
-    if (!loanAmount || !loanTenure || !interestRate || !emiAmount) {
+    if (!loanAmount || !loanTenure || !emiAmount) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -89,7 +89,6 @@ export async function POST(
         userId: userId,
         loanAmount,
         loanTenure,
-        interestRate,
         emiAmount,
       },
     });
@@ -134,10 +133,10 @@ export async function PUT(
   try {
     const { userId } = await params;
     const body = await request.json();
-    const { loanAmount, loanTenure, interestRate, emiAmount } = body;
+    const { loanAmount, loanTenure, emiAmount } = body;
 
     // Validate required fields
-    if (!loanAmount || !loanTenure || !interestRate || !emiAmount) {
+    if (!loanAmount || !loanTenure || !emiAmount) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -151,7 +150,6 @@ export async function PUT(
       data: {
         loanAmount,
         loanTenure,
-        interestRate,
         emiAmount,
       },
     });
@@ -201,10 +199,9 @@ export async function DELETE(
       },
     });
 
-    return NextResponse.json(
-      { message: "Debt details deleted successfully" },
-      { status: 200 }
-    );
+    return NextResponse.json({
+      message: "Debt details deleted successfully"
+    });
   } catch (error) {
     console.error("Error deleting debt:", error);
     return NextResponse.json(

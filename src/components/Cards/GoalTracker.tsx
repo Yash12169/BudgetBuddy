@@ -5,15 +5,18 @@ import tracker from '../../assets/dash-goal-tracker.svg';
 import { montserrat } from "@/fonts/fonts";
 
 
-type Goal = {
-  id: string; 
+interface Goal {
+  id: string;
+  userId: string;
   title: string;
+  targetAmount: number;
+  yearsToGoal: number;
   category: string;
-  yearsToGoal: number; 
-  priority: string; 
-  adjustedTargetAmount: number; 
-  isAchievable: boolean; 
-};
+  isAchievable: boolean;
+  priority: number;
+  createdAt: string;
+  updatedAt: string;
+}
 
 
 const ICONS = {
@@ -90,7 +93,7 @@ export default function GoalTracker() {
             </div>
             <div className={`flex flex-col ${montserrat}`}> 
               <p>Amount</p>
-              <p className="font-semibold">{Math.round(goal.adjustedTargetAmount / 100000)} Lakh</p>
+              <p className="font-semibold">{Math.round(goal.targetAmount / 100000)} Lakh</p>
             </div>
             <div className="flex flex-col">
               <p>Target Year</p>

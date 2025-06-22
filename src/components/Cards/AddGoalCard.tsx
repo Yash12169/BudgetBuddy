@@ -39,48 +39,44 @@ export default function AddGoalCard() {
     title: "",
     targetAmount: "",
     yearsToGoal: "",
-    category: "general",
-    priority: "3",
-    currentSalary: "",
-    annualIncrementRate: "0.07",
+    category: "",
   });
 
   const maxLimits = {
     targetAmount: 100000000000,
-    currentSalary: 100000000000,
+    yearsToGoal: 100,
   };
 
-  useEffect(() => {
-    if (financials?.allData?.salary) {
-      setFormValues(prev => ({
-        ...prev,
-        currentSalary: formatNumber(financials.allData.salary),
-      }));
-    }
-  }, [financials]);
-
-  const handleInputChange = 
-    (field: keyof typeof formValues) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      const value = e.target.value;
+  const handleInputChange = (field: keyof typeof formValues) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const value = e.target.value;
+    
+    if (field === 'targetAmount') {
+      const rawValue = value.replace(/,/g, "");
       
-      if (field === 'targetAmount' || field === 'currentSalary') {
-        const rawValue = value.replace(/,/g, "");
-        if (/^\d*\.?\d*$/.test(rawValue)) {
-          const num = Number(rawValue);
-          if (num > (maxLimits[field] || Infinity)) return;
-          setFormValues((prev) => ({
-            ...prev,
-            [field]: formatNumber(num),
-          }));
-        }
-      } else {
-        setFormValues((prev) => ({
+      if (/^\d*\.?\d*$/.test(rawValue)) {
+        const num = Number(rawValue);
+        if (num > maxLimits.targetAmount) return;
+        
+        setFormValues(prev => ({
           ...prev,
-          [field]: value,
+          [field]: formatNumber(num),
         }));
       }
-    };
+    } else if (field === 'yearsToGoal') {
+      const numValue = parseNumber(value);
+      if (numValue > maxLimits.yearsToGoal) return;
+      
+      setFormValues(prev => ({
+        ...prev,
+        [field]: value
+      }));
+    } else {
+      setFormValues(prev => ({
+        ...prev,
+        [field]: value
+      }));
+    }
+  };
 
   const handleSubmit = async () => {
     if (!user?.id) {
@@ -88,7 +84,7 @@ export default function AddGoalCard() {
       return;
     }
 
-    if (!formValues.title || !formValues.targetAmount || !formValues.yearsToGoal) {
+    if (!formValues.title || !formValues.targetAmount || !formValues.yearsToGoal || !formValues.category) {
       setError("Please fill in all required fields");
       return;
     }
@@ -97,19 +93,15 @@ export default function AddGoalCard() {
     setError(null);
 
     try {
-      const payload = {
-        userId: user.id,
+      const goalData = {
+        userId: user?.id,
         title: formValues.title,
         targetAmount: parseNumber(formValues.targetAmount),
-        amountRequired: parseNumber(formValues.targetAmount),
-        yearsToGoal: Number(formValues.yearsToGoal),
+        yearsToGoal: parseNumber(formValues.yearsToGoal),
         category: formValues.category,
-        currentSalary: parseNumber(formValues.currentSalary),
-        annualIncrementRate: Number(formValues.annualIncrementRate),
-        priority: Number(formValues.priority),
       };
       
-      await axios.post('/api/goals', payload);
+      await axios.post('/api/goals', goalData);
       
       toast.success('Goal created successfully');
       router.push("/user/goals");
@@ -168,25 +160,11 @@ export default function AddGoalCard() {
               className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-full`}
               disabled={isLoading}
             >
+              <option value="">Select Category</option>
               <option value="realEstate">Real Estate</option>
               <option value="automobile">Automobile</option>
               <option value="education">Education</option>
               <option value="general">General</option>
-            </select>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>
-              Priority <span className="text-red-600 text-xl">*</span>
-            </label>
-            <select
-              value={formValues.priority}
-              onChange={handleInputChange("priority")}
-              className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-full`}
-              disabled={isLoading}
-            >
-              <option value="1">High Priority</option>
-              <option value="2">Medium Priority</option>
-              <option value="3">Low Priority</option>
             </select>
           </div>
           <div className="flex flex-col gap-2">
@@ -220,24 +198,6 @@ export default function AddGoalCard() {
               pattern="[0-9]*"
             />
           </div>
-          <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>
-              Annual Increment % <span className="text-red-600 text-xl">*</span>
-            </label>
-            <div className="flex items-center gap-3">
-              <input
-                type="text"
-                value={formValues.annualIncrementRate}
-                onChange={handleInputChange("annualIncrementRate")}
-                className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-full`}
-                disabled={isLoading}
-                placeholder="0.07"
-                inputMode="decimal"
-                pattern="[0-9.]*"
-              />
-              <p className="font-semibold text-lg">%</p>
-            </div>
-          </div>
           <div></div>
         </div>
         <div className="flex flex-col gap-6 bg-[#6F39C5]/5 p-6 rounded-[20px]">
@@ -268,7 +228,7 @@ export default function AddGoalCard() {
           <div className="flex flex-col gap-2">
             <label className={`${poppins} text-gray-700`}>Reminder</label>
             <p className={`${poppins} text-sm text-gray-600`}>
-              Your current salary is used for goal calculations. Please ensure your salary is up to date in your profile or financial checkup section.
+              Your current salary from your financial profile will be used for goal calculations. Please ensure your salary is up to date in your financial checkup section.
             </p>
           </div>
         </div>
@@ -298,4 +258,4 @@ export default function AddGoalCard() {
       </div>
     </div>
   );
-} 
+}

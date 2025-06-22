@@ -61,6 +61,7 @@ export async function GET(
         data: {
           salary: formatAmount(data.salary),
           amount: data.salary,
+          netWorth: data.netWorth || 0,
           expenses: formatAmount(data.expenses),
           savingsPercent: savingPercent,
           savingScore: savingScore,
@@ -108,9 +109,11 @@ export async function POST(
       data: {
         userId,
         salary: Number(data.salary),
+        netWorth: Number(data.netWorth) || 0,
         expenses: Number(data.expenses),
         extraExpenses: Number(data.extraExpenses) || 0,
         insurancePremium: Number(data.insurancePremium) || 0,
+        annualIncrementRate: Number(data.annualIncrementRate) || 0.05,
       },
     });
 
@@ -157,14 +160,38 @@ export async function PUT(
       where: { userId },
       data: {
         salary: Number(data.salary),
+        netWorth: Number(data.netWorth) || 0,
         expenses: Number(data.expenses),
         extraExpenses: Number(data.extraExpenses) || 0,
         insurancePremium: Number(data.insurancePremium) || 0,
+        annualIncrementRate: Number(data.annualIncrementRate) || 0.05,
       },
     });
 
+    // Calculate the same fields as GET endpoint
+    const { salary, expenses, extraExpenses, insurancePremium } = updatedRecord;
+    const totalExpenses = (expenses ?? 0) + (extraExpenses ?? 0) + (insurancePremium ?? 0);
+    const savings = salary - totalExpenses;
+    const savingPercent = parseFloat(((savings / salary) * 100).toFixed(2));
+
+    const savingScore = calculateSavingScore(savingPercent);
+    const savingStatus = calculateSavingStatus(savingPercent);
+
     return NextResponse.json(
-      { success: true, message: "Financial data updated successfully", data: updatedRecord },
+      {
+        success: true,
+        message: "Financial data updated successfully",
+        allData: updatedRecord,
+        data: {
+          salary: formatAmount(updatedRecord.salary),
+          amount: updatedRecord.salary,
+          netWorth: updatedRecord.netWorth || 0,
+          expenses: formatAmount(updatedRecord.expenses),
+          savingsPercent: savingPercent,
+          savingScore: savingScore,
+          savingStatus: savingStatus,
+        },
+      },
       { status: 200 }
     );
   } catch (error: unknown) {

@@ -10,6 +10,8 @@ import { montserrat, poppins } from "@/fonts/fonts";
 import { debtAtom, financialAtom } from "@/atoms/atoms";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 const formatNumber = (value: string | number): string => {
   const str = value.toString().replace(/,/g, "");
@@ -24,7 +26,8 @@ const formatNumber = (value: string | number): string => {
   return decimal ? `${formatted}.${decimal}` : formatted;
 };
 
-const parseNumber = (value: string): number => {
+const parseNumber = (value: string | undefined): number => {
+  if (!value) return 0;
   const clean = value.replace(/,/g, "");
   return isNaN(Number(clean)) ? 0 : Number(clean);
 };
@@ -40,24 +43,14 @@ export default function DebtEdit() {
 
   const [formValues, setFormValues] = useState({
     loan: "",
-    time: "",
-    interest: "",
+    tenure: "",
     emi: "",
-    income: "",
-    basic: "",
-    extra: "",
-    insurance: "",
   });
 
   const maxLimits = {
     loan: 100000000000,
-    time: 100000000000,
-    interest: 100000000000,
+    tenure: 100000000000,
     emi: 100000000000,
-    income: 100000000000,
-    basic: 100000000000,
-    extra: 100000000000,
-    insurance: 100000000000,
   };
 
   useEffect(() => {
@@ -70,13 +63,8 @@ export default function DebtEdit() {
 
       setFormValues({
         loan: formatNumber(debt.data.data.loanAmount),
-        time: formatNumber(debt.data.data.loanTenure),
-        interest: formatNumber(debt.data.data.interestRate),
+        tenure: formatNumber(debt.data.data.loanTenure),
         emi: formatNumber(debt.data.data.emiAmount),
-        income: formatNumber(financials.allData.salary || 0),
-        basic: formatNumber(financials.allData.expenses || 0),
-        extra: formatNumber(financials.allData.extraExpenses || 0),
-        insurance: formatNumber(financials.allData.insurancePremium || 0),
       });
     }
   }, [financials, debt, setTotalScore, setFormValues]);
@@ -97,15 +85,6 @@ export default function DebtEdit() {
       }
     };
 
-  const totalExpenses =
-    parseNumber(formValues.basic) +
-    parseNumber(formValues.extra) +
-    parseNumber(formValues.emi) +
-    parseNumber(formValues.insurance);
-
-  const totalIncome = parseNumber(formValues.income);
-  const savings = totalIncome - totalExpenses;
-
   const handleSubmit = async () => {
     if (!user?.id) {
       setError("User not authenticated");
@@ -117,31 +96,16 @@ export default function DebtEdit() {
 
     try {
       const debtPayload = {
-      loanAmount: parseNumber(formValues.loan),
-      loanTenure: parseNumber(formValues.time),
-      interestRate: parseFloat(formValues.interest),
-      emiAmount: parseNumber(formValues.emi),
-    };
+        loanAmount: parseNumber(formValues.loan),
+        loanTenure: parseNumber(formValues.tenure),
+        emiAmount: parseNumber(formValues.emi),
+      };
 
       await axios.put(`/api/debt/${user.id}`, debtPayload);
       
-      const financialPayload = {
-        userId: user.id,
-        salary: parseNumber(formValues.income),
-        expenses: parseNumber(formValues.basic),
-        extraExpenses: parseNumber(formValues.extra),
-        insurancePremium: parseNumber(formValues.insurance),
-      };
-      
-      await axios.put(`/api/financials/${user.id}`, financialPayload);
-      
-      const [debtResponse, financialResponse] = await Promise.all([
-        axios.get(`/api/debt/${user.id}`),
-        axios.get(`/api/financials/${user.id}`)
-      ]);
-      
+      // Refresh debt data
+      const debtResponse = await axios.get(`/api/debt/${user.id}`);
       setDebt(debtResponse.data);
-      setFinancial(financialResponse.data);
       
       router.push("/user/financial-checkup");
     } catch (err) {
@@ -169,10 +133,10 @@ export default function DebtEdit() {
     <div className="flex w-full h-fit flex-col bg-accent text-accent-foreground shadow-lg rounded-[30px] p-7 gap-10">
       <div className="flex flex-col">
         <div className="text-xl text-black font-semibold">
-          <p className={montserrat}>Debt</p>
+          <p className={montserrat}>Debt Management</p>
         </div>
         <div className="text-sm">
-          <p className={montserrat}>Tell us about your outstanding loans</p>
+          <p className={montserrat}>Update your loan and EMI details</p>
         </div>
       </div>
 
@@ -205,17 +169,16 @@ export default function DebtEdit() {
 
       <div className="flex flex-wrap gap-5">
         {[
-          { label: "Loan Amount", key: "loan" },
-          { label: "Loan Tenure", key: "time" },
-          { label: "Interest Rate", key: "interest" },
-          { label: "EMIs", key: "emi" },
+          { label: "Loan Amount", key: "loan", showCurrency: true },
+          { label: "Loan Tenure (years)", key: "tenure", showCurrency: false },
+          { label: "EMI Amount", key: "emi", showCurrency: true },
         ].map((item) => (
           <div className="flex flex-col gap-2" key={item.key}>
             <label className={poppins}>
               {item.label} <span className="text-red-600 text-xl">*</span>
             </label>
             <div className="flex items-center gap-3">
-              <p className="font-semibold text-lg">₹</p>
+              {item.showCurrency && <p className="font-semibold text-lg">₹</p>}
               <input
                 type="text"
                 value={formValues[item.key as keyof typeof formValues]}
@@ -230,25 +193,25 @@ export default function DebtEdit() {
         ))}
 
         <div className="flex flex-col gap-2 p-1">
-          <label className={poppins}>Monthly Expenses</label>
+          <label className={poppins}>EMI Load</label>
           <div className="flex items-center gap-3">
-            <p className="font-semibold text-lg">₹</p>
+           
             <input
               type="text"
               disabled
-              value={formatNumber(totalExpenses)}
+              value={debt ? `${debt.data.debtLoad}%` : "0%"}
               className={`bg-[#c3c3c38e] rounded-[15px] px-3 py-2 ${montserrat} border-2 border-[#747373] font-semibold`}
             />
+             <p className="font-semibold text-lg">%</p>
           </div>
         </div>
         <div className="flex flex-col gap-2 p-1">
-          <label className={poppins}>Monthly Savings</label>
+          <label className={poppins}>Risk Level</label>
           <div className="flex items-center gap-3">
-            <p className="font-semibold text-lg">₹</p>
             <input
               type="text"
               disabled
-              value={formatNumber(savings)}
+              value={debt ? (debt.data.debtLoad <= 30 ? 'Low' : debt.data.debtLoad <= 50 ? 'Moderate' : 'High') : 'Low'}
               className={`bg-[#c3c3c38e] rounded-[15px] px-3 py-2 ${montserrat} border-2 border-[#747373] font-semibold`}
             />
           </div>
@@ -259,7 +222,7 @@ export default function DebtEdit() {
         <button
           onClick={handleSubmit}
           disabled={isLoading}
-          className={`flex justify-center items-center bg-[#6F39C5] px-6 py-2 rounded-[25px] text-white cursor-pointer ${
+          className={`flex justify-center items-center bg-[#6F39C5] px-6 py-2 rounded-[25px] text-white cursor-pointer hover:bg-[#5a2fa0] transition-all duration-300 ${
             isLoading ? "opacity-50 cursor-not-allowed" : ""
           }`}
         >
@@ -270,7 +233,7 @@ export default function DebtEdit() {
         <button
           onClick={() => router.push("/user/financial-checkup")}
           disabled={isLoading}
-          className={`flex justify-center items-center text-[#6F39C5] border-2 border-[#6F39C5] px-5 py-2 rounded-[25px] cursor-pointer ${
+          className={`flex justify-center items-center text-[#6F39C5] border-2 border-[#6F39C5] px-5 py-2 rounded-[25px] cursor-pointer hover:bg-[#6F39C5] hover:text-white transition-all duration-300 ${
             isLoading ? "opacity-50 cursor-not-allowed" : ""
           }`}
         >

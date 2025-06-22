@@ -16,6 +16,17 @@ const formatAmount = (amount: number): string => {
   return `₹ ${(amount/10000000).toFixed(1)}Cr`;
 };
 
+const calculateFinancialHealth = (salary: number, totalExpenses: number): string => {
+  if (salary === 0) return "weak";
+  
+  const savings = salary - totalExpenses;
+  const savingsPercent = (savings / salary) * 100;
+  
+  if (savingsPercent >= 50) return "strong";
+  if (savingsPercent >= 30) return "moderate";
+  return "weak";
+};
+
 export default function StarterCard() {
   const userC = useUser();
   const [user] = useAtom(userAtom);
@@ -42,11 +53,24 @@ export default function StarterCard() {
     );
   }
 
-
   //@ts-expect-error - TODO: fix this
-  const salary = financials?.salary || 0;
+  const salary = financials?.allData?.salary || 0;
   //@ts-expect-error - TODO: fix this
-  const savingStatus = financials?.savingStatus || "weak";
+  const expenses = financials?.allData?.expenses || 0;
+  //@ts-expect-error - TODO: fix this
+  const extraExpenses = financials?.allData?.extraExpenses || 0;
+  //@ts-expect-error - TODO: fix this
+  const insurancePremium = financials?.allData?.insurancePremium || 0;
+  
+  // Calculate basic net worth: salary - total expenses (as a simple approximation)
+  const totalExpenses = expenses + extraExpenses + insurancePremium;
+  const basicNetWorth = salary - totalExpenses;
+  
+  //@ts-expect-error - TODO: fix this
+  const netWorth = financials?.allData?.netWorth || basicNetWorth || salary; // Use net worth if available, fallback to calculated net worth, then salary
+  
+  // Calculate financial health based on salary and expenses
+  const savingStatus = calculateFinancialHealth(salary, totalExpenses);
   const firstName = userC.user?.firstName || "User";
   const imageUrl = userImg || "/default-avatar.svg";
 
@@ -78,7 +102,7 @@ export default function StarterCard() {
             <p>Your net Worth</p>
           </div>
           <div className="font-semibold text-base text-white md:text-lg">
-            <p>{formatAmount(salary)}</p>
+            <p>{formatAmount(netWorth)}</p>
           </div>
         </div>
         <div className="flex flex-col gap-0.5 md:gap-1">

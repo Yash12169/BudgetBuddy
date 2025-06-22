@@ -58,17 +58,16 @@ import {
 } from "@/components/ui/alert-dialog"
 
 interface Goal {
-  id: string
-  title: string
-  category: string
-  priority: number
-  targetAmount: number
-  yearsToGoal: number
-  amountRequired: number
-  adjustedTargetAmount: number
-  forecastedSalary: number
-  currentSalary: number
-  isAchievable: boolean
+  id: string;
+  userId: string;
+  title: string;
+  targetAmount: number;
+  yearsToGoal: number;
+  category: string;
+  isAchievable: boolean;
+  priority: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const containerVariants = {
@@ -478,20 +477,22 @@ export default function GoalSidebar() {
                         <CardContent className="pb-4 flex-grow space-y-4">
                           <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
                             <div className="space-y-1">
-                              <p className="text-xs text-muted-foreground">Monthly Required:</p>
-                              <p className="font-semibold text-foreground">{formatCurrency(goal.amountRequired / 12)}</p>
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-muted-foreground">Monthly Required</span>
+                                <p className="font-semibold text-foreground">{formatCurrency(goal.targetAmount / (goal.yearsToGoal * 12))}</p>
+                              </div>
                             </div>
                             <div className="space-y-1">
-                              <p className="text-xs text-muted-foreground">Future Value:</p>
-                              <p className="font-semibold text-foreground">{formatCurrency(goal.adjustedTargetAmount)}</p>
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-muted-foreground">Target Amount</span>
+                                <p className="font-semibold text-foreground">{formatCurrency(goal.targetAmount)}</p>
+                              </div>
                             </div>
                             <div className="space-y-1">
-                              <p className="text-xs text-muted-foreground">Target Year:</p>
-                              <p className="font-semibold text-foreground">{new Date().getFullYear() + goal.yearsToGoal}</p>
-                            </div>
-                            <div className="space-y-1">
-                              <p className="text-xs text-muted-foreground">Expected Salary:</p>
-                              <p className="font-semibold text-foreground">{formatShortNumber(Math.round(goal.forecastedSalary))}</p>
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-muted-foreground">Years to Goal</span>
+                                <p className="font-semibold text-foreground">{goal.yearsToGoal} years</p>
+                              </div>
                             </div>
                           </div>
                           
@@ -511,9 +512,7 @@ export default function GoalSidebar() {
                                   goal.category,
                                 )} transition-all duration-1000 ease-out shadow-sm`}
                                 style={{
-                                  width: goal.isAchievable
-                                    ? `${Math.min(100, Math.max(20, (goal.targetAmount / goal.adjustedTargetAmount) * 100 + 30))}%`
-                                    : `${Math.max(15, (goal.currentSalary / goal.targetAmount) * 25)}%`,
+                                  width: `${Math.min(100, Math.max(20, (goal.targetAmount / goal.targetAmount) * 100 + 30))}%`
                                 }}
                               />
                             </div>
