@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+    domains: [
+      'as2.ftcdn.net',
+      // add other allowed domains here
+    ],
   },
 };
 

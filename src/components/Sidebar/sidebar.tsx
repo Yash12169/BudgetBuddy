@@ -249,12 +249,12 @@ export default function Sidebar() {
             </DropdownMenu>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-2 md:gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <div className="grid auto-rows-min md:grid-cols-3 gap-x-12 gap-y-8">
             <div className="rounded-xl h-fit w-full">
               <StarterCard />
             </div>
-            <div className="rounded-xl h-fit col-span-2 ">
+            <div className="rounded-xl h-fit col-span-2 md:col-span-2">
               <GoalTracker />
             </div>
           </div>

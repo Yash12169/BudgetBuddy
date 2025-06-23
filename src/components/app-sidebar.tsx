@@ -1,12 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { LogOut, Wallet, Sparkles } from "lucide-react";
+import { LogOut, ChevronRight } from "lucide-react";
 import { SignOutButton } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useSidebar } from "@/components/ui/sidebar";
+import Image from "next/image";
 
-import { NavMain } from "@/components/nav-main";
 import {
   Sidebar,
   SidebarContent,
@@ -14,44 +15,40 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import finalgoalGif from "../assets/finalgoal.gif";
-import finalgoalPng from "../assets/finalgoal.png";
-import dashboardGif from "../assets/dashboardi.gif";
-import dashboardPng from "../assets/dashboardi.png";
-import analysisGif from "../assets/analysis.gif";
-import analysisPng from "../assets/analysis.png";
-import profileGif from "../assets/profilei.gif";
-import profilePng from "../assets/profilei.png";
+import dashboardx from "../assets/dashboardx.png";
+import analysisx from "../assets/analysisx.png";
+import goalx from "../assets/goalx.png";
+import profilex from "../assets/profilex.png";
 
 const data = {
   navMain: [
     {
       title: "Dashboard",
       url: "/user/dashboard",
-      webmIcon: dashboardGif.src,
-      staticIcon: dashboardPng.src,
+      icon: dashboardx,
       isActive: true,
+      description: "Overview & insights",
     },
     {
       title: "Financial Checkup",
       url: "/user/financial-checkup",
-      webmIcon: analysisGif.src,
-      staticIcon: analysisPng.src,
+      icon: analysisx,
       isActive: true,
+      description: "Analyze your finances",
     },
     {
       title: "My Goals",
       url: "/user/goals",
-      webmIcon: finalgoalGif.src,
-      staticIcon: finalgoalPng.src,
+      icon: goalx,
       isActive: true,
+      description: "Track your targets",
     },
     {
       title: "Profile",
       url: "/user/profile",
-      webmIcon: profileGif.src,
-      staticIcon: profilePng.src,
+      icon: profilex,
       isActive: true,
+      description: "Manage your account",
     },
   ],
 };
@@ -59,88 +56,157 @@ const data = {
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   const [burst, setBurst] = React.useState(false);
   const [isSigningOut, setIsSigningOut] = React.useState(false);
+  const [hoveredItem, setHoveredItem] = React.useState<string | null>(null);
   const router = useRouter();
+  const { state } = useSidebar();
 
   const handleSignOut = () => {
     setIsSigningOut(true);
     setBurst(true);
     setTimeout(() => setBurst(false), 500);
-    // Navigate to home page after sign out
     setTimeout(() => router.push("/"), 1000);
   };
 
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="p-4 pb-6 border-b bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 relative overflow-hidden">
-        {/* Background deco */}
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-blue-500/5 to-purple-500/5 dark:from-emerald-400/10 dark:via-blue-400/10 dark:to-purple-400/10"></div>
-        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-emerald-200/20 via-blue-200/20 to-purple-200/20 dark:from-emerald-400/10 dark:via-blue-400/10 dark:to-purple-400/10 rounded-full blur-2xl translate-x-10 -translate-y-10"></div>
-
-        <div className="relative z-10 flex flex-col items-center gap-2 text-center">
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 via-blue-500 to-purple-600 shadow-lg shadow-blue-500/20">
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-emerald-400 via-blue-400 to-purple-500 opacity-80 blur-sm"></div>
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/20 to-transparent"></div>
-            <Wallet className="relative z-10 h-5 w-5 text-white drop-shadow-sm" />
-            <Sparkles className="absolute -top-1 -right-1 h-3 w-3 text-yellow-300 animate-pulse" />
+    <Sidebar
+      collapsible="icon"
+      {...props}
+      className="group/sidebar data-[collapsible=icon]:w-14 w-80 min-w-14 transition-all duration-300 bg-gradient-to-br from-blue-25/80 via-sky-25/75 to-slate-50/80 dark:from-slate-900/90 dark:via-blue-950/85 dark:to-slate-900/90 backdrop-blur-xl relative overflow-hidden"
+    >
+      <SidebarHeader className="relative flex items-center h-20 group-data-[collapsible=icon]/sidebar:h-16 border-b border-blue-100/40 dark:border-blue-800/40 transition-all duration-300">
+        <motion.div
+          className="flex items-center w-full h-full gap-4 min-w-0 overflow-hidden"
+          initial={{ opacity: 0, y: -20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.6, type: "spring", bounce: 0.3 }}
+        >
+          <div className="flex items-center justify-center w-12 h-12 group-data-[collapsible=icon]/sidebar:w-8 group-data-[collapsible=icon]/sidebar:h-8 ml-2 sm:w-10 sm:h-10">
+            <Image
+              src="https://as2.ftcdn.net/v2/jpg/00/79/77/00/1000_F_79770058_2QwQ6l04e6MN2eUVxZ4WRzE7dHGnQk8A.jpg"
+              alt="BudgetBuddy Logo"
+              width={48}
+              height={48}
+              className="object-contain rounded-xl shadow-lg border-2 border-blue-200 dark:border-blue-800"
+              style={{
+                minHeight: "36px",
+                minWidth: "36px",
+                maxHeight: "48px",
+                maxWidth: "48px",
+                display: "block",
+              }}
+            />
           </div>
-
-          <div className="group-data-[collapsible=icon]:hidden">
-            <h1 className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 dark:from-emerald-400 dark:via-blue-400 dark:to-purple-400">
+          {state !== "collapsed" && (
+            <h1 className="text-2xl sm:text-xl font-extrabold text-blue-800 dark:text-blue-200 tracking-wide break-words text-wrap max-w-xs leading-tight">
               BudgetBuddy
             </h1>
-          </div>
-        </div>
+          )}
+        </motion.div>
       </SidebarHeader>
 
-      <SidebarContent className="flex flex-col flex-1 justify-between">
-        <NavMain items={data.navMain} />
+      <SidebarContent className="relative flex flex-col flex-1 justify-between">
+        <div
+          className={`p-4 space-y-2 ${
+            state === "collapsed"
+              ? "flex flex-col items-center justify-center gap-2"
+              : ""
+          }`}
+        >
+          {data.navMain.map((item) => (
+            <motion.a
+              key={item.title}
+              href={item.url}
+              className={`relative flex items-center rounded-2xl p-3 group-data-[collapsible=icon]/sidebar:p-2 hover:bg-blue-100/20 dark:hover:bg-blue-900/20 transition-all duration-200 ${
+                state === "collapsed" ? "justify-center w-full" : ""
+              }`}
+              onMouseEnter={() => setHoveredItem(item.title)}
+              onMouseLeave={() => setHoveredItem(null)}
+            >
+              <div
+                className={`flex-shrink-0 ${
+                  state === "collapsed"
+                    ? "w-8 h-8 flex items-center justify-center mx-auto"
+                    : "w-10 h-10"
+                }`}
+              >
+                <Image
+                  src={item.icon.src}
+                  alt={`${item.title} icon`}
+                  width={44}
+                  height={44}
+                  className={`mx-auto object-contain transition-all duration-200 ${
+                    state === "collapsed" ? "w-8 h-8" : "w-10 h-10"
+                  }`}
+                  style={{
+                    minWidth: "28px",
+                    minHeight: "28px",
+                    maxWidth: "44px",
+                    maxHeight: "44px",
+                    display: "block",
+                  }}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.display =
+                      "none";
+                  }}
+                />
+              </div>
+              {state !== "collapsed" && (
+                <div className="ml-4 flex-1">
+                  <p className="font-semibold text-base text-blue-700 dark:text-blue-300">
+                    {item.title}
+                  </p>
+                  <p className="text-sm text-blue-500 dark:text-blue-400">
+                    {item.description}
+                  </p>
+                </div>
+              )}
+              {state !== "collapsed" && (
+                <motion.div
+                  animate={{ x: hoveredItem === item.title ? 6 : 0 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <ChevronRight className="w-4 h-4 text-blue-400 opacity-0 group-hover:opacity-70" />
+                </motion.div>
+              )}
+            </motion.a>
+          ))}
+        </div>
 
-        <div className="p-3 pb-8 border-t border-border/50">
+        <div className="p-4 border-t border-blue-100/40 dark:border-blue-800/40">
           <SignOutButton>
-            <button
+            <motion.button
               onClick={handleSignOut}
               disabled={isSigningOut}
-              className="relative flex w-full items-center gap-3 rounded-lg bg-gradient-to-r from-red-600/10 to-pink-600/10 hover:from-red-600/20 hover:to-pink-600/20 border border-red-500/30 px-3 py-2.5 text-sm font-extrabold text-red-700 dark:text-red-200 transition-all duration-200 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] group overflow-hidden"
+              className="relative flex w-full items-center rounded-2xl p-3 group-data-[collapsible=icon]/sidebar:p-2 bg-red-100/20 dark:bg-red-900/20 hover:bg-red-100/40 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 transition-all duration-200"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
             >
+              <div className="flex-shrink-0">
+                <LogOut className="w-5 h-5" />
+              </div>
+              {state !== "collapsed" && (
+                <span className="ml-3">
+                  {isSigningOut ? "Signing out..." : "Sign out"}
+                </span>
+              )}
               <AnimatePresence>
                 {burst && (
                   <motion.div
                     initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 2, opacity: [0, 1, 0] }}
+                    animate={{
+                      scale: [0, 1.2, 2],
+                      opacity: [0, 0.6, 0],
+                    }}
                     exit={{ scale: 0, opacity: 0 }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
-                    className="absolute inset-0 bg-gradient-to-r from-red-400/30 to-pink-400/30 rounded-lg pointer-events-none"
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    className="absolute inset-0 bg-red-300/20 rounded-2xl pointer-events-none"
                   />
                 )}
               </AnimatePresence>
-
-              <div className="relative">
-                {isSigningOut ? (
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 1,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                  >
-                    <LogOut className="h-4 w-4" />
-                  </motion.div>
-                ) : (
-                  <LogOut className="h-4 w-4 transition-transform group-hover:scale-110" />
-                )}
-              </div>
-
-              <span className="whitespace-nowrap group-data-[collapsible=icon]:hidden">
-                {isSigningOut ? "Signing Out..." : "Sign Out"}
-              </span>
-
-              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-red-500/0 via-red-500/5 to-pink-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-            </button>
+            </motion.button>
           </SignOutButton>
         </div>
       </SidebarContent>
-
       <SidebarRail />
     </Sidebar>
   );

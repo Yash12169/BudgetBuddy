@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { type LucideIcon } from "lucide-react"
-import { useRouter } from "next/navigation"
-import Image from "next/image"
+
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   Collapsible,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -13,19 +13,17 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 interface NavItem {
-  title: string
-  url: string
-  icon?: LucideIcon
-  webmIcon?: string
-  staticIcon?: string
-  isActive?: boolean
+  title: string;
+  url: string;
+  icon?: string; 
+  isActive?: boolean;
   items?: {
-    title: string
-    url: string
-  }[]
+    title: string;
+    url: string;
+  }[];
 }
 
 export function NavMain({ items }: { items: NavItem[] }) {
@@ -44,42 +42,31 @@ export function NavMain({ items }: { items: NavItem[] }) {
             defaultOpen={item.isActive}
             className="group/collapsible"
           >
-            <SidebarMenuItem className="transition-all duration-300 hover:bg-accent/50">
+            <SidebarMenuItem className="transition-all duration-300 hover:bg-blue-100/40 dark:hover:bg-blue-900/40 rounded-xl">
               <SidebarMenuButton
                 tooltip={isCollapsed ? item.title : undefined}
-                className="relative group"
+                className="relative group flex items-center"
                 onClick={() => router.push(item.url)}
               >
-                {item.webmIcon && item.staticIcon && (
+                {item.icon && (
                   <div
-                    className={`relative flex items-center justify-center transition-all duration-300 group-hover:scale-105 ${
-                      isCollapsed ? 'w-10 h-10' : 'w-12 h-12'
-                    }`}
+                    className={`flex-shrink-0 flex items-center justify-center ${
+                      isCollapsed ? "w-6 h-6" : "w-7 h-7 mr-3"
+                    } transition-all duration-200 group-hover:scale-110`}
                   >
                     <Image
-                      src={item.staticIcon}
+                      src={item.icon}
                       alt={`${item.title} icon`}
-                      width={isCollapsed ? 40 : 48}
-                      height={isCollapsed ? 40 : 48}
-                      className={`absolute inset-0 w-full h-full object-contain z-0 ${
-                        isCollapsed ? '' : 'group-hover:opacity-0 transition-opacity duration-200'
+                      width={28}
+                      height={28}
+                      className={`object-contain ${
+                        isCollapsed ? "w-6 h-6" : "w-7 h-7"
                       }`}
-                      style={{ opacity: isCollapsed ? 1 : undefined }}
                     />
-                    {!isCollapsed && (
-                      <Image
-                        src={item.webmIcon}
-                        alt={`${item.title} animated icon`}
-                        width={48}
-                        height={48}
-                        className="absolute inset-0 w-full h-full object-contain z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                      />
-                    )}
                   </div>
                 )}
-
                 {!isCollapsed && (
-                  <span className="ml-2 transition-opacity duration-200">
+                  <span className="ml-2 font-semibold text-blue-900 dark:text-blue-100 transition-opacity duration-200">
                     {item.title}
                   </span>
                 )}
@@ -89,5 +76,5 @@ export function NavMain({ items }: { items: NavItem[] }) {
         ))}
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }
