@@ -96,7 +96,6 @@ export async function POST(req: Request) {
                 id: id,
                 userId: id,
                 emergencyFund: 0,
-                status: '', 
               },
             });
 
