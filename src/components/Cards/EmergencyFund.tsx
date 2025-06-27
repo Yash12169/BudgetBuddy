@@ -81,17 +81,11 @@ export default function EmergencyFund() {
       </div>
     );
   }
-  //@ts-expect-error - TODO: fix this
   const salary = financials?.allData?.salary || 0;
-  //@ts-expect-error - TODO: fix this
   const emergencyFundAmount = emergencyFund?.emergencyFundAmount || 0;
-  //@ts-expect-error - TODO: fix this
   const monthsCovered = emergencyFund?.emergencyFundStatus?.monthsCovered || 0;
-  //@ts-expect-error - TODO: fix this
   const status = emergencyFund?.emergencyFundStatus?.status || "critical";
-  //@ts-expect-error - TODO: fix this
   const recommendedMin = emergencyFund?.emergencyFundStatus?.recommendedMin || 3;
-  //@ts-expect-error - TODO: fix this
   const recommendedIdeal = emergencyFund?.emergencyFundStatus?.recommendedIdeal || 6;
 
   return (

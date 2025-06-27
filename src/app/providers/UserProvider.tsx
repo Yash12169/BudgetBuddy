@@ -25,8 +25,7 @@ export default function UserProvider({ children }: UserProviderProps) {
         setGoal(data.data);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
-          //@ts-expect-error - TODO: fix this
-          setGoal([]); // or null, depending on your data structure
+          setGoal(null);
         } else {
           console.error("Error fetching goal data:", error);
         }
@@ -74,8 +73,7 @@ export default function UserProvider({ children }: UserProviderProps) {
         setDebt(response.data);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
-          //@ts-expect-error - TODO: fix this
-          setDebt([]); 
+          setDebt(null); 
         } else {
           console.error("Error fetching debt:", error);
         }

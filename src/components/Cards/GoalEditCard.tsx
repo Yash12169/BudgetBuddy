@@ -12,6 +12,13 @@ import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 
+const inflationRates = {
+  realEstate: 0.06,
+  automobile: 0.04,
+  education: 0.05,
+  general: 0.03,
+} as const;
+
 const formatNumber = (num: number) => {
   return new Intl.NumberFormat('en-IN').format(num);
 };
@@ -79,6 +86,7 @@ interface Goal {
   yearsToGoal: number;
   category: string;
   isAchievable?: boolean;
+  priority: number;
 }
 
 export default function GoalEditCard({ goal }: { goal: Goal }) {
@@ -94,50 +102,51 @@ export default function GoalEditCard({ goal }: { goal: Goal }) {
     targetAmount: formatNumber(goal.targetAmount || 0),
     yearsToGoal: goal.yearsToGoal?.toString() || "",
     category: goal.category || "",
+    priority: goal.priority || 3,
   });
 
-  const [isAchievable, setIsAchievable] = useState(goalData?.isAchievable || false);
+  const [isAchievable, setIsAchievable] = useState(goal?.isAchievable || false);
   const [achievabilityScore, setAchievabilityScore] = useState(0);
 
   useEffect(() => {
-    if (goalData) {
+    if (goal) {
       setFormValues({
-        title: goalData.title || "",
-        targetAmount: formatNumber(goalData.targetAmount || 0),
-        yearsToGoal: goalData.yearsToGoal?.toString() || "",
-        category: goalData.category || "",
+        title: goal.title || "",
+        targetAmount: formatNumber(goal.targetAmount || 0),
+        yearsToGoal: goal.yearsToGoal?.toString() || "",
+        category: goal.category || "",
+        priority: goal.priority || 3,
       });
     } 
-    else if (financialData?.income) {
+    else if (financialData?.allData?.salary) {
       setFormValues(prev => ({
         ...prev,
-        currentSalary: financialData.income
+        currentSalary: financialData.allData.salary
       }));
     }
-  }, [goalData, financialData, setFormValues]);
+  }, [goal, financialData, setFormValues]);
 
   useEffect(() => {
     const calculateAchievability = () => {
-      if (!financialData?.income || !financialData?.annualIncrementRate) return;
+      if (!financialData?.allData?.salary || !financialData?.allData?.annualIncrementRate) return;
       
       const inflationRate = inflationRates[formValues.category as keyof typeof inflationRates] || inflationRates.general;
-      const adjustedTargetAmount = formValues.targetAmount * Math.pow(1 + inflationRate, formValues.yearsToGoal);
-      const forecastedSalary = financialData.income * Math.pow(1 + financialData.annualIncrementRate, formValues.yearsToGoal);
-      const isAchievable = forecastedSalary * 0.3 * formValues.yearsToGoal >= adjustedTargetAmount;
+      const adjustedTargetAmount = parseFloat(formValues.targetAmount) * Math.pow(1 + inflationRate, parseFloat(formValues.yearsToGoal));
+      const forecastedSalary = financialData.allData.salary * Math.pow(1 + financialData.allData.annualIncrementRate, parseFloat(formValues.yearsToGoal));
+      const isAchievable = forecastedSalary * 0.3 * parseFloat(formValues.yearsToGoal) >= adjustedTargetAmount;
       
       setIsAchievable(isAchievable);
       setAchievabilityScore(isAchievable ? 85 : 45);
     };
 
     calculateAchievability();
-  }, [formValues, setAchievabilityScore, financialData?.income, financialData?.annualIncrementRate]);
+  }, [formValues, setAchievabilityScore, financialData?.allData?.salary, financialData?.allData?.annualIncrementRate]);
 
   const handleInputChange = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
     if (key === 'targetAmount' || key === 'yearsToGoal' || key === 'currentSalary') {
       // Only allow numbers
       value = value.replace(/[^\d.]/g, '');
-      value = parseFloat(value) || 0;
     }
     setFormValues((prev) => ({
       ...prev,
@@ -168,13 +177,13 @@ export default function GoalEditCard({ goal }: { goal: Goal }) {
     setIsLoading(true);
     try {
       const updateData = {
-        ...(goalData || {}),
+        ...(goal || {}),
         ...formValues,
         isAchievable: isAchievable,
         userId: user?.id
       };
 
-      await axios.put(`/api/goals/${goalData?.id}`, updateData);
+      await axios.put(`/api/goals/${goal?.id}`, updateData);
       toast.success("Goal updated successfully!");
       router.push("/user/goals");
     } catch (error) {
@@ -191,6 +200,7 @@ export default function GoalEditCard({ goal }: { goal: Goal }) {
       targetAmount: formatNumber(sample.targetAmount),
       yearsToGoal: sample.yearsToGoal?.toString() || "",
       category: sample.category || "",
+      priority: sample.priority || 3,
     });
   };
 
@@ -344,9 +354,10 @@ export default function GoalEditCard({ goal }: { goal: Goal }) {
             <p className="font-semibold text-lg">₹</p>
             <input
               type="number"
-              value={financialData?.income || 0}
+              value={financialData?.allData?.salary || 0}
               onChange={handleInputChange("currentSalary")}
               className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-48`}
+              placeholder="Current Salary"
             />
           </div>
         </div>
@@ -358,7 +369,7 @@ export default function GoalEditCard({ goal }: { goal: Goal }) {
           <div className="flex items-center gap-3">
             <input
               type="number"
-              value={financialData?.annualIncrementRate ? (financialData.annualIncrementRate * 100).toFixed(1) : "5.0"}
+              value={financialData?.allData?.annualIncrementRate ? (financialData.allData.annualIncrementRate * 100).toFixed(1) : "5.0"}
               disabled
               className={`bg-[#c3c3c38e] rounded-[15px] px-3 py-2 ${montserrat} border-2 border-[#747373] font-semibold w-32`}
             />
@@ -373,8 +384,8 @@ export default function GoalEditCard({ goal }: { goal: Goal }) {
             <input
               type="text"
               disabled
-              value={formatNumber(Math.round(financialData?.income && financialData?.annualIncrementRate ? 
-                financialData.income * Math.pow(1 + financialData.annualIncrementRate, formValues.yearsToGoal) : 0))}
+              value={formatNumber(Math.round(financialData?.allData?.salary && financialData?.allData?.annualIncrementRate ? 
+                financialData.allData.salary * Math.pow(1 + financialData.allData.annualIncrementRate, parseFloat(formValues.yearsToGoal) || 0) : 0))}
               className={`bg-[#c3c3c38e] rounded-[15px] px-3 py-2 ${montserrat} border-2 border-[#747373] font-semibold w-48`}
             />
           </div>
@@ -387,7 +398,7 @@ export default function GoalEditCard({ goal }: { goal: Goal }) {
             <input
               type="text"
               disabled
-              value={formatNumber(Math.round(formValues.targetAmount / (formValues.yearsToGoal * 12)))}
+              value={formatNumber(Math.round(parseFloat(formValues.targetAmount) / (parseFloat(formValues.yearsToGoal) * 12)))}
               className={`bg-[#c3c3c38e] rounded-[15px] px-3 py-2 ${montserrat} border-2 border-[#747373] font-semibold w-48`}
             />
           </div>

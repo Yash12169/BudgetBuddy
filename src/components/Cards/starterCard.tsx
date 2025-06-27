@@ -68,20 +68,15 @@ export default function StarterCard() {
     );
   }
 
-  //@ts-expect-error - TODO: fix this
   const salary = financials?.allData?.salary || 0;
-  //@ts-expect-error - TODO: fix this
   const expenses = financials?.allData?.expenses || 0;
-  //@ts-expect-error - TODO: fix this
   const extraExpenses = financials?.allData?.extraExpenses || 0;
-  //@ts-expect-error - TODO: fix this
   const insurancePremium = financials?.allData?.insurancePremium || 0;
   
   // Calculate basic net worth: salary - total expenses (as a simple approximation)
   const totalExpenses = expenses + extraExpenses + insurancePremium;
   const basicNetWorth = salary - totalExpenses;
   
-  //@ts-expect-error - TODO: fix this
   const netWorth = financials?.allData?.netWorth || basicNetWorth || salary; // Use net worth if available, fallback to calculated net worth, then salary
   
   // Calculate financial health based on salary and expenses
