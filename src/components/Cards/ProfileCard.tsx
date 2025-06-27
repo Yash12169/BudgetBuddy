@@ -122,7 +122,6 @@ export default function ProfileCard() {
     setError(null);
 
     try {
-      // Update user name if changed
       const currentFirstName = user.firstName || "";
       const currentLastName = user.lastName || "";
       
@@ -146,7 +145,6 @@ export default function ProfileCard() {
       
       console.log('Saving financial data:', financialData);
       
-      // Update financials
       const financialResponse = await axios.put(`/api/financials/${user.id}`, financialData);
       console.log('Financial response:', financialResponse.data);
       setFinancials(financialResponse.data);
@@ -207,55 +205,51 @@ export default function ProfileCard() {
   if (!financials || !user) {
     return (
       <div className="w-full max-w-8xl mx-auto">
-        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-sm overflow-hidden">
-          {/* Header Skeleton */}
-          <div className="border-b border-neutral-200 dark:border-neutral-800 p-6">
+        <div className="bg-neutral text-neutral-content border border-neutral-content/20 rounded-2xl shadow-lg overflow-hidden">
+          <div className="border-b border-neutral-content/20 p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="p-2 rounded-lg bg-blue-500/10">
-                  <div className="w-8 h-8 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <div className="skeleton w-8 h-8 rounded"></div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-48"></div>
-                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-64"></div>
+                  <div className="skeleton h-8 w-48"></div>
+                  <div className="skeleton h-4 w-64"></div>
                 </div>
               </div>
-              <div className="h-10 bg-neutral-200 dark:bg-neutral-700 rounded w-32"></div>
+              <div className="skeleton h-10 w-32 rounded-xl"></div>
             </div>
           </div>
 
-          {/* Content Skeleton */}
           <div className="p-6 space-y-12">
             <div className="animate-pulse">
-              {/* Personal Information Section */}
               <div className="space-y-6">
                 <div className="flex items-center gap-2">
-                  <div className="w-1 h-6 bg-neutral-200 dark:bg-neutral-700 rounded-full"></div>
-                  <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded w-40"></div>
+                  <div className="w-1 h-6 bg-primary rounded-full"></div>
+                  <div className="skeleton h-6 w-40"></div>
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="space-y-3">
-                    <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-20"></div>
-                    <div className="h-14 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
+                    <div className="skeleton h-4 w-20"></div>
+                    <div className="skeleton h-14 rounded-xl"></div>
                   </div>
                   <div className="space-y-3">
-                    <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-20"></div>
-                    <div className="h-14 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
+                    <div className="skeleton h-4 w-20"></div>
+                    <div className="skeleton h-14 rounded-xl"></div>
                   </div>
                 </div>
               </div>
 
-              {/* Financial Information Section */}
               <div className="space-y-6 mt-12">
                 <div className="flex items-center gap-2">
-                  <div className="w-1 h-6 bg-neutral-200 dark:bg-neutral-700 rounded-full"></div>
-                  <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded w-40"></div>
+                  <div className="w-1 h-6 bg-success rounded-full"></div>
+                  <div className="skeleton h-6 w-40"></div>
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                   {[...Array(6)].map((_, index) => (
                     <div key={index} className="space-y-3">
-                      <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-24"></div>
-                      <div className="h-14 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
+                      <div className="skeleton h-4 w-24"></div>
+                      <div className="skeleton h-14 rounded-xl"></div>
                     </div>
                   ))}
                 </div>
@@ -269,21 +263,21 @@ export default function ProfileCard() {
 
   return (
     <div className="w-full max-w-8xl mx-auto">
-      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-sm overflow-hidden">
-        <div className="border-b border-neutral-200 dark:border-neutral-800 p-6">
+      <div className="bg-neutral text-neutral-content border border-neutral-content/20 rounded-2xl shadow-lg overflow-hidden">
+        <div className="border-b border-neutral-content/20 p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-2 rounded-lg bg-blue-500/10">
+              <div className="p-2 rounded-lg bg-base-content/10 text-base-content">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="#3B82F6"/>
-                  <path d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z" fill="#3B82F6"/>
+                  <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="currentColor" className="text-neutral-content"/>
+                  <path d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z" fill="currentColor" className="text-neutral-content"/>
                 </svg>
               </div>
               <div className="flex flex-col">
-                <h1 className={`text-2xl font-semibold text-neutral-800 dark:text-neutral-100 ${montserrat}`}>
+                <h1 className={`text-2xl font-semibold text-neutral-content ${montserrat}`}>
                   Profile Information
                 </h1>
-                <p className={`text-sm text-neutral-600 dark:text-neutral-300 ${poppins}`}>
+                <p className={`text-sm text-neutral-content/70 ${poppins}`}>
                   Manage your personal and financial details
                 </p>
               </div>
@@ -291,10 +285,10 @@ export default function ProfileCard() {
             <Button
               onClick={() => setIsEditing(!isEditing)}
               variant={isEditing ? "outline" : "default"}
-              className={`${montserrat} font-semibold text-sm px-4 py-2 rounded-lg transition-all duration-300 ${
+              className={`${montserrat} font-semibold text-sm px-4 py-2 rounded-xl transition-all duration-300 ${
                 isEditing 
-                  ? "border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800" 
-                  : "bg-blue-500 text-white hover:bg-blue-600"
+                  ? "border-neutral-content/20 text-neutral hover:bg-neutral-content/60 bg-neutral-content" 
+                  : "bg-neutral-content text-neutral hover:bg-neutral-content/60"
               }`}
               disabled={isLoading}
             >
@@ -304,7 +298,7 @@ export default function ProfileCard() {
         </div>
 
         {error && (
-          <div className="mx-6 mt-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg" role="alert">
+          <div className="mx-6 mt-4 bg-error/10 border border-error/20 text-error px-4 py-3 rounded-xl" role="alert">
             <span className="block sm:inline text-sm font-medium">{error}</span>
           </div>
         )}
@@ -312,34 +306,34 @@ export default function ProfileCard() {
         <div className="p-6 space-y-8">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
-              <h2 className={`text-lg font-semibold text-neutral-800 dark:text-neutral-100 ${montserrat}`}>Personal Information</h2>
+              <div className="w-1 h-6 bg-warning rounded-full"></div>
+              <h2 className={`text-lg font-semibold text-neutral-content ${montserrat}`}>Personal Information</h2>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className={`${poppins} text-neutral-900 dark:text-neutral-100 font-semibold text-base`}>First Name</Label>
+                <Label className={`${poppins} text-neutral-content font-semibold text-base`}>First Name</Label>
                 <Input
                   type="text"
                   value={formValues.firstName}
                   onChange={handleInputChange("firstName")}
                   disabled={!isEditing || isLoading}
                   customDisabledCursor={!isEditing ? "disabled:cursor-default" : undefined}
-                  className={`${montserrat} text-base border border-neutral-200 dark:border-neutral-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 rounded-lg bg-white dark:bg-neutral-800 font-semibold p-3 ${
-                    !isEditing ? 'bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 border-neutral-100 dark:border-neutral-700' : 'bg-white dark:bg-neutral-800'
+                  className={`${montserrat} text-base border border-neutral-content/20 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-xl bg-neutral-focus text-neutral-content font-semibold p-3 ${
+                    !isEditing ? 'bg-neutral-focus/50 text-neutral-content border-neutral-content/10' : 'bg-neutral-focus'
                   }`}
                   placeholder="Enter first name"
                 />
               </div>
               <div className="space-y-2">
-                <Label className={`${poppins} text-neutral-900 dark:text-neutral-100 font-semibold text-base`}>Last Name</Label>
+                <Label className={`${poppins} text-neutral-content font-semibold text-base`}>Last Name</Label>
                 <Input
                   type="text"
                   value={formValues.lastName}
                   onChange={handleInputChange("lastName")}
                   disabled={!isEditing || isLoading}
                   customDisabledCursor={!isEditing ? "disabled:cursor-default" : undefined}
-                  className={`${montserrat} text-base border border-neutral-200 dark:border-neutral-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 rounded-lg bg-white dark:bg-neutral-800 font-semibold p-3 ${
-                    !isEditing ? 'bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 border-neutral-100 dark:border-neutral-700' : 'bg-white dark:bg-neutral-800'
+                  className={`${montserrat} text-base border border-neutral-content/20 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-xl bg-neutral-focus text-neutral-content font-semibold p-3 ${
+                    !isEditing ? 'bg-neutral-focus/50 text-neutral-content border-neutral-content/10' : 'bg-neutral-focus'
                   }`}
                   placeholder="Enter last name"
                 />
@@ -349,107 +343,107 @@ export default function ProfileCard() {
 
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-1 h-6 bg-green-500 rounded-full"></div>
-              <h2 className={`text-lg font-semibold text-neutral-800 dark:text-neutral-100 ${montserrat}`}>Financial Information</h2>
+              <div className="w-1 h-6 bg-success rounded-full"></div>
+              <h2 className={`text-lg font-semibold text-neutral-content ${montserrat}`}>Financial Information</h2>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label className={`${poppins} text-neutral-900 dark:text-neutral-100 font-semibold text-base`}>Monthly Salary</Label>
+                <Label className={`${poppins} text-neutral-content font-semibold text-base`}>Monthly Salary</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-semibold text-base text-neutral-700">₹</span>
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-semibold text-base text-neutral-content/70">₹</span>
                   <Input
                     type="text"
                     value={formValues.salary}
                     onChange={handleInputChange("salary")}
                     disabled={!isEditing || isLoading}
                     customDisabledCursor={!isEditing ? "disabled:cursor-default" : undefined}
-                    className={`${montserrat} text-base border border-neutral-200 dark:border-neutral-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 rounded-lg bg-white dark:bg-neutral-800 font-semibold p-3 pl-8 ${
-                      !isEditing ? 'bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 border-neutral-100 dark:border-neutral-700' : 'bg-white dark:bg-neutral-800'
+                    className={`${montserrat} text-base border border-neutral-content/20 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-xl bg-neutral-focus text-neutral-content font-semibold p-3 pl-8 ${
+                      !isEditing ? 'bg-neutral-focus/50 text-neutral-content border-neutral-content/10' : 'bg-neutral-focus'
                     }`}
                     placeholder="Enter monthly salary"
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label className={`${poppins} text-neutral-900 dark:text-neutral-100 font-semibold text-base`}>Monthly Expenses</Label>
+                <Label className={`${poppins} text-neutral-content font-semibold text-base`}>Monthly Expenses</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-semibold text-base text-neutral-700">₹</span>
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-semibold text-base text-neutral-content/70">₹</span>
                   <Input
                     type="text"
                     value={formValues.monthlyExpenses}
                     onChange={handleInputChange("monthlyExpenses")}
                     disabled={!isEditing || isLoading}
                     customDisabledCursor={!isEditing ? "disabled:cursor-default" : undefined}
-                    className={`${montserrat} text-base border border-neutral-200 dark:border-neutral-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 rounded-lg bg-white dark:bg-neutral-800 font-semibold p-3 pl-8 ${
-                      !isEditing ? 'bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 border-neutral-100 dark:border-neutral-700' : 'bg-white dark:bg-neutral-800'
+                    className={`${montserrat} text-base border border-neutral-content/20 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-xl bg-neutral-focus text-neutral-content font-semibold p-3 pl-8 ${
+                      !isEditing ? 'bg-neutral-focus/50 text-neutral-content border-neutral-content/10' : 'bg-neutral-focus'
                     }`}
                     placeholder="Enter monthly expenses"
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label className={`${poppins} text-neutral-900 dark:text-neutral-100 font-semibold text-base`}>Annual Increment Rate</Label>
+                <Label className={`${poppins} text-neutral-content font-semibold text-base`}>Annual Increment Rate</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-semibold text-base text-neutral-700">%</span>
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-semibold text-base text-neutral-content/70">%</span>
                   <Input
                     type="text"
                     value={formValues.annualIncrementRate}
                     onChange={handleInputChange("annualIncrementRate")}
                     disabled={!isEditing || isLoading}
                     customDisabledCursor={!isEditing ? "disabled:cursor-default" : undefined}
-                    className={`${montserrat} text-base border border-neutral-200 dark:border-neutral-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 rounded-lg bg-white dark:bg-neutral-800 font-semibold p-3 pl-8 ${
-                      !isEditing ? 'bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 border-neutral-100 dark:border-neutral-700' : 'bg-white dark:bg-neutral-800'
+                    className={`${montserrat} text-base border border-neutral-content/20 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-xl bg-neutral-focus text-neutral-content font-semibold p-3 pl-8 ${
+                      !isEditing ? 'bg-neutral-focus/50 text-neutral-content/70 border-neutral-content/10' : 'bg-neutral-focus'
                     }`}
                     placeholder="Enter annual increment rate"
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label className={`${poppins} text-neutral-900 dark:text-neutral-100 font-semibold text-base`}>Emergency Fund</Label>
+                <Label className={`${poppins} text-neutral-content font-semibold text-base`}>Emergency Fund</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-semibold text-base text-green-600">₹</span>
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-semibold text-base text-neutral-content/70">₹</span>
                   <Input
                     type="text"
                     value={formValues.emergencyFund}
                     onChange={handleInputChange("emergencyFund")}
                     disabled={!isEditing || isLoading}
                     customDisabledCursor={!isEditing ? "disabled:cursor-default" : undefined}
-                    className={`${montserrat} text-base border border-neutral-200 dark:border-neutral-700 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all duration-300 rounded-lg bg-white dark:bg-neutral-800 font-semibold p-3 pl-8 ${
-                      !isEditing ? 'bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 border-neutral-100 dark:border-neutral-700' : 'bg-white dark:bg-neutral-800'
+                    className={`${montserrat} text-base border border-neutral-content/20 focus:border-success focus:ring-2 focus:ring-success/20 transition-all duration-300 rounded-xl bg-neutral-focus text-neutral-content font-semibold p-3 pl-8 ${
+                      !isEditing ? 'bg-neutral-focus/50 text-neutral-content border-neutral-content/10' : 'bg-neutral-focus'
                     }`}
                     placeholder="Enter emergency fund amount"
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label className={`${poppins} text-neutral-900 dark:text-neutral-100 font-semibold text-base`}>Total Debt</Label>
+                <Label className={`${poppins} text-neutral-content font-semibold text-base`}>Total Debt</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-semibold text-base text-red-600">₹</span>
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-semibold text-base text-neutral-content/70">₹</span>
                   <Input
                     type="text"
                     value={formValues.debt}
                     onChange={handleInputChange("debt")}
                     disabled={!isEditing || isLoading}
                     customDisabledCursor={!isEditing ? "disabled:cursor-default" : undefined}
-                    className={`${montserrat} text-base border border-neutral-200 dark:border-neutral-700 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all duration-300 rounded-lg bg-white dark:bg-neutral-800 font-semibold p-3 pl-8 ${
-                      !isEditing ? 'bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 border-neutral-100 dark:border-neutral-700' : 'bg-white dark:bg-neutral-800'
+                    className={`${montserrat} text-base border border-neutral-content/20 focus:border-error focus:ring-2 focus:ring-error/20 transition-all duration-300 rounded-xl bg-neutral-focus text-neutral-content font-semibold p-3 pl-8 ${
+                      !isEditing ? 'bg-neutral-focus/50 text-neutral-content border-neutral-content/10' : 'bg-neutral-focus'
                     }`}
                     placeholder="Enter total debt"
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label className={`${poppins} text-neutral-900 dark:text-neutral-100 font-semibold text-base`}>Net Worth</Label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-semibold text-base text-emerald-600">₹</span>
+              <Label className={`${poppins} text-neutral-content font-semibold text-base`}>Net Worth</Label>
+              <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-semibold text-base text-neutral-content/70">₹</span>
                   <Input
                     type="text"
                     value={formValues.netWorth}
                     onChange={handleInputChange("netWorth")}
                     disabled={!isEditing || isLoading}
                     customDisabledCursor={!isEditing ? "disabled:cursor-default" : undefined}
-                    className={`${montserrat} text-base border border-neutral-200 dark:border-neutral-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-300 rounded-lg bg-white dark:bg-neutral-800 font-semibold p-3 pl-8 ${
-                      !isEditing ? 'bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 border-neutral-100 dark:border-neutral-700' : 'bg-white dark:bg-neutral-800'
+                    className={`${montserrat} text-base border border-neutral-content/20 focus:border-success focus:ring-2 focus:ring-success/20 transition-all duration-300 rounded-xl bg-neutral-focus text-neutral-content font-semibold p-3 pl-8 ${
+                      !isEditing ? 'bg-neutral-focus/50 text-neutral-content border-neutral-content/10' : 'bg-neutral-focus'
                     }`}
                     placeholder="Enter net worth"
                   />
@@ -463,14 +457,14 @@ export default function ProfileCard() {
               <Button
                 onClick={handleCancel}
                 variant="outline"
-                className={`${montserrat} font-semibold text-sm px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all duration-300`}
+                className={`border-neutral-content/20 text-neutral-content hover:bg-neutral-focus hover:text-neutral-content bg-transparent ${montserrat} font-semibold text-sm px-4 py-2 rounded-xl transition-all duration-300`}
                 disabled={isLoading}
               >
                 Cancel
               </Button>
               <Button
                 onClick={handleSave}
-                className={`bg-blue-500 hover:bg-blue-600 text-white ${montserrat} font-semibold text-sm px-4 py-2 rounded-lg transition-all duration-300`}
+                className={`bg-neutral-content text-neutral hover:bg-neutral-content/60 border-neutral-content ${montserrat} font-semibold text-sm px-4 py-2 rounded-xl transition-all duration-300`}
                 disabled={isLoading}
               >
                 {isLoading ? "Saving..." : "Save Changes"}

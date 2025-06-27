@@ -62,18 +62,18 @@ const TiltCard = () => {
         transform,
       }}
       onClick={() => router.push("/user/goals")}
-      className="relative h-96 w-72 rounded-xl bg-[#c3bebea1] cursor-pointer"
+      className="relative h-96 w-72 rounded-xl bg-neutral-content/10 cursor-pointer"
     >
       <div
         style={{
           transform: "translateZ(75px)",
           transformStyle: "preserve-3d",
         }}
-        className="absolute inset-4 grid place-content-center gap-3 rounded-xl bg-white shadow-lg"
+        className="absolute inset-4 grid place-content-center gap-3 rounded-xl bg-neutral shadow-lg"
       >
         <Image src={car} alt="wealth"/>
         <div className="flex justify-center font-semibold text-2xl items-center">
-            <p className={`${montserrat} `}>Buy a Car</p>
+            <p className={`${montserrat} text-neutral-content`}>Buy a Car</p>
         </div>
       </div>
     </motion.div>

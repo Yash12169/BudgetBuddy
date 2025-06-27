@@ -7,6 +7,9 @@ import { toast } from "sonner";
 import { montserrat, poppins } from "@/fonts/fonts";
 import goalTracker from "../../assets/dash-goal-tracker.svg";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 const formatNumber = (value: string | number): string => {
   const str = value.toString().replace(/,/g, "");
@@ -111,51 +114,51 @@ export default function AddGoalCard() {
   };
 
   return (
-    <div className="flex w-full h-fit flex-col bg-accent text-accent-foreground shadow-lg rounded-[30px] p-7 gap-10">
+    <div className="flex w-full h-fit flex-col bg-neutral text-neutral-content shadow-lg rounded-2xl p-7 gap-6 border border-neutral-content/20">
       <div className="flex items-center gap-4">
-        <div className="p-3 rounded-full bg-[#6F39C5]/10">
+        <div className="p-3 rounded-full bg-primary/10">
           <Image src={goalTracker} height={40} width={40} alt="Goal Tracker"/>
         </div>
         <div className="flex flex-col">
-          <div className="text-xl text-black font-semibold">
+          <div className="text-xl text-neutral-content font-semibold">
             <p className={montserrat}>Create a Goal</p>
           </div>
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-neutral-content/70">
             <p className={montserrat}>Set a new financial goal to stay on track!</p>
           </div>
         </div>
       </div>
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <div className="bg-error/10 border border-error/20 text-error px-4 py-3 rounded relative" role="alert">
           <span className="block sm:inline">{error}</span>
         </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>
-              Goal Title <span className="text-red-600 text-xl">*</span>
-            </label>
-            <input
+          <div className="space-y-2">
+            <Label className={`${poppins} text-neutral-content font-semibold text-base`}>
+              Goal Title <span className="text-error text-xl">*</span>
+            </Label>
+            <Input
               type="text"
               value={formValues.title}
               onChange={handleInputChange("title")}
-              className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-full`}
               disabled={isLoading}
+              className={`${montserrat} text-base border border-neutral-content/20 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-xl bg-neutral-focus text-neutral-content font-semibold p-3`}
               placeholder="Dream Home, New Car, etc."
             />
           </div>
-          <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>
-              Category <span className="text-red-600 text-xl">*</span>
-            </label>
+          <div className="space-y-2">
+            <Label className={`${poppins} text-neutral-content font-semibold text-base`}>
+              Category <span className="text-error text-xl">*</span>
+            </Label>
             <select
               value={formValues.category}
               onChange={handleInputChange("category")}
-              className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-full`}
               disabled={isLoading}
+              className={`${montserrat} text-base border border-neutral-content/20 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-xl bg-neutral-focus text-neutral-content font-semibold p-3 w-full`}
             >
               <option value="">Select Category</option>
               <option value="realEstate">Real Estate</option>
@@ -164,32 +167,32 @@ export default function AddGoalCard() {
               <option value="general">General</option>
             </select>
           </div>
-          <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>
-              Target Amount <span className="text-red-600 text-xl">*</span>
-            </label>
-            <div className="flex items-center gap-3">
-              <p className="font-semibold text-lg">₹</p>
-              <input
+          <div className="space-y-2">
+            <Label className={`${poppins} text-neutral-content font-semibold text-base`}>
+              Target Amount <span className="text-error text-xl">*</span>
+            </Label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 font-semibold text-base text-neutral-content/70">₹</span>
+              <Input
                 type="text"
                 value={formValues.targetAmount}
                 onChange={handleInputChange("targetAmount")}
-                className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-full`}
                 disabled={isLoading}
+                className={`${montserrat} text-base border border-neutral-content/20 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-xl bg-neutral-focus text-neutral-content font-semibold p-3 pl-8`}
                 placeholder="Enter amount"
               />
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>
-              Years to Goal <span className="text-red-600 text-xl">*</span>
-            </label>
-            <input
+          <div className="space-y-2">
+            <Label className={`${poppins} text-neutral-content font-semibold text-base`}>
+              Years to Goal <span className="text-error text-xl">*</span>
+            </Label>
+            <Input
               type="text"
               value={formValues.yearsToGoal}
               onChange={handleInputChange("yearsToGoal")}
-              className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-full`}
               disabled={isLoading}
+              className={`${montserrat} text-base border border-neutral-content/20 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 rounded-xl bg-neutral-focus text-neutral-content font-semibold p-3`}
               placeholder="5"
               inputMode="numeric"
               pattern="[0-9]*"
@@ -197,34 +200,34 @@ export default function AddGoalCard() {
           </div>
           <div></div>
         </div>
-        <div className="flex flex-col gap-6 bg-[#6F39C5]/5 p-6 rounded-[20px]">
+        <div className="flex flex-col gap-6 bg-base-300 p-6 rounded-[20px] border border-neutral-content/50">
           <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>Goal Setting Tips</label>
+            <Label className={`${poppins} text-neutral-content/80`}>Goal Setting Tips</Label>
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                <p className={`${poppins} text-sm`}>Be specific about your goal amount</p>
+                <div className="w-2 h-2 rounded-full bg-neutral-content/70"></div>
+                <p className={`${poppins} text-sm text-neutral-content/70`}>Be specific about your goal amount</p>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                <p className={`${poppins} text-sm`}>Set realistic timeframes</p>
+                <div className="w-2 h-2 rounded-full bg-neutral-content/70"></div>
+                <p className={`${poppins} text-sm text-neutral-content/70`}>Set realistic timeframes</p>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                <p className={`${poppins} text-sm`}>Consider inflation and salary growth</p>
+                <div className="w-2 h-2 rounded-full bg-neutral-content/70"></div>
+                <p className={`${poppins} text-sm text-neutral-content/70`}>Consider inflation and salary growth</p>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>Motivation</label>
-            <p className={`${poppins} text-sm text-gray-600`}>
+            <Label className={`${poppins} text-neutral-content/80`}>Motivation</Label>
+            <p className={`${poppins} text-sm text-neutral-content/70`}>
               Setting clear, achievable goals is the first step towards financial success. Every great achievement starts with a plan!
             </p>
           </div>
           <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>Reminder</label>
-            <p className={`${poppins} text-sm text-gray-600`}>
+            <Label className={`${poppins} text-neutral-content/80`}>Reminder</Label>
+            <p className={`${poppins} text-sm text-neutral-content/70`}>
               Your current salary from your financial profile will be used for goal calculations. Please ensure your salary is up to date in your financial checkup section.
             </p>
           </div>
@@ -232,26 +235,21 @@ export default function AddGoalCard() {
       </div>
 
       <div className="flex gap-5">
-        <button
+        <Button
           onClick={() => router.push("/user/goals")}
+          variant="outline"
           disabled={isLoading}
-          className={`flex justify-center items-center text-[#6F39C5] border-2 border-[#6F39C5] px-5 py-2 rounded-[25px] cursor-pointer hover:bg-[#6F39C5] hover:text-white transition-all duration-300 ${
-            isLoading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className={`border-neutral-content/20 text-neutral-content hover:bg-neutral-focus hover:text-neutral-content bg-transparent ${montserrat} font-semibold text-sm px-4 py-2 rounded-xl transition-all duration-300`}
         >
-          <p className={`${montserrat} font-semibold`}>Cancel</p>
-        </button>
-        <button
+          Cancel
+        </Button>
+        <Button
           onClick={handleSubmit}
           disabled={isLoading}
-          className={`flex justify-center items-center bg-[#6F39C5] px-6 py-2 rounded-[25px] text-white cursor-pointer hover:bg-[#5a2fa0] transition-all duration-300 ${
-            isLoading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className={`bg-neutral-content text-neutral hover:bg-neutral-content/60 border-neutral-content ${montserrat} font-semibold text-sm px-4 py-2 rounded-xl transition-all duration-300`}
         >
-          <p className={`${montserrat} font-semibold`}>
-            {isLoading ? "Creating..." : "Create Goal"}
-          </p>
-        </button>
+          {isLoading ? "Creating..." : "Create Goal"}
+        </Button>
       </div>
     </div>
   );

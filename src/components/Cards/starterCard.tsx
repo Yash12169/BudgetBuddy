@@ -42,12 +42,27 @@ export default function StarterCard() {
   // Show loading state while data is being fetched
   if (!user || !financials) {
     return (
-      <div className="flex gap-4 flex-col h-[100%] px-5 py-9 bg-neutral text-neutral-content rounded-[30px]">
-        <div className="flex w-full flex-col gap-4">
-          <div className="skeleton h-32 w-full"></div>
-          <div className="skeleton h-4 w-28"></div>
-          <div className="skeleton h-4 w-full"></div>
-          <div className="skeleton h-4 w-full"></div>
+      <div className="bg-neutral flex flex-col gap-3 w-full h-full px-4 py-4 md:px-6 md:py-6 text-neutral-content rounded-2xl max-w-sm mx-auto md:max-w-full border border-neutral-content/20">
+        {/* Avatar and greeting skeleton */}
+        <div className="flex flex-col text-center items-center gap-2 md:gap-3 flex-1 justify-center">
+          <div className="rounded-full h-24 w-24 md:h-36 md:w-36 p-1 flex justify-center items-center border-4 border-purple-500 shadow-[0_0_10px_#A020F0] md:shadow-[0_0_15px_#A020F0]">
+            <div className="skeleton w-full h-full rounded-full"></div>
+          </div>
+          <div className="text-neutral-content">
+            <div className="skeleton h-5 w-32 md:w-40"></div>
+          </div>
+        </div>
+      
+        {/* Net worth and financial health skeleton */}
+        <div className="flex justify-between mt-1">
+          <div className="flex flex-col gap-0.5 md:gap-1">
+            <div className="skeleton h-3 w-20 md:w-24"></div>
+            <div className="skeleton h-4 w-16 md:w-20"></div>
+          </div>
+          <div className="flex flex-col gap-0.5 md:gap-1">
+            <div className="skeleton h-3 w-24 md:w-28"></div>
+            <div className="skeleton h-6 w-16 md:w-20 rounded-full"></div>
+          </div>
         </div>
       </div>
     );
@@ -75,9 +90,9 @@ export default function StarterCard() {
   const imageUrl = userImg || "/default-avatar.svg";
 
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-black flex flex-col gap-4 w-full h-full px-4 py-4 md:px-5 md:py-5 text-neutral-content rounded-[30px] max-w-sm mx-auto md:max-w-full">
+    <div className="bg-neutral flex flex-col gap-3 w-full h-full px-4 py-4 md:px-6 md:py-6 text-neutral-content rounded-2xl max-w-sm mx-auto md:max-w-full border border-neutral-content/20">
      
-      <div className="flex flex-col text-center items-center gap-2 md:gap-4">
+      <div className="flex flex-col text-center items-center gap-2 md:gap-3 flex-1 justify-center">
         <div className="rounded-full h-24 w-24 p-1 flex justify-center items-center border-4 border-purple-500 shadow-[0_0_10px_#A020F0] md:h-36 md:w-36 md:p-2 md:shadow-[0_0_15px_#A020F0]">
           <Image
             src={imageUrl}
@@ -88,25 +103,25 @@ export default function StarterCard() {
             className="object-cover w-full h-full rounded-full"
           />
         </div>
-        <div className="text-white">
+        <div className="text-neutral-content">
           <p className={`${montserrat} text-base md:text-lg`}>
             <span className="font-semibold">Hi</span>,
-            <span className="text-gray-300"> {firstName}</span>
+            <span className="text-neutral-content/70"> {firstName}</span>
           </p>
         </div>
       </div>
     
-      <div className={`flex justify-between ${poppins} mt-2`}>
+      <div className={`flex justify-between ${poppins} mt-1`}>
         <div className="flex flex-col gap-0.5 md:gap-1">
-          <div className="text-xs md:text-sm">
+          <div className="text-xs md:text-sm text-neutral-content/80">
             <p>Your net Worth</p>
           </div>
-          <div className="font-semibold text-base text-white md:text-lg">
+          <div className="font-semibold text-base text-neutral-content md:text-lg">
             <p>{formatAmount(netWorth)}</p>
           </div>
         </div>
         <div className="flex flex-col gap-0.5 md:gap-1">
-          <div className="text-xs md:text-sm">
+          <div className="text-xs md:text-sm text-neutral-content/80">
             <p>Your financial Health</p>
           </div>
           <div>

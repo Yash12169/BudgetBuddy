@@ -48,12 +48,41 @@ export default function Habits() {
 
   if (!financials) {
     return (
-      <div className="flex gap-4 flex-col h-[100%] px-5 py-9 bg-neutral text-neutral-content rounded-[30px]">
-        <div className="flex w-full flex-col gap-4">
-          <div className="skeleton h-32 w-full"></div>
-          <div className="skeleton h-4 w-28"></div>
-          <div className="skeleton h-4 w-full"></div>
-          <div className="skeleton h-4 w-full"></div>
+      <div className="flex flex-col p-5 h-[45vh] justify-between bg-neutral text-neutral-content rounded-2xl border border-neutral-content/20">
+        <div className="flex flex-col items-center gap-5">
+          <div className="skeleton w-16 h-16 rounded-full"></div>
+          <div className="skeleton h-6 w-32"></div>
+        </div>
+
+        <div className="flex justify-between">
+          <div className="flex flex-col gap-5">
+            <div className="gap-1 flex flex-col">
+              <div className="skeleton h-4 w-24"></div>
+              <div className="skeleton h-6 w-20"></div>
+            </div>
+            <div className="gap-1 flex flex-col">
+              <div className="skeleton h-4 w-20"></div>
+              <div className="skeleton h-6 w-16"></div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-5">
+            <div className="gap-1 flex flex-col">
+              <div className="skeleton h-4 w-16"></div>
+              <div className="skeleton h-6 w-12"></div>
+            </div>
+            <div className="gap-1 flex flex-col">
+              <div className="skeleton h-4 w-12"></div>
+              <div className="skeleton h-6 w-16"></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-5">
+          <div className="bg-neutral-content/20 rounded-full h-[1px] w-full"></div>
+          <div className="flex justify-between">
+            <div className="skeleton h-8 w-16 rounded-full"></div>
+          </div>
         </div>
       </div>
     );
@@ -83,12 +112,12 @@ export default function Habits() {
   };
 
   return (
-    <div className="flex flex-col p-5 h-[45vh] justify-between text-black">
+    <div className="flex flex-col p-5 h-[45vh] justify-between bg-neutral text-neutral-content rounded-2xl border border-neutral-content/20">
       <div className="flex flex-col items-center gap-5">
-        <div className="p-4 rounded-full">
+        <div className="p-4 rounded-full bg-neutral-focus">
           <Image src={card} height={50} width={50} alt="Spending Habits"/>
         </div>
-        <div className={`${montserrat} text-xl font-semibold`}>
+        <div className={`${montserrat} text-xl font-semibold text-neutral-content`}>
           <p>Spending Habit</p>
         </div>
       </div>
@@ -96,19 +125,19 @@ export default function Habits() {
       <div className="flex justify-between">
         <div className={`${poppins} flex flex-col gap-5`}>
           <div className="gap-1 flex flex-col">
-            <div className="text-sm text-[#36454F]">
+            <div className="text-sm text-neutral-content/70">
               <p>Monthly Income:</p>
             </div>
-            <div className="font-semibold text-lg">
+            <div className="font-semibold text-lg text-neutral-content">
               <p>{formatAmount(financials.allData.salary)}</p>
             </div>
           </div>
 
           <div className="gap-1 flex flex-col">
-            <div className="text-sm text-[#36454F]">
+            <div className="text-sm text-neutral-content/70">
               <p>Expenses:</p>
             </div>
-            <div className="font-semibold text-lg">
+            <div className="font-semibold text-lg text-neutral-content">
               <p>{formatAmount(totalExpenses)}</p>
             </div>
           </div>
@@ -116,16 +145,16 @@ export default function Habits() {
 
         <div className={`${poppins} flex flex-col gap-5`}>
           <div className="gap-1 flex flex-col">
-            <div className="text-sm text-[#36454F]">
+            <div className="text-sm text-neutral-content/70">
               <p>Savings:</p>
             </div>
-            <div className="font-semibold text-lg">
+            <div className="font-semibold text-lg text-neutral-content">
               <p>{savingsPercent.toFixed(2)}%</p>
             </div>
           </div>
 
           <div className="gap-1 flex flex-col">
-            <div className="text-sm text-[#36454F]">
+            <div className="text-sm text-neutral-content/70">
               <p>Habit:</p>
             </div>
             <div>
@@ -138,7 +167,7 @@ export default function Habits() {
       </div>
 
       <div className="flex flex-col gap-5">
-        <div className="bg-[#c9cac88b] rounded-full h-[1px] w-full"></div>
+        <div className="bg-neutral-content/20 rounded-full h-[1px] w-full"></div>
         <div className="flex justify-between">
 
 
@@ -146,16 +175,16 @@ export default function Habits() {
             <DialogTrigger asChild>
               <div 
                 onClick={handleView}
-                className="bg-black text-white rounded-[30px] px-5 py-1 cursor-pointer flex justify-center items-center hover:bg-black/90 transition-all duration-300"
+                className="bg-neutral-content text-neutral rounded-[30px] px-5 py-1 cursor-pointer flex justify-center items-center hover:bg-neutral-content/90 transition-all duration-300"
               >
                 <p className={`${poppins} font-semibold text-sm`}>View</p>
               </div>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800">
-              <DialogHeader className="pb-4 border-b border-gray-100 dark:border-gray-800">
-                <DialogTitle className={`${montserrat} text-xl flex items-center gap-3 text-gray-800 dark:text-gray-200`}>
-                  <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <Wallet className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <DialogContent className="sm:max-w-[425px] bg-neutral border border-neutral-content/20 rounded-2xl shadow-xl">
+              <DialogHeader className="pb-4 border-b border-neutral-content/20">
+                <DialogTitle className={`${montserrat} text-xl flex items-center gap-3 text-neutral-content`}>
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Wallet className="w-6 h-6 text-primary" />
                   </div>
                   Spending Breakdown
                 </DialogTitle>
@@ -163,36 +192,36 @@ export default function Habits() {
               <div className="grid gap-6 py-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 mb-1">
-                    <div className="w-1.5 h-5 bg-blue-500 rounded-full"></div>
-                    <div className="text-base font-semibold text-gray-700 dark:text-gray-300">Expenses</div>
+                    <div className="w-1.5 h-5 bg-primary rounded-full"></div>
+                    <div className="text-base font-semibold text-neutral-content">Expenses</div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 gap-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-neutral-focus border border-neutral-content/10 gap-4">
                       <div className="flex items-center gap-3">
-                        <span className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                          <Receipt className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <span className="p-2 bg-neutral-content/10 rounded-lg flex items-center justify-center">
+                          <Receipt className="w-5 h-5 text-neutral-content/70" />
                         </span>
-                        <span className={`${poppins} text-base font-medium text-gray-700 dark:text-gray-300`}>Basic Expenses</span>
+                        <span className={`${poppins} text-base font-medium text-neutral-content`}>Basic Expenses</span>
                       </div>
-                      <span className={`${poppins} text-lg font-semibold text-gray-900 dark:text-gray-100`}>{formatAmount(financials.allData.expenses || 0)}</span>
+                      <span className={`${poppins} text-lg font-semibold text-neutral-content`}>{formatAmount(financials.allData.expenses || 0)}</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 gap-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-neutral-focus border border-neutral-content/10 gap-4">
                       <div className="flex items-center gap-3">
-                        <span className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                          <PlusCircle className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <span className="p-2 bg-neutral-content/10 rounded-lg flex items-center justify-center">
+                          <PlusCircle className="w-5 h-5 text-neutral-content/70" />
                         </span>
-                        <span className={`${poppins} text-base font-medium text-gray-700 dark:text-gray-300`}>Extra Expenses</span>
+                        <span className={`${poppins} text-base font-medium text-neutral-content`}>Extra Expenses</span>
                       </div>
-                      <span className={`${poppins} text-lg font-semibold text-gray-900 dark:text-gray-100`}>{formatAmount(financials.allData.extraExpenses || 0)}</span>
+                      <span className={`${poppins} text-lg font-semibold text-neutral-content`}>{formatAmount(financials.allData.extraExpenses || 0)}</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 gap-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-neutral-focus border border-neutral-content/10 gap-4">
                       <div className="flex items-center gap-3">
-                        <span className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                          <Shield className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <span className="p-2 bg-neutral-content/10 rounded-lg flex items-center justify-center">
+                          <Shield className="w-5 h-5 text-neutral-content/70" />
                         </span>
-                        <span className={`${poppins} text-base font-medium text-gray-700 dark:text-gray-300`}>Insurance</span>
+                        <span className={`${poppins} text-base font-medium text-neutral-content`}>Insurance</span>
                       </div>
-                      <span className={`${poppins} text-lg font-semibold text-gray-900 dark:text-gray-100`}>{formatAmount(financials.allData.insurancePremium || 0)}</span>
+                      <span className={`${poppins} text-lg font-semibold text-neutral-content`}>{formatAmount(financials.allData.insurancePremium || 0)}</span>
                     </div>
                   </div>
                 </div>
@@ -266,7 +295,7 @@ export default function Habits() {
           </Dialog>          
           <div 
             onClick={handleReCheck}
-            className="flex justify-center items-center border-2 border-black hover:bg-black hover:text-white transition-all duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer relative overflow-hidden group"
+            className="flex justify-center items-center border-2 border-neutral-content hover:bg-neutral-content hover:text-neutral transition-all duration-300 text-neutral-content rounded-[30px] px-5 py-1 cursor-pointer relative overflow-hidden group"
           >
             <p className={`${poppins} font-semibold text-sm transition-opacity duration-300 ${isNavigating ? 'opacity-0' : 'opacity-100'}`}>
               Re-Check
@@ -276,7 +305,7 @@ export default function Habits() {
                 <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
               </div>
             )}
-            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 bg-neutral-content opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
           </div>
         </div>
       </div>

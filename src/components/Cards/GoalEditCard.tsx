@@ -88,6 +88,7 @@ export default function GoalEditCard({ goal }: { goal: Goal }) {
   const [financialData] = useAtom(financialAtom);
   
   const [isLoading, setIsLoading] = useState(false);
+  const [showSampleGoals, setShowSampleGoals] = useState(false);
   const [formValues, setFormValues] = useState({
     title: goal.title || "",
     targetAmount: formatNumber(goal.targetAmount || 0),

@@ -1,9 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { LogOut, ChevronRight } from "lucide-react";
-import { SignOutButton } from "@clerk/nextjs";
-import { motion, AnimatePresence } from "framer-motion";
+import { ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useSidebar } from "@/components/ui/sidebar";
 import Image from "next/image";
@@ -54,26 +53,17 @@ const data = {
 };
 
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
-  const [burst, setBurst] = React.useState(false);
-  const [isSigningOut, setIsSigningOut] = React.useState(false);
   const [hoveredItem, setHoveredItem] = React.useState<string | null>(null);
   const router = useRouter();
   const { state } = useSidebar();
-
-  const handleSignOut = () => {
-    setIsSigningOut(true);
-    setBurst(true);
-    setTimeout(() => setBurst(false), 500);
-    setTimeout(() => router.push("/"), 1000);
-  };
 
   return (
     <Sidebar
       collapsible="icon"
       {...props}
-      className="group/sidebar data-[collapsible=icon]:w-14 w-80 min-w-14 transition-all duration-300 bg-gradient-to-br from-blue-25/80 via-sky-25/75 to-slate-50/80 dark:from-slate-900/90 dark:via-blue-950/85 dark:to-slate-900/90 backdrop-blur-xl relative overflow-hidden"
+      className="group/sidebar data-[collapsible=icon]:w-14 w-80 min-w-14 transition-all duration-300 bg-base-100 border-r border-base-300 relative overflow-hidden sticky top-0 h-screen"
     >
-      <SidebarHeader className="relative flex items-center h-20 group-data-[collapsible=icon]/sidebar:h-16 border-b border-blue-100/40 dark:border-blue-800/40 transition-all duration-300">
+      <SidebarHeader className="relative flex items-center h-20 group-data-[collapsible=icon]/sidebar:h-16 border-b border-base-300 transition-all duration-300 bg-base-200">
         <motion.div
           className="flex items-center w-full h-full gap-4 min-w-0 overflow-hidden"
           initial={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -86,7 +76,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
               alt="BudgetBuddy Logo"
               width={48}
               height={48}
-              className="object-contain rounded-xl shadow-lg border-2 border-blue-200 dark:border-blue-800"
+              className="object-contain rounded-xl shadow-lg border-2 border-base-300"
               style={{
                 minHeight: "36px",
                 minWidth: "36px",
@@ -97,14 +87,14 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
             />
           </div>
           {state !== "collapsed" && (
-            <h1 className="text-2xl sm:text-xl font-extrabold text-blue-800 dark:text-blue-200 tracking-wide break-words text-wrap max-w-xs leading-tight">
+            <h1 className="text-2xl sm:text-xl font-extrabold text-base-content tracking-wide break-words text-wrap max-w-xs leading-tight">
               BudgetBuddy
             </h1>
           )}
         </motion.div>
       </SidebarHeader>
 
-      <SidebarContent className="relative flex flex-col flex-1 justify-between">
+      <SidebarContent className="relative flex flex-col flex-1 justify-between bg-base-200">
         <div
           className={`p-4 space-y-2 ${
             state === "collapsed"
@@ -116,7 +106,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
             <motion.a
               key={item.title}
               href={item.url}
-              className={`relative flex items-center rounded-2xl p-3 group-data-[collapsible=icon]/sidebar:p-2 hover:bg-blue-100/20 dark:hover:bg-blue-900/20 transition-all duration-200 ${
+              className={`relative flex items-center rounded-2xl p-3 group-data-[collapsible=icon]/sidebar:p-2 bg-base-200 hover:bg-base-300 transition-all duration-200 ${
                 state === "collapsed" ? "justify-center w-full" : ""
               }`}
               onMouseEnter={() => setHoveredItem(item.title)}
@@ -152,10 +142,10 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
               </div>
               {state !== "collapsed" && (
                 <div className="ml-4 flex-1">
-                  <p className="font-semibold text-base text-blue-700 dark:text-blue-300">
+                  <p className="font-semibold text-base text-base-content">
                     {item.title}
                   </p>
-                  <p className="text-sm text-blue-500 dark:text-blue-400">
+                  <p className="text-sm text-base-content/70">
                     {item.description}
                   </p>
                 </div>
@@ -165,46 +155,11 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                   animate={{ x: hoveredItem === item.title ? 6 : 0 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <ChevronRight className="w-4 h-4 text-blue-400 opacity-0 group-hover:opacity-70" />
+                  <ChevronRight className="w-4 h-4 text-base-content/50 opacity-0 group-hover:opacity-70" />
                 </motion.div>
               )}
             </motion.a>
           ))}
-        </div>
-
-        <div className="p-4 border-t border-blue-100/40 dark:border-blue-800/40">
-          <SignOutButton>
-            <motion.button
-              onClick={handleSignOut}
-              disabled={isSigningOut}
-              className="relative flex w-full items-center rounded-2xl p-3 group-data-[collapsible=icon]/sidebar:p-2 bg-red-100/20 dark:bg-red-900/20 hover:bg-red-100/40 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 transition-all duration-200"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <div className="flex-shrink-0">
-                <LogOut className="w-5 h-5" />
-              </div>
-              {state !== "collapsed" && (
-                <span className="ml-3">
-                  {isSigningOut ? "Signing out..." : "Sign out"}
-                </span>
-              )}
-              <AnimatePresence>
-                {burst && (
-                  <motion.div
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{
-                      scale: [0, 1.2, 2],
-                      opacity: [0, 0.6, 0],
-                    }}
-                    exit={{ scale: 0, opacity: 0 }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
-                    className="absolute inset-0 bg-red-300/20 rounded-2xl pointer-events-none"
-                  />
-                )}
-              </AnimatePresence>
-            </motion.button>
-          </SignOutButton>
         </div>
       </SidebarContent>
       <SidebarRail />

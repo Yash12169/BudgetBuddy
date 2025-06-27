@@ -102,12 +102,46 @@ export default function EmergencyFundEdit() {
 
   if (!emergencyFund || !financials) {
     return (
-      <div className="flex gap-4 flex-col h-fit px-5 py-9 bg-neutral text-neutral-content rounded-[30px]">
-        <div className="flex w-full flex-col gap-4">
-          <div className="skeleton h-32 w-full"></div>
-          <div className="skeleton h-4 w-28"></div>
-          <div className="skeleton h-4 w-full"></div>
-          <div className="skeleton h-4 w-full"></div>
+      <div className="flex w-full h-fit flex-col bg-neutral text-neutral-content shadow-lg rounded-2xl p-7 gap-10 border border-neutral-content/20">
+        <div className="flex items-center gap-4">
+          <div className="skeleton w-16 h-16 rounded-full"></div>
+          <div className="flex flex-col gap-2">
+            <div className="skeleton h-6 w-40"></div>
+            <div className="skeleton h-4 w-64"></div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <div className="skeleton h-4 w-32"></div>
+              <div className="skeleton h-10 w-full rounded-xl"></div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="skeleton h-4 w-24"></div>
+              <div className="skeleton h-10 w-full rounded-xl"></div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-6 bg-primary/5 p-6 rounded-2xl border border-neutral-content/20">
+            <div className="flex flex-col gap-2">
+              <div className="skeleton h-4 w-28"></div>
+              <div className="skeleton h-8 w-24"></div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="skeleton h-4 w-20"></div>
+              <div className="skeleton h-8 w-20"></div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="skeleton h-4 w-24"></div>
+              <div className="skeleton h-8 w-20"></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex gap-4">
+          <div className="skeleton h-10 w-24 rounded-xl"></div>
+          <div className="skeleton h-10 w-24 rounded-xl"></div>
         </div>
       </div>
     );
@@ -122,23 +156,23 @@ export default function EmergencyFundEdit() {
   const status = emergencyFund?.emergencyFundStatus?.status || "critical";
 
   return (
-    <div className="flex w-full h-fit flex-col bg-accent text-accent-foreground shadow-lg rounded-[30px] p-7 gap-10">
+    <div className="flex w-full h-fit flex-col bg-neutral text-neutral-content shadow-lg rounded-2xl p-7 gap-10 border border-neutral-content/20">
       <div className="flex items-center gap-4">
-        <div className="p-3 rounded-full bg-[#6F39C5]/10">
+        <div className="p-3 rounded-full bg-primary/10">
           <Image src={siren} height={40} width={40} alt="Emergency Fund"/>
         </div>
         <div className="flex flex-col">
-          <div className="text-xl text-black font-semibold">
+          <div className="text-xl text-neutral-content font-semibold">
             <p className={montserrat}>Emergency Fund</p>
           </div>
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-neutral-content/80">
             <p className={montserrat}>Update your emergency fund amount</p>
           </div>
         </div>
       </div>
 
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <div className="bg-error/10 border border-error/20 text-error px-4 py-3 rounded-lg relative" role="alert">
           <span className="block sm:inline">{error}</span>
         </div>
       )}
@@ -146,16 +180,16 @@ export default function EmergencyFundEdit() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>
-              Emergency Fund Amount <span className="text-red-600 text-xl">*</span>
+            <label className={`${poppins} text-neutral-content`}>
+              Emergency Fund Amount <span className="text-error text-xl">*</span>
             </label>
             <div className="flex items-center gap-3">
-              <p className="font-semibold text-lg">₹</p>
+              <p className="font-semibold text-lg text-neutral-content">₹</p>
               <input
                 type="text"
                 value={formValues.emergencyFund}
                 onChange={handleInputChange("emergencyFund")}
-                className={`bg-white rounded-[15px] px-3 py-2 ${montserrat} border-2 border-gray-200 font-semibold focus:outline-none focus:border-[#6F39C5] transition-all duration-300 ease-in-out w-full`}
+                className={`bg-base-100 text-base-content rounded-xl px-3 py-2 ${montserrat} border-2 border-neutral-content/20 font-semibold focus:outline-none focus:border-primary transition-all duration-300 ease-in-out w-full`}
                 disabled={isLoading}
                 placeholder="Enter amount"
               />
@@ -163,26 +197,26 @@ export default function EmergencyFundEdit() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>Monthly Salary</label>
+            <label className={`${poppins} text-neutral-content`}>Monthly Salary</label>
             <div className="flex items-center gap-3">
-              <p className="font-semibold text-lg">₹</p>
+              <p className="font-semibold text-lg text-neutral-content">₹</p>
               <input
                 type="text"
                 value={formatNumber(
                   financials.allData.salary
                 )}
                 disabled
-                className={`bg-[#c3c3c38e] rounded-[15px] px-3 py-2 ${montserrat} border-2 border-[#747373] font-semibold w-full`}
+                className={`bg-neutral-focus text-neutral-content rounded-xl px-3 py-2 ${montserrat} border-2 border-neutral-content/30 font-semibold w-full`}
               />
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-6 bg-[#6F39C5]/5 p-6 rounded-[20px]">
+        <div className="flex flex-col gap-6 bg-primary/5 p-6 rounded-2xl border border-neutral-content/20">
           <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>Current Coverage</label>
+            <label className={`${poppins} text-neutral-content`}>Current Coverage</label>
             <div className="flex items-center gap-3">
-              <div className="text-2xl font-bold text-[#6F39C5]">
+              <div className="text-2xl font-bold text-base-content">
                 {currentMonthsCovered} months
               </div>
               <div>
@@ -206,22 +240,22 @@ export default function EmergencyFundEdit() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>Recommendations</label>
+            <label className={`${poppins} text-neutral-content`}>Recommendations</label>
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                <p className={`${poppins} text-sm`}>Minimum: {recommendedMin} months of expenses</p>
+                <div className="w-2 h-2 rounded-full bg-warning"></div>
+                <p className={`${poppins} text-sm text-neutral-content`}>Minimum: {recommendedMin} months of expenses</p>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                <p className={`${poppins} text-sm`}>Ideal: {recommendedIdeal} months of expenses</p>
+                <div className="w-2 h-2 rounded-full bg-success"></div>
+                <p className={`${poppins} text-sm text-neutral-content`}>Ideal: {recommendedIdeal} months of expenses</p>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className={`${poppins} text-gray-700`}>Status Message</label>
-            <p className={`${poppins} text-sm text-gray-600`}>
+            <label className={`${poppins} text-neutral-content`}>Status Message</label>
+            <p className={`${poppins} text-sm text-neutral-content/70`}>
               {/* @ts-expect-error - TODO: fix this */}
               {emergencyFund?.emergencyFundStatus?.message || "No status message available"}
             </p>
@@ -233,7 +267,7 @@ export default function EmergencyFundEdit() {
         <button
           onClick={handleSubmit}
           disabled={isLoading}
-          className={`flex justify-center items-center bg-[#6F39C5] px-6 py-2 rounded-[25px] text-white cursor-pointer hover:bg-[#5a2fa0] transition-all duration-300 ${
+          className={`btn btn-primary px-6 py-2 rounded-2xl transition-all duration-300 ${
             isLoading ? "opacity-50 cursor-not-allowed" : ""
           }`}
         >
@@ -244,7 +278,7 @@ export default function EmergencyFundEdit() {
         <button
           onClick={() => router.push("/user/financial-checkup")}
           disabled={isLoading}
-          className={`flex justify-center items-center text-[#6F39C5] border-2 border-[#6F39C5] px-5 py-2 rounded-[25px] cursor-pointer hover:bg-[#6F39C5] hover:text-white transition-all duration-300 ${
+          className={`btn btn-outline btn-primary px-5 py-2 rounded-2xl transition-all duration-300 ${
             isLoading ? "opacity-50 cursor-not-allowed" : ""
           }`}
         >

@@ -74,9 +74,39 @@ interface EmergencyFundResponse {
   };
 }
 
+interface Goal {
+  id: string;
+  userId: string;
+  title: string;
+  targetAmount: number;
+  yearsToGoal: number;
+  category: string;
+  isAchievable: boolean;
+  priority: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface GoalResponse {
+  data: Goal[];
+}
+
+// Initialize with a default theme that will be consistent between server and client
 export const themeAtom = atom<string>('dark');
+
+// Custom atom with localStorage persistence
+export const persistentThemeAtom = atom(
+  (get) => get(themeAtom),
+  (get, set, newValue: string) => {
+    set(themeAtom, newValue);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('budget-buddy-theme', newValue);
+    }
+  }
+);
+
 export const userAtom = atom<User | null>(null);
 export const financialAtom = atom<FinancialResponse | null>(null);
 export const emergencyFundAtom = atom<EmergencyFundResponse | null>(null);
 export const debtAtom = atom<DebtResponse | null>(null);
-export const goalAtom = atom(null);
+export const goalAtom = atom<Goal[] | GoalResponse | null>(null);

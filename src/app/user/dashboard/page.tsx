@@ -3,12 +3,8 @@ import Sidebar from "@/components/Sidebar/sidebar";
 
 export default function page() {
   return (
-    <div>
-      <Layout>
+    <Layout>
       <Sidebar/>
-      </Layout>
-     
-
-    </div>
+    </Layout>
   )
 }

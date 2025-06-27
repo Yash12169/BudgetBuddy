@@ -31,9 +31,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User, LogOut, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
-import { themeAtom } from "../../atoms/atoms";
+import { persistentThemeAtom } from "../../atoms/atoms";
 
 interface theme {
   id: string | number;
@@ -47,91 +47,27 @@ interface theme {
 const themes: theme[] = [
   {
     id: 0,
-    theme: 'dark',
-    primary: "#661AE6",
-    secondary: "#D926A9",
-    accent: "#1FB2A6",
-    neutral: "#191D24",
+    theme: 'dark', 
+    primary: "#200282",     
+    secondary: "#5c6bc0",   
+    accent: "#00bcd4",      
+    neutral: "#0d1117",     
   },
   {
     id: 1,
-    theme: 'cupcake',
-    primary: "#65c3c8",
-    secondary: "#ef9fbc",
-    accent: "#eeaf3a",
-    neutral: "#291334",
+    theme: 'night', 
+    primary: "#000",     
+    secondary: "#94a3b8",   
+    accent: "#22d3ee",      
+    neutral: "#1e1e2f",     
   },
   {
     id: 2,
-    theme: 'emerald',
-    primary: "#66cc8a",
-    secondary: "#377cfb",
-    accent: "#ea5234",
-    neutral: "#1e293b",
-  },
-  {
-    id: 3,
-    theme: 'forest',
-    primary: "#166534",
-    secondary: "#22d3ee",
-    accent: "#37cdbe",
-    neutral: "#212121",
-  },
-  {
-    id: 4,
-    theme: 'lofi',
-    primary: "#808080",
-    secondary: "#d1d5db",
-    accent: "#1a1a1a",
-    neutral: "# cfcfcf",
-  },
-  {
-    id: 5,
-    theme: 'autumn',
-    primary: "#D97706",
-    secondary: "#F59E0B",
-    accent: "#92400E",
-    neutral: "#1f2937",
-  },
-  {
-    id: 6,
-    theme: 'coffee',
-    primary: "#DB924B",
-    secondary: "#D9A29F",
-    accent: "#B78C6C",
-    neutral: "#120E0B",
-  },
-  {
-    id: 7,
-    theme: 'dim',
-    primary: "#374151",
-    secondary: "#4B5563",
-    accent: "#6B7280",
-    neutral: "#111827",
-  },
-  {
-    id: 8,
-    theme: 'sunset',
-    primary: "#F97316",
-    secondary: "#FB923C",
-    accent: "#F43F5E",
-    neutral: "#24292F",
-  },
-  {
-    id: 9,
-    theme: 'corporate',
-    primary: '#4b6bfb',
-    secondary: '#7b92b2',
-    accent: '#67cba0',
-    neutral: '#181a2a',
-  },
-  {
-    id: 10,
-    theme: 'retro',
-    primary: '#ef9995',
-    secondary: '#a4cbb4',
-    accent: '#ebdc99',
-    neutral: '#7d7259',
+    theme: 'corporate', 
+    primary: "#4169e1",     
+    secondary: "#7b9fff",   
+    accent: "#00c49a",      
+    neutral: "#f4f4f5",     
   },
 ];
 
@@ -140,7 +76,10 @@ export default function Sidebar() {
   const router = useRouter();
   const [isProfileLoading, setIsProfileLoading] = useState(false);
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
-  const [, setTheme] = useAtom(themeAtom);
+  const [, setTheme] = useAtom(persistentThemeAtom);
+
+  
+  
 
   const handleProfileClick = async () => {
     setIsProfileLoading(true);
@@ -159,14 +98,14 @@ export default function Sidebar() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="bgblue-400 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+        <header className="bg-base-200 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar:h-12">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/user/dashboard">
+                  <BreadcrumbLink href="/user/dashboard" className="text-base-content hover:text-neutral-content/50">
                     Dashboard
                   </BreadcrumbLink>
                 </BreadcrumbItem>
@@ -249,12 +188,12 @@ export default function Sidebar() {
             </DropdownMenu>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min md:grid-cols-3 gap-x-12 gap-y-8">
-            <div className="rounded-xl h-fit w-full">
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0 bg-base-200">
+          <div className="grid auto-rows-min md:grid-cols-12 gap-x-4 gap-y-4">
+            <div className="rounded-xl h-[300px] w-full md:col-span-4">
               <StarterCard />
             </div>
-            <div className="rounded-xl h-fit col-span-2 md:col-span-2">
+            <div className="rounded-xl h-[300px] w-full md:col-span-8">
               <GoalTracker />
             </div>
           </div>

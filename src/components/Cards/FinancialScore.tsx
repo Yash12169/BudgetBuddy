@@ -26,7 +26,6 @@ export default function FinancialScore() {
     router.push("/user/financial-checkup");
   };
 
-  // Extract scores with proper type checking
   const savingScore = financials?.data?.savingScore || 0;
   const emergencyScore = emergencyFund?.emergencyFundStatus?.score || 0;
 
@@ -51,12 +50,71 @@ export default function FinancialScore() {
 
   if (!financials || !emergencyFund) {
     return (
-      <div className="flex gap-4 flex-col h-[100%] px-5 py-9 bg-neutral text-neutral-content rounded-[30px]">
-        <div className="flex w-full flex-col gap-4">
-          <div className="skeleton h-32 w-full"></div>
-          <div className="skeleton h-4 w-28"></div>
-          <div className="skeleton h-4 w-full"></div>
-          <div className="skeleton h-4 w-full"></div>
+      <div className="flex flex-col bg-neutral text-neutral-content shadow-lg rounded-2xl p-7 gap-7 border border-neutral-content/20">
+        <div className="flex w-[100%] h-[100%]">
+          <div className="flex w-[65%] h-[100%] flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <div className="skeleton h-6 w-40"></div>
+              <div className="skeleton h-4 w-60"></div>
+            </div>
+
+            <div className="flex border-2 border-neutral-content/20 gap-5 items-center w-[60%] rounded-xl px-5 py-2 bg-neutral-focus">
+              <div className="skeleton w-10 h-10 rounded-lg"></div>
+              <div className="skeleton h-12 w-16"></div>
+              <div className="flex flex-col gap-1">
+                <div className="skeleton h-3 w-24"></div>
+                <div className="skeleton h-3 w-16"></div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="skeleton h-5 w-48"></div>
+              <div className="skeleton h-3 w-56"></div>
+            </div>
+
+            <div className="bg-neutral-content/20 w-[90%] h-[5vh] flex rounded-xl">
+              <div className="skeleton h-full w-1/3 rounded-xl"></div>
+            </div>
+          </div>
+
+          <div className="flex w-[45%] flex-col h-[100%] justify-center gap-5">
+            <div className="flex flex-col gap-2">
+              <div className="skeleton h-5 w-32"></div>
+              <div className="skeleton h-4 w-48"></div>
+            </div>
+
+            <div className="flex gap-3 items-center">
+              <div className="skeleton w-8 h-8 rounded-full"></div>
+              <div className="flex flex-col gap-2 flex-1">
+                <div className="flex gap-2 items-center">
+                  <div className="skeleton h-4 w-32"></div>
+                  <div className="skeleton h-5 w-12 rounded-full"></div>
+                </div>
+                <div className="skeleton h-3 w-40"></div>
+              </div>
+            </div>
+
+            <div className="flex gap-3 items-center">
+              <div className="skeleton w-8 h-8 rounded-full"></div>
+              <div className="flex flex-col gap-2 flex-1">
+                <div className="flex gap-2 items-center">
+                  <div className="skeleton h-4 w-28"></div>
+                  <div className="skeleton h-5 w-12 rounded-full"></div>
+                </div>
+                <div className="skeleton h-3 w-36"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col h-[5vh] w-full justify-end items-end gap-7 border-t border-neutral-content/20">
+          <div className="flex h-[90%] justify-between items-end w-full px-4">
+            <div className="flex gap-3 items-center w-[80%] h-fit">
+              <div className="skeleton w-6 h-6"></div>
+              <div className="skeleton h-4 w-full"></div>
+            </div>
+            <div className="skeleton h-8 w-24 rounded-full"></div>
+          </div>
         </div>
       </div>
     );
@@ -69,21 +127,21 @@ export default function FinancialScore() {
   };
 
   return (
-    <div className="flex flex-col bg-accent text-accent-foreground shadow-lg rounded-[30px] p-7 gap-7">
+    <div className="flex flex-col bg-neutral text-neutral-content shadow-lg rounded-2xl p-7 gap-7 border border-neutral-content/20">
       <div className="flex w-[100%] h-[100%]">
         <div className="flex w-[65%] h-[100%] flex-col gap-5">
           <div className="flex flex-col">
-            <div className="text-xl text-black font-semibold">
+            <div className="text-xl text-neutral-content font-semibold">
               <p className={montserrat}>Financial Checkup</p>
             </div>
-            <div className="text-sm">
+            <div className="text-sm text-neutral-content/80">
               <p className={montserrat}>
                 Analyse & improve your Financial Health
               </p>
             </div>
           </div>
 
-          <div className="flex border-2 gap-5 items-center w-[60%] rounded-[15px] px-5 py-2">
+          <div className="flex border-2 border-neutral-content/20 gap-5 items-center w-[60%] rounded-[15px] px-5 py-2 bg-neutral-focus">
             <div>
               {totalScore <= 30 && (
                 <Image src={finWeak} alt="weak financials" />
@@ -95,44 +153,44 @@ export default function FinancialScore() {
                 <Image src={finStrong} alt="strong financials" />
               )}
             </div>
-            <div className="text-black text-5xl">
+            <div className="text-neutral-content text-5xl">
               <p className={`${montserrat} font-semibold`}>{totalScore}</p>
             </div>
             <div className={poppins}>
-              <div className="text-black text-[14px]">
+              <div className="text-neutral-content text-[14px]">
                 <p>Financial Health Score</p>
               </div>
-              <div className="text-sm">
+              <div className="text-sm text-neutral-content/70">
                 <p>out of 100</p>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col">
-            <div className="text-black font-semibold">
+            <div className="text-neutral-content font-semibold">
               <p className={montserrat}>Your Financial Health Status</p>
             </div>
-            <div className="text-xs">
+            <div className="text-xs text-neutral-content/70">
               <p className={montserrat}>
                 Refer to the Contributors for more details
               </p>
             </div>
           </div>
 
-          <div className="bg-[#d4d4d4c3] w-[90%] h-[5vh] flex rounded-[15px]">
+          <div className="bg-neutral-content/20 w-[90%] h-[5vh] flex rounded-[15px]">
             <div
               style={{ width: `${width}%` }}
-              className="bg-[#ec0072] h-[100%] rounded-[15px] transition-all duration-1000 ease-in-out"
+              className="bg-neutral-content h-[100%] rounded-[15px] transition-all duration-1000 ease-in-out"
             ></div>
           </div>
         </div>
 
         <div className="flex w-[45%] flex-col h-[100%] justify-center gap-5">
           <div>
-            <div className="text-lg text-black font-semibold">
+            <div className="text-lg text-neutral-content font-semibold">
               <p className={montserrat}>Score Contributors</p>
             </div>
-            <div className="text-sm">
+            <div className="text-sm text-neutral-content/80">
               <p className={montserrat}>
                 Components of your Financial Health Score
               </p>
@@ -140,48 +198,48 @@ export default function FinancialScore() {
           </div>
 
           <div className="flex gap-3 items-center">
-            <div className="rounded-full border-2 border-[#6F39C5] justify-center items-center flex h-fit p-2">
+            <div className="rounded-full border-2 border-base-content justify-center items-center flex h-fit p-2">
               <Image src={wallet} alt="wallet" height={24} width={24} />
             </div>
             <div className="flex flex-col">
               <div className="flex gap-2">
                 <div
-                  className={`${montserrat} font-semibold text-sm text-black`}
+                  className={`${montserrat} font-semibold text-sm text-neutral-content`}
                 >
                   <p>Savings & Investments</p>
                 </div>
-                <div className="text-xs rounded-[15px] px-2 py-1 bg-black text-white">
+                <div className="text-xs rounded-[15px] px-2 py-1 bg-neutral-content text-neutral">
                   <p className={montserrat}>
                     <span className="font-semibold">{savingScore}</span>
-                    <span className="text-[#ffffffaa]">/100</span>
+                    <span className="text-neutral/70">/100</span>
                   </p>
                 </div>
               </div>
-              <div className={`${montserrat} text-xs`}>
+              <div className={`${montserrat} text-xs text-neutral-content/70`}>
                 <p>{getStatusText(savingScore)}</p>
               </div>
             </div>
           </div>
 
           <div className="flex gap-3 items-center">
-            <div className="rounded-full border-2 border-[#4A9BE6] justify-center items-center flex h-fit p-2">
+            <div className="rounded-full border-2 border-secondary justify-center items-center flex h-fit p-2">
               <Image src={shield} alt="shield" height={24} width={24} />
             </div>
             <div className="flex flex-col">
               <div className="flex gap-2">
                 <div
-                  className={`${montserrat} font-semibold text-sm text-black`}
+                  className={`${montserrat} font-semibold text-sm text-neutral-content`}
                 >
                   <p>Financial Security</p>
                 </div>
-                <div className="text-xs rounded-[15px] px-2 py-1 bg-black text-white">
+                <div className="text-xs rounded-[15px] px-2 py-1 bg-neutral-content text-neutral">
                   <p className={montserrat}>
                     <span className="font-semibold">{emergencyScore}</span>
-                    <span className="text-[#ffffffaa]">/100</span>
+                    <span className="text-neutral/70">/100</span>
                   </p>
                 </div>
               </div>
-              <div className={`${montserrat} text-xs`}>
+              <div className={`${montserrat} text-xs text-neutral-content/70`}>
                 <p>{getStatusText(emergencyScore)}</p>
               </div>
             </div>
@@ -189,19 +247,19 @@ export default function FinancialScore() {
         </div>
       </div>
 
-      <div className="flex flex-col h-[5vh] w-full justify-end items-end gap-7 border-t border-[#5a595947]">
+      <div className="flex flex-col h-[5vh] w-full justify-end items-end gap-7 border-t border-neutral-content/20">
         <div className="flex h-[90%] justify-between items-end w-full px-4">
           <div className="flex gap-3 items-center w-[80%] h-fit">
             <Image src={img2} alt="icon" />
-            <p className={`${poppins} text-[13px] w-full`}>
-              <span className="font-semibold">Reminder!</span> Recheck your
+            <p className={`${poppins} text-[13px] w-full text-neutral-content/80`}>
+              <span className="font-semibold text-neutral-content">Reminder!</span> Recheck your
               financial health regularly to track improvements.
             </p>
           </div>
           <button
             onClick={handleFinancialCheckup}
             disabled={isNavigating}
-            className="flex justify-center items-center text-secondary cursor-pointer w-[10%] h-[75%] rounded-full bg-neutral hover:bg-neutral/90 transition-all duration-300 relative overflow-hidden group disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex justify-center items-center  text-neutral-content cursor-pointer w-[13%] h-[80%] rounded-full bg-base-200 hover:bg-neutral-content/10 transition-all duration-300 relative overflow-hidden group disabled:cursor-not-allowed disabled:opacity-50 "
           >
             <p
               className={`text-[12px] font-semibold ${poppins} transition-opacity duration-300 ${
@@ -212,10 +270,10 @@ export default function FinancialScore() {
             </p>
             {isNavigating && (
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-4 h-4 border-2 border-secondary border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-4 h-4 border-2 border-neutral-content border-t-transparent rounded-full animate-spin"></div>
               </div>
             )}
-            <div className="absolute inset-0 bg-secondary opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 bg-neutral-content opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
           </button>
         </div>
       </div>

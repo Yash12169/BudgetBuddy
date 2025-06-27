@@ -42,12 +42,41 @@ export default function EmergencyFund() {
 
   if (!emergencyFund || !financials) {
     return (
-      <div className="flex gap-4 flex-col h-[100%] px-5 py-9 bg-neutral text-neutral-content rounded-[30px]">
-        <div className="flex w-full flex-col gap-4">
-          <div className="skeleton h-32 w-full"></div>
-          <div className="skeleton h-4 w-28"></div>
-          <div className="skeleton h-4 w-full"></div>
-          <div className="skeleton h-4 w-full"></div>
+      <div className="flex flex-col p-5 h-[45vh] justify-between bg-neutral text-neutral-content rounded-2xl border border-neutral-content/20">
+        <div className="flex flex-col items-center gap-5">
+          <div className="skeleton w-16 h-16 rounded-full"></div>
+          <div className="skeleton h-6 w-36"></div>
+        </div>
+
+        <div className="flex justify-between">
+          <div className="flex flex-col gap-5">
+            <div className="gap-1 flex flex-col">
+              <div className="skeleton h-4 w-28"></div>
+              <div className="skeleton h-6 w-20"></div>
+            </div>
+            <div className="gap-1 flex flex-col">
+              <div className="skeleton h-4 w-32"></div>
+              <div className="skeleton h-6 w-24"></div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-5">
+            <div className="gap-1 flex flex-col">
+              <div className="skeleton h-4 w-28"></div>
+              <div className="skeleton h-6 w-16"></div>
+            </div>
+            <div className="gap-1 flex flex-col">
+              <div className="skeleton h-4 w-24"></div>
+              <div className="skeleton h-6 w-20"></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-5">
+          <div className="bg-neutral-content/20 rounded-full h-[1px] w-full"></div>
+          <div className="flex justify-between">
+            <div className="skeleton h-8 w-16 rounded-full"></div>
+          </div>
         </div>
       </div>
     );
@@ -66,12 +95,12 @@ export default function EmergencyFund() {
   const recommendedIdeal = emergencyFund?.emergencyFundStatus?.recommendedIdeal || 6;
 
   return (
-    <div className="flex flex-col p-5 h-[45vh] justify-between text-black">
+    <div className="flex flex-col p-5 h-[45vh] justify-between bg-neutral text-neutral-content rounded-2xl border border-neutral-content/20">
       <div className="flex flex-col items-center gap-5">
-        <div className="p-3 rounded-full">
+        <div className="p-3 rounded-full bg-neutral-focus">
           <Image src={siren} height={40} width={40} alt="Emergency Fund"/>
         </div>
-        <div className={`${montserrat.className} text-xl font-semibold`}>
+        <div className={`${montserrat.className} text-xl font-semibold text-neutral-content`}>
           <p>Emergency Fund</p>
         </div>
       </div>
@@ -79,19 +108,19 @@ export default function EmergencyFund() {
       <div className="flex justify-between">
         <div className={`${poppins.className} flex flex-col gap-5`}>
           <div className="gap-1 flex flex-col">
-            <div className="text-sm text-[#36454F]">
+            <div className="text-sm text-neutral-content/70">
               <p>Monthly Salary</p>
             </div>
-            <div className="font-semibold text-lg">
+            <div className="font-semibold text-lg text-neutral-content">
               <p>{formatAmount(salary)}</p>
             </div>
           </div>
 
           <div className="gap-1 flex flex-col">
-            <div className="text-sm text-[#36454F]">
+            <div className="text-sm text-neutral-content/70">
               <p>Emergency Fund:</p>
             </div>
-            <div className="font-semibold text-lg">
+            <div className="font-semibold text-lg text-neutral-content">
               <p>{emergencyFundAmount.toLocaleString()}</p>
             </div>
           </div>
@@ -99,15 +128,15 @@ export default function EmergencyFund() {
 
         <div className={`${poppins.className} flex flex-col gap-5`}>
           <div className="gap-1 flex flex-col">
-            <div className="text-sm text-[#36454F]">
+            <div className="text-sm text-neutral-content/70">
               <p>Months Covered:</p>
             </div>
-            <div className="font-semibold text-lg">
+            <div className="font-semibold text-lg text-neutral-content">
               <p>{monthsCovered}</p>
             </div>
           </div>
           <div className="gap-1 flex flex-col">
-            <div className="text-sm text-[#36454F]">
+            <div className="text-sm text-neutral-content/70">
               <p>Your Status:</p>
             </div>
             <div>
@@ -132,22 +161,22 @@ export default function EmergencyFund() {
       </div>
 
       <div className="flex flex-col gap-5">
-        <div className="bg-[#c9cac88b] rounded-full h-[1px] w-full"></div>
+        <div className="bg-neutral-content/20 rounded-full h-[1px] w-full"></div>
         <div className="flex justify-between">
           <Dialog open={isViewOpen} onOpenChange={setIsViewOpen}>
             <DialogTrigger asChild>
               <div
                 onClick={() => setIsViewOpen(true)}
-                className="bg-black text-white rounded-[30px] px-5 py-1 cursor-pointer flex justify-center items-center hover:bg-black/90 transition-all duration-300"
+                className="bg-neutral-content text-neutral rounded-[30px] px-5 py-1 cursor-pointer flex justify-center items-center hover:bg-neutral-content/90 transition-all duration-300"
               >
                 <p className={`${poppins.className} font-semibold text-sm`}>View</p>
               </div>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800">
-              <DialogHeader className="pb-4 border-b border-gray-100 dark:border-gray-800">
-                <DialogTitle className={`${montserrat.className} text-xl flex items-center gap-3 text-gray-800 dark:text-gray-200`}>
-                  <div className="p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <Shield className="w-6 h-6 text-green-600 dark:text-green-400" />
+            <DialogContent className="sm:max-w-[425px] bg-neutral border border-neutral-content/20 rounded-2xl shadow-xl">
+              <DialogHeader className="pb-4 border-b border-neutral-content/20">
+                <DialogTitle className={`${montserrat.className} text-xl flex items-center gap-3 text-neutral-content`}>
+                  <div className="p-2 bg-success/10 rounded-lg">
+                    <Shield className="w-6 h-6 text-success" />
                   </div>
                   Emergency Fund Breakdown
                 </DialogTitle>
@@ -155,88 +184,71 @@ export default function EmergencyFund() {
               <div className="grid gap-6 py-4">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 mb-1">
-                    <div className="w-1.5 h-5 bg-green-500 rounded-full"></div>
-                    <div className="text-base font-semibold text-gray-700 dark:text-gray-300">Fund Details</div>
+                    <div className="w-1.5 h-5 bg-success rounded-full"></div>
+                    <div className="text-base font-semibold text-neutral-content">Fund Details</div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 gap-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-neutral-focus border border-neutral-content/10 gap-4">
                       <div className="flex items-center gap-3">
-                        <span className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                          <Wallet className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <span className="p-2 bg-neutral-content/10 rounded-lg flex items-center justify-center">
+                          <Wallet className="w-5 h-5 text-neutral-content/70" />
                         </span>
-                        <span className={`${poppins.className} text-base font-medium text-gray-700 dark:text-gray-300`}>Monthly Salary</span>
+                        <span className={`${poppins.className} text-base font-medium text-neutral-content`}>Monthly Salary</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-gray-900 dark:text-gray-100`}>₹{salary.toLocaleString()}</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-neutral-content`}>₹{salary.toLocaleString()}</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 gap-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-neutral-focus border border-neutral-content/10 gap-4">
                       <div className="flex items-center gap-3">
-                        <span className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
-                          <Shield className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <span className="p-2 bg-neutral-content/10 rounded-lg flex items-center justify-center">
+                          <Shield className="w-5 h-5 text-neutral-content/70" />
                         </span>
-                        <span className={`${poppins.className} text-base font-medium text-gray-700 dark:text-gray-300`}>Emergency Fund</span>
+                        <span className={`${poppins.className} text-base font-medium text-neutral-content`}>Emergency Fund</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-gray-900 dark:text-gray-100`}>₹{emergencyFundAmount.toLocaleString()}</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-neutral-content`}>₹{emergencyFundAmount.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 mb-1">
-                    <div className="w-1.5 h-5 bg-blue-500 rounded-full"></div>
-                    <div className="text-base font-semibold text-gray-700 dark:text-gray-300">Coverage & Status</div>
+                    <div className="w-1.5 h-5 bg-primary rounded-full"></div>
+                    <div className="text-base font-semibold text-neutral-content">Coverage & Status</div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/30 gap-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-primary/10 border border-primary/20 gap-4">
                       <div className="flex items-center gap-3">
-                        <span className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                          <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        <span className="p-2 bg-primary/20 rounded-lg flex items-center justify-center">
+                          <Calendar className="w-5 h-5 text-primary" />
                         </span>
-                        <span className={`${poppins.className} text-base font-medium text-blue-700 dark:text-blue-400`}>Months Covered</span>
+                        <span className={`${poppins.className} text-base font-medium text-neutral-content`}>Months Covered</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-blue-800 dark:text-blue-200`}>{monthsCovered}</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-neutral-content`}>{monthsCovered}</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/30 gap-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-primary/10 border border-primary/20 gap-4">
                       <div className="flex items-center gap-3">
-                        <span className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                          <AlertTriangle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        <span className="p-2 bg-primary/20 rounded-lg flex items-center justify-center">
+                          <AlertTriangle className="w-5 h-5 text-primary" />
                         </span>
-                        <span className={`${poppins.className} text-base font-medium text-blue-700 dark:text-blue-400`}>Status</span>
+                        <span className={`${poppins.className} text-base font-medium text-neutral-content`}>Current Status</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-blue-800 dark:text-blue-200`}>
-                        {(() => {
-                          if (status === "critical") return "Critical";
-                          if (status === "danger") return "Danger";
-                          if (status === "warning") return "Warning";
-                          if (status === "moderate") return "Moderate";
-                          if (status === "secure") return "Secure";
-                          return status;
-                        })()}
-                      </span>
+                      <span className={`${poppins.className} text-lg font-semibold text-neutral-content`}>{status.charAt(0).toUpperCase() + status.slice(1)}</span>
                     </div>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 mb-1">
-                    <div className="w-1.5 h-5 bg-purple-500 rounded-full"></div>
-                    <div className="text-base font-semibold text-gray-700 dark:text-gray-300">Recommendations</div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-900/30 gap-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-primary/10 border border-primary/20 gap-4">
                       <div className="flex items-center gap-3">
-                        <span className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-                          <Info className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                        <span className="p-2 bg-primary/20 rounded-lg flex items-center justify-center">
+                          <CheckCircle2 className="w-5 h-5 text-primary" />
                         </span>
-                        <span className={`${poppins.className} text-base font-medium text-purple-700 dark:text-purple-400`}>Minimum Coverage</span>
+                        <span className={`${poppins.className} text-base font-medium text-neutral-content`}>Recommended Min</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-purple-800 dark:text-purple-200`}>{recommendedMin} months</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-neutral-content`}>{recommendedMin} months</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-900/30 gap-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-primary/10 border border-primary/20 gap-4">
                       <div className="flex items-center gap-3">
-                        <span className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-                          <CheckCircle2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                        <span className="p-2 bg-primary/20 rounded-lg flex items-center justify-center">
+                          <Info className="w-5 h-5 text-primary" />
                         </span>
-                        <span className={`${poppins.className} text-base font-medium text-purple-700 dark:text-purple-400`}>Ideal Coverage</span>
+                        <span className={`${poppins.className} text-base font-medium text-neutral-content`}>Recommended Ideal</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-purple-800 dark:text-purple-200`}>{recommendedIdeal} months</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-neutral-content`}>{recommendedIdeal} months</span>
                     </div>
                   </div>
                 </div>
@@ -245,7 +257,7 @@ export default function EmergencyFund() {
           </Dialog>
           <div
             onClick={handleReCheck}
-            className="flex justify-center items-center border-2 border-black hover:bg-black hover:text-white transition-all duration-300 text-black rounded-[30px] px-5 py-1 cursor-pointer relative overflow-hidden group"
+            className="flex justify-center items-center border-2 border-neutral-content hover:bg-neutral-content hover:text-neutral transition-all duration-300 text-neutral-content rounded-[30px] px-5 py-1 cursor-pointer relative overflow-hidden group"
           >
             <p className={`${poppins.className} font-semibold text-sm transition-opacity duration-300 ${isNavigating ? 'opacity-0' : 'opacity-100'}`}>Re-Check</p>
             {isNavigating && (
@@ -253,7 +265,7 @@ export default function EmergencyFund() {
                 <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
               </div>
             )}
-            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 bg-neutral-content opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
           </div>
         </div>
       </div>

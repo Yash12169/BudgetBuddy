@@ -1,9 +1,10 @@
 "use client";
 import { useAtom } from "jotai";
-import { themeAtom } from "../../atoms/atoms";
+import { persistentThemeAtom } from "../../atoms/atoms";
 import "./themeController.css";
 import { useEffect, useRef, useState } from "react";
 import gsap from 'gsap'
+
 interface theme{
   id:string | number,
   theme: string,
@@ -13,103 +14,66 @@ interface theme{
   neutral: string,
 }
 
+// Function to get actual DaisyUI theme colors
+const getThemeColors = (themeName: string) => {
+  // Create a temporary element to apply the theme and read its colors
+  const tempDiv = document.createElement('div');
+  tempDiv.setAttribute('data-theme', themeName);
+  tempDiv.style.position = 'absolute';
+  tempDiv.style.left = '-9999px';
+  tempDiv.style.visibility = 'hidden';
+  document.body.appendChild(tempDiv);
+
+  // Get computed styles for the theme colors
+  const computedStyle = getComputedStyle(tempDiv);
+  const primary = computedStyle.getPropertyValue('--p') || '#661AE6';
+  const secondary = computedStyle.getPropertyValue('--s') || '#D926A9';
+  const accent = computedStyle.getPropertyValue('--a') || '#1FB2A6';
+  const neutral = computedStyle.getPropertyValue('--n') || '#191D24';
+
+  // Clean up
+  document.body.removeChild(tempDiv);
+
+  return {
+    primary: primary.trim(),
+    secondary: secondary.trim(),
+    accent: accent.trim(),
+    neutral: neutral.trim(),
+  };
+};
+
 const ThemeController = () => {
-  const [, setTheme] = useAtom(themeAtom);
+  const [, setTheme] = useAtom(persistentThemeAtom);
   const [openTheme, setOpenTheme] = useState(false);
-  const themeRef = useRef<HTMLDivElement>(null)
+  const themeRef = useRef<HTMLDivElement>(null);
 
   const themes: theme[] = [
     {
       id: 0,
       theme: 'dark',
-      primary: "#661AE6",
+      primary: "#ffffff",
       secondary: "#D926A9",
       accent: "#1FB2A6",
       neutral: "#191D24",
     },
     {
       id: 1,
-      theme: 'cupcake',
-      primary: "#65c3c8",
-      secondary: "#ef9fbc",
-      accent: "#eeaf3a",
-      neutral: "#291334",
-    },
-    {
-      id: 2,
-      theme: 'emerald',
-      primary: "#66cc8a",
-      secondary: "#377cfb",
-      accent: "#ea5234",
-      neutral: "#1e293b",
-    },
-    {
-      id: 3,
-      theme: 'forest',
-      primary: "#166534",
-      secondary: "#22d3ee",
-      accent: "#37cdbe",
-      neutral: "#212121",
-    },
-    {
-      id: 4,
-      theme: 'lofi',
-      primary: "#808080",
-      secondary: "#d1d5db",
-      accent: "#1a1a1a",
-      neutral: "# cfcfcf",
-    },
-    {
-      id: 5,
-      theme: 'autumn',
-      primary: "#D97706",
-      secondary: "#F59E0B",
-      accent: "#92400E",
+      theme: 'night',
+      primary: "#3b82f6",
+      secondary: "#f59e0b",
+      accent: "#10b981",
       neutral: "#1f2937",
     },
     {
-      id: 6,
-      theme: 'coffee',
-      primary: "#DB924B",
-      secondary: "#D9A29F",
-      accent: "#B78C6C",
-      neutral: "#120E0B",
-    },
-    {
-      id: 7,
-      theme: 'dim',
-      primary: "#374151",
-      secondary: "#4B5563",
-      accent: "#6B7280",
-      neutral: "#111827",
-    },
-    {
-      id: 8,
-      theme: 'sunset',
-      primary: "#F97316",
-      secondary: "#FB923C",
-      accent: "#F43F5E",
-      neutral: "#24292F",
-    },
-    {
-      id: 9,
+      id: 2,
       theme: 'corporate',
       primary: '#4b6bfb',
       secondary: '#7b92b2',
-      accent: '#67cba0',
+      accent: '#4b6bfb',
       neutral: '#181a2a',
     },
-    {
-      id: 10,
-      theme: 'retro',
-      primary: '#ef9995',
-      secondary: '#a4cbb4',
-      accent: '#ebdc99',
-      neutral: '#7d7259',
-    },
-    
-
   ];
+
   const handleThemeChange2 = (theme: string) => {
     setTheme(theme);
   };
