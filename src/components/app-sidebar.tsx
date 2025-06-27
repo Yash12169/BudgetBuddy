@@ -14,10 +14,10 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
-import dashboardx from "../assets/dashboardx.png";
-import analysisx from "../assets/analysisx.png";
-import goalx from "../assets/goalx.png";
-import profilex from "../assets/profilex.png";
+import dashboardx from "../assets/dashboardx.svg";
+import analysisx from "../assets/analysisx.svg";
+import goalx from "../assets/goalx.svg";
+import profilex from "../assets/profilex.svg";
 
 const data = {
   navMain: [
