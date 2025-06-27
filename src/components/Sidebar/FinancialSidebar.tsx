@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User, LogOut, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAtom } from "jotai";
 import { persistentThemeAtom } from "../../atoms/atoms";
 
@@ -48,7 +48,6 @@ export default function FinancialSidebar() {
   const { user } = useUser();
   const router = useRouter();
   const [isProfileLoading, setIsProfileLoading] = useState(false);
-  const [isLogoutLoading, setIsLogoutLoading] = useState(false);
   const [, setTheme] = useAtom(persistentThemeAtom);
   const themes: theme[] = [
     {
@@ -166,17 +165,12 @@ export default function FinancialSidebar() {
                 <DropdownMenuSeparator className="my-2" />
                 <DropdownMenuItem 
                   asChild
-                  disabled={isLogoutLoading}
                   className="cursor-pointer rounded-md px-3 py-2 text-sm transition-colors hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <SignOutButton>
                     <div className="flex items-center w-full">
-                      {isLogoutLoading ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : (
-                        <LogOut className="mr-2 h-4 w-4" />
-                      )}
-                      {isLogoutLoading ? "Signing out..." : "Log Out"}
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Log Out
                     </div>
                   </SignOutButton>
                 </DropdownMenuItem>

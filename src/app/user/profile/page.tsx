@@ -33,7 +33,6 @@ import {
 import { User, LogOut, Loader2 } from "lucide-react";
 import { useAtom } from "jotai";
 import { persistentThemeAtom } from "../../../atoms/atoms";
-import { Button } from "@/components/ui/button";
 
 interface theme {
   id: string | number;
@@ -75,9 +74,7 @@ export default function Page() {
   const router = useRouter();
   const { user } = useUser();
   const [theme, setTheme] = useAtom(persistentThemeAtom);
-  const [isLoading, setIsLoading] = useState(false);
   const [isProfileLoading, setIsProfileLoading] = useState(false);
-  const [isLogoutLoading, setIsLogoutLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   
   useEffect(() => {
@@ -105,17 +102,6 @@ export default function Page() {
       await router.push("/user/profile");
     } finally {
       setIsProfileLoading(false);
-    }
-  };
-
-  const handleSignOut = async () => {
-    setIsLoading(true);
-    try {
-      await router.push('/');
-    } catch (error) {
-      console.error('Error during sign out:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -201,17 +187,12 @@ export default function Page() {
                   <DropdownMenuSeparator className="my-2" />
                   <DropdownMenuItem 
                     asChild
-                    disabled={isLogoutLoading}
                     className="cursor-pointer rounded-md px-3 py-2 text-sm transition-colors hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <SignOutButton>
                       <div className="flex items-center w-full">
-                        {isLogoutLoading ? (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        ) : (
-                          <LogOut className="mr-2 h-4 w-4" />
-                        )}
-                        {isLogoutLoading ? "Signing out..." : "Log Out"}
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Log Out
                       </div>
                     </SignOutButton>
                   </DropdownMenuItem>

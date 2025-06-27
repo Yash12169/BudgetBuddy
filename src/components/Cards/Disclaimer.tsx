@@ -2,12 +2,9 @@
 
 import { montserrat, poppins } from "@/fonts/fonts";
 import { Info } from "lucide-react";
-import { useAtom } from "jotai";
-import { persistentThemeAtom } from "../../atoms/atoms";
 import { useEffect, useState } from "react";
 
 export default function Disclaimer() {
-  const [theme] = useAtom(persistentThemeAtom);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {

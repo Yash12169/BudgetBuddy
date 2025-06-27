@@ -16,7 +16,7 @@ const Layout = ({ children}:{children:ReactNode}) => {
       }
       setIsInitialized(true);
     }
-  }, [setTheme]);
+  }, [setTheme, theme]);
 
   // During SSR and initial client render, use the default theme
   // This ensures server and client render the same thing initially

@@ -9,26 +9,18 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import Disclaimer from "../Cards/Disclaimer"
-import ThemeController from "../ThemeController/themeController"
-import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import {
-  ChevronDown,
-  AlertCircle,
   Home,
   Car,
   GraduationCap,
   PiggyBank,
   PlusCircle,
   Loader2,
-  Trash2,
-  Edit,
   Target,
   TrendingUp,
   Calendar,
@@ -46,19 +38,8 @@ import {
   DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 import { useAtom } from "jotai"
 import { goalAtom, persistentThemeAtom } from "@/atoms/atoms"
 import axios from "axios"
@@ -85,48 +66,6 @@ interface theme {
   secondary: string;
   accent: string;
   neutral: string;
-}
-
-const containerVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-    },
-  },
-}
-
-const itemVariants = {
-  hidden: { y: 30, opacity: 0, scale: 0.95 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.4,
-    },
-  },
-}
-
-const statsVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-    },
-  },
-}
-
-const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(amount)
 }
 
 const getCategoryColor = (category: string): string => {
@@ -237,7 +176,6 @@ export default function GoalSidebar() {
   const [activeCategory, setActiveCategory] = useState("All")
   const [goals, setGoals] = useAtom(goalAtom)
   const [isProfileLoading, setIsProfileLoading] = useState(false);
-  const [isLogoutLoading, setIsLogoutLoading] = useState(false);
   const [isAddGoalLoading, setIsAddGoalLoading] = useState(false);
   const [deletingGoalId, setDeletingGoalId] = useState<string | null>(null);
   const [modifyingGoalId, setModifyingGoalId] = useState<string | null>(null);
@@ -287,16 +225,16 @@ export default function GoalSidebar() {
   }, [user?.id, setGoals])
 
   // Refresh goals data
-  const refreshGoals = async () => {
+  const refreshGoals = useCallback(async () => {
     if (user?.id) {
       try {
         const response = await axios.get(`/api/goals/${user.id}`)
         setGoals(response.data)
-      } catch (error) {
-        console.error('Failed to refresh goals:', error)
+      } catch {
+        console.error('Failed to refresh goals')
       }
     }
-  }
+  }, [user?.id, setGoals])
 
   // Listen for route changes to refresh goals when returning from add-goal
   useEffect(() => {
@@ -318,7 +256,7 @@ export default function GoalSidebar() {
     return () => {
       window.removeEventListener('focus', handleFocus)
     }
-  }, [user?.id])
+  }, [refreshGoals])
 
   const handleProfileClick = async () => {
     setIsProfileLoading(true);
@@ -344,18 +282,18 @@ export default function GoalSidebar() {
 
   const goalsList = Array.isArray(goals) ? goals : (goals?.data || [])
 
-  const deleteGoalMutation = async (goalId: string) => {
+  const deleteGoalMutation = useCallback(async (goalId: string) => {
     setDeletingGoalId(goalId);
     try {
       await axios.delete(`/api/goals?id=${goalId}`)
       await refreshGoals() // Use the refresh function instead of direct fetch
       toast.success('Goal deleted successfully')
-    } catch (error) {
+    } catch {
       toast.error('Failed to delete goal')
     } finally {
       setDeletingGoalId(null);
     }
-  }
+  }, [refreshGoals])
 
   const filteredGoals = goalsList.filter((goal: Goal) => {
     const matchesCategory = activeCategory === "All" || goal.category.toLowerCase() === activeCategory.toLowerCase()
@@ -460,17 +398,12 @@ export default function GoalSidebar() {
                 <DropdownMenuSeparator className="my-2" />
                 <DropdownMenuItem 
                   asChild
-                  disabled={isLogoutLoading}
-                  className={`cursor-pointer rounded-md px-3 py-2 text-sm transition-colors hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive disabled:opacity-50 disabled:cursor-not-allowed ${poppins}`}
+                  className={`cursor-pointer rounded-md px-3 py-2 text-sm transition-colors hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive ${poppins}`}
                 >
                   <SignOutButton>
                     <div className="flex items-center w-full">
-                      {isLogoutLoading ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : (
-                        <LogOut className="mr-2 h-4 w-4" />
-                      )}
-                      {isLogoutLoading ? "Signing out..." : "Log Out"}
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Log Out
                     </div>
                   </SignOutButton>
                 </DropdownMenuItem>

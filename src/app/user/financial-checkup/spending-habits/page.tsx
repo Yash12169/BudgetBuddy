@@ -48,7 +48,6 @@ export default function FinancialSidebar() {
   const router = useRouter();
   const { user } = useUser();
   const [isProfileLoading, setIsProfileLoading] = useState(false);
-  const [isLogoutLoading, setIsLogoutLoading] = useState(false);
   const [, setTheme] = useAtom(persistentThemeAtom);
   const themes: theme[] = [
     {
@@ -175,17 +174,12 @@ export default function FinancialSidebar() {
                   <DropdownMenuSeparator className="my-2" />
                   <DropdownMenuItem 
                     asChild
-                    disabled={isLogoutLoading}
                     className="cursor-pointer rounded-md px-3 py-2 text-sm transition-colors hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <SignOutButton>
                       <div className="flex items-center w-full">
-                        {isLogoutLoading ? (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        ) : (
-                          <LogOut className="mr-2 h-4 w-4" />
-                        )}
-                        {isLogoutLoading ? "Signing out..." : "Log Out"}
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Log Out
                       </div>
                     </SignOutButton>
                   </DropdownMenuItem>

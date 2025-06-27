@@ -16,7 +16,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { SignOutButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";

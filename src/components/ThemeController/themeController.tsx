@@ -14,34 +14,6 @@ interface theme{
   neutral: string,
 }
 
-// Function to get actual DaisyUI theme colors
-const getThemeColors = (themeName: string) => {
-  // Create a temporary element to apply the theme and read its colors
-  const tempDiv = document.createElement('div');
-  tempDiv.setAttribute('data-theme', themeName);
-  tempDiv.style.position = 'absolute';
-  tempDiv.style.left = '-9999px';
-  tempDiv.style.visibility = 'hidden';
-  document.body.appendChild(tempDiv);
-
-  // Get computed styles for the theme colors
-  const computedStyle = getComputedStyle(tempDiv);
-  const primary = computedStyle.getPropertyValue('--p') || '#661AE6';
-  const secondary = computedStyle.getPropertyValue('--s') || '#D926A9';
-  const accent = computedStyle.getPropertyValue('--a') || '#1FB2A6';
-  const neutral = computedStyle.getPropertyValue('--n') || '#191D24';
-
-  // Clean up
-  document.body.removeChild(tempDiv);
-
-  return {
-    primary: primary.trim(),
-    secondary: secondary.trim(),
-    accent: accent.trim(),
-    neutral: neutral.trim(),
-  };
-};
-
 const ThemeController = () => {
   const [, setTheme] = useAtom(persistentThemeAtom);
   const [openTheme, setOpenTheme] = useState(false);

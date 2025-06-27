@@ -76,7 +76,6 @@ export default function AddGoalPage() {
   const { user } = useUser();
   const [theme, setTheme] = useAtom(persistentThemeAtom);
   const [isProfileLoading, setIsProfileLoading] = useState(false);
-  const [isLogoutLoading, setIsLogoutLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   
   useEffect(() => {
@@ -191,17 +190,12 @@ export default function AddGoalPage() {
                   <DropdownMenuSeparator className="my-2" />
                   <DropdownMenuItem 
                     asChild
-                    disabled={isLogoutLoading}
-                    className={`cursor-pointer rounded-md px-3 py-2 text-sm transition-colors hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive disabled:opacity-50 disabled:cursor-not-allowed ${poppins}`}
+                    className={`cursor-pointer rounded-md px-3 py-2 text-sm transition-colors hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive ${poppins}`}
                   >
                     <SignOutButton>
                       <div className="flex items-center w-full">
-                        {isLogoutLoading ? (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        ) : (
-                          <LogOut className="mr-2 h-4 w-4" />
-                        )}
-                        {isLogoutLoading ? "Signing out..." : "Log Out"}
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Log Out
                       </div>
                     </SignOutButton>
                   </DropdownMenuItem>

@@ -3,7 +3,6 @@
 import * as React from "react";
 import { ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 import { useSidebar } from "@/components/ui/sidebar";
 import Image from "next/image";
 
@@ -54,7 +53,6 @@ const data = {
 
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   const [hoveredItem, setHoveredItem] = React.useState<string | null>(null);
-  const router = useRouter();
   const { state } = useSidebar();
 
   return (
