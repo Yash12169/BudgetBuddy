@@ -40,7 +40,7 @@ export default function Debt() {
 
   const handleReCheck = () => {
     setIsNavigating(true);
-    router.push("/user/financial-checkup");
+    router.push("/user/financial-checkup/debt");
   };
 
   if (!debt) {
