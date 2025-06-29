@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User, LogOut, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAtom } from "jotai";
 import { persistentThemeAtom } from "../../atoms/atoms";
 
@@ -75,18 +75,6 @@ export default function FinancialSidebar() {
       neutral: "#f4f4f5",     
     },
   ];
-
-  // Auto-refresh for financial checkup page to ensure updated data loads
-  useEffect(() => {
-    const hasRefreshed = sessionStorage.getItem('financialCheckupRefreshed');
-    if (!hasRefreshed && user) {
-      sessionStorage.setItem('financialCheckupRefreshed', 'true');
-      // Small delay to ensure the page is fully loaded before refresh
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
-    }
-  }, [user]);
 
   const handleProfileClick = async () => {
     setIsProfileLoading(true);

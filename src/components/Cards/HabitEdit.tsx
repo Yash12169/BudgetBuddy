@@ -31,7 +31,7 @@ const parseNumber = (value: string): number => {
 
 export default function HabitEdit() {
   const router = useRouter();
-  const [financials] = useAtom(financialAtom);
+  const [financials, setFinancials] = useAtom(financialAtom);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useUser();
@@ -128,7 +128,12 @@ export default function HabitEdit() {
         annualIncrementRate: parseFloat(formValues.annualIncrementRate) / 100,
       };
       
-      await axios.put(`/api/financials/${user.id}`, payload);
+      const response = await axios.put(`/api/financials/${user.id}`, payload);
+      
+      // Update the financial atom with the new data
+      if (response.data.success) {
+        setFinancials(response.data);
+      }
       
       router.push("/user/financial-checkup");
     } catch (err) {
