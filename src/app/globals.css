@@ -2,14 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Set entire project to 90% zoom */
-html {
-  transform: scale(0.9);
-  transform-origin: top left;
-  width: 111.11%; /* Compensate for the scale to prevent horizontal scrollbar */
-  height: 111.11%;
-}
-
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
