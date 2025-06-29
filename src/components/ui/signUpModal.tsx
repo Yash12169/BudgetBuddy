@@ -12,7 +12,7 @@ const SignUpModal = () => {
           className={`${montserrat}  bg-green-500 px-5 py-2 rounded-lg font-semibold cursor-pointer text-white`}
           onClick={() => setIsOpen(true)}
         >
-          <p>Sign up with Google</p>
+          <p>Create an Account</p>
         </div>
       <SpringModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
