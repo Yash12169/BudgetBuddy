@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User, LogOut, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { persistentThemeAtom } from "../../atoms/atoms";
 
@@ -76,6 +76,18 @@ export default function Sidebar() {
   const router = useRouter();
   const [isProfileLoading, setIsProfileLoading] = useState(false);
   const [, setTheme] = useAtom(persistentThemeAtom);
+
+  // Auto-refresh for new users to ensure data loads properly
+  useEffect(() => {
+    const hasRefreshed = sessionStorage.getItem('dashboardRefreshed');
+    if (!hasRefreshed && user) {
+      sessionStorage.setItem('dashboardRefreshed', 'true');
+      // Small delay to ensure the page is fully loaded before refresh
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    }
+  }, [user]);
 
   const handleProfileClick = async () => {
     setIsProfileLoading(true);
