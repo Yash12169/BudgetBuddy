@@ -107,6 +107,9 @@ export default function DebtEdit() {
       setDebt(debtResponse.data);
       
       toast.success("Debt information updated successfully!");
+      
+      // Redirect to financial checkup page
+      router.push("/user/financial-checkup");
     } catch (err) {
       console.error("Submit failed", err);
       setError("Failed to update information. Please try again.");
