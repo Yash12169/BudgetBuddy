@@ -127,9 +127,9 @@ export default function FinancialScore() {
   };
 
   return (
-    <div className="flex flex-col bg-neutral text-neutral-content shadow-lg rounded-2xl p-7 gap-7 border border-neutral-content/20">
-      <div className="flex w-[100%] h-[100%]">
-        <div className="flex w-[65%] h-[100%] flex-col gap-5">
+    <div className="flex flex-col bg-neutral text-neutral-content shadow-lg rounded-2xl p-4 sm:p-6 gap-5 sm:gap-7 border border-neutral-content/20 box-border overflow-hidden">
+      <div className="flex flex-col md:flex-row w-[100%] h-[100%]">
+        <div className="flex w-full md:w-[65%] h-[100%] flex-col gap-5">
           <div className="flex flex-col">
             <div className="text-xl text-neutral-content font-semibold">
               <p className={montserrat}>Financial Checkup</p>
@@ -185,7 +185,7 @@ export default function FinancialScore() {
           </div>
         </div>
 
-        <div className="flex w-[45%] flex-col h-[100%] justify-center gap-5">
+        <div className="flex w-full md:w-[45%] flex-col h-[100%] justify-center gap-5">
           <div>
             <div className="text-lg text-neutral-content font-semibold">
               <p className={montserrat}>Score Contributors</p>
@@ -247,33 +247,20 @@ export default function FinancialScore() {
         </div>
       </div>
 
-      <div className="flex flex-col h-[5vh] w-full justify-end items-end gap-7 border-t border-neutral-content/20">
-        <div className="flex h-[90%] justify-between items-end w-full px-4">
-          <div className="flex gap-3 items-center w-[80%] h-fit">
-            <Image src={img2} alt="icon" />
-            <p className={`${poppins} text-[13px] w-full text-neutral-content/80`}>
-              <span className="font-semibold text-neutral-content">Reminder!</span> Recheck your
-              financial health regularly to track improvements.
+      <div className="flex flex-col w-full gap-3 pt-4 border-t border-neutral-content/20 mt-2">
+        <div className="flex flex-col sm:flex-row justify-between items-center w-full gap-2 px-0 sm:px-4">
+          <div className="flex gap-2 items-center w-full sm:w-auto">
+            <Image src={img2} alt="icon" className="w-5 h-5 min-w-[20px] min-h-[20px]" />
+            <p className={`${poppins} text-[13px] w-full text-neutral-content/80 whitespace-normal`}>
+              <span className="font-semibold text-neutral-content">Reminder!</span> Recheck your financial health regularly to track improvements.
             </p>
           </div>
           <button
             onClick={handleFinancialCheckup}
+            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm w-full sm:w-auto mt-2 sm:mt-0"
             disabled={isNavigating}
-            className="flex justify-center items-center  text-neutral-content cursor-pointer w-[13%] h-[80%] rounded-full bg-base-200 hover:bg-neutral-content/10 transition-all duration-300 relative overflow-hidden group disabled:cursor-not-allowed disabled:opacity-50 "
           >
-            <p
-              className={`text-[12px] font-semibold ${poppins} transition-opacity duration-300 ${
-                isNavigating ? "opacity-0" : "opacity-100"
-              }`}
-            >
-              Financial Checkup
-            </p>
-            {isNavigating && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-4 h-4 border-2 border-neutral-content border-t-transparent rounded-full animate-spin"></div>
-              </div>
-            )}
-            <div className="absolute inset-0 bg-neutral-content opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+            {isNavigating ? "Loading..." : "Financial Checkup"}
           </button>
         </div>
       </div>

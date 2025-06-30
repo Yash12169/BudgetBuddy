@@ -80,37 +80,37 @@ function Faq() {
   };
 
   return (
-    <div className="flex flex-col gap-9 py-8 md:py-16 px-4 md:px-8 bg-[#FFF8ED]">
-      <div className="flex flex-col items-center gap-4 md:gap-6 text-center">
-        <div className={`${montserrat} font-bold text-3xl md:text-4xl text-[#1c1f58]`}>
+    <div className="flex flex-col gap-6 sm:gap-8 md:gap-9 py-6 sm:py-8 md:py-16 px-3 sm:px-4 md:px-8 bg-[#FFF8ED]">
+      <div className="flex flex-col items-center gap-3 sm:gap-4 md:gap-6 text-center">
+        <div className={`${montserrat} font-bold text-2xl sm:text-3xl md:text-4xl text-[#1c1f58]`}>
           <p>Any Questions?</p>
         </div>
-        <div className={`${poppins} text-base md:text-lg text-[#1c1f58] max-w-2xl`}>
+        <div className={`${poppins} text-sm sm:text-base md:text-lg text-[#1c1f58] max-w-2xl px-2`}>
           <p>
             Find answers to common questions that you may have in your mind.
           </p>
         </div>
       </div>
-      <div className="flex flex-col items-center gap-4 md:gap-5 w-full">
+      <div className="flex flex-col items-center gap-3 sm:gap-4 md:gap-5 w-full">
         {faqs.map((faq, index) => (
           <div 
             key={index} 
-            className="w-full md:w-[90%] lg:w-[70%] p-4 md:p-5 rounded-[25px] text-[#1c1f58] border border-green-500 transition-all duration-300 hover:border-green-600"
+            className="w-full md:w-[90%] lg:w-[70%] p-3 sm:p-4 md:p-5 rounded-[20px] sm:rounded-[25px] text-[#1c1f58] border border-green-500 transition-all duration-300 hover:border-green-600"
           >
             <div
-              className="flex justify-between items-center cursor-pointer gap-4"
+              className="flex justify-between items-center cursor-pointer gap-3 sm:gap-4"
               onClick={() => toggleFAQ(index)}
             >
-              <p className={`${montserrat} font-semibold text-sm md:text-base`}>{faq.question}</p>
+              <p className={`${montserrat} font-semibold text-xs sm:text-sm md:text-base`}>{faq.question}</p>
               <svg
                 //@ts-expect-error - TODO: fix this
                 ref={(el) => (iconRefs.current[index] = el || null)}
-                width="24"
-                height="24"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none" 
                 style={{ transform: "rotate(180deg)", flexShrink: 0 }}
-                className="transition-transform duration-300"
+                className="transition-transform duration-300 sm:w-6 sm:h-6"
               >
                 <path
                   d="M17 14L12 9L7 14"
@@ -127,14 +127,14 @@ function Faq() {
               className="overflow-hidden"
               style={{ height: 0, opacity: 0 }}
             >
-              <p className={`${poppins} mt-2 text-sm md:text-base`}>{faq.answer}</p>
+              <p className={`${poppins} mt-2 text-xs sm:text-sm md:text-base`}>{faq.answer}</p>
             </div>
           </div>
         ))}
       </div>
-      <div className="flex items-center justify-center mt-4 md:mt-8">
+      <div className="flex items-center justify-center mt-2 sm:mt-4 md:mt-8">
         <button
-          className={`${montserrat} font-semibold text-base md:text-lg bg-green-500 text-white cursor-pointer px-4 md:px-5 py-2 md:py-3 rounded-lg hover:bg-green-600 transition-colors`}
+          className={`${montserrat} font-semibold text-sm sm:text-base md:text-lg bg-green-500 text-white cursor-pointer px-3 sm:px-4 md:px-5 py-2 md:py-3 rounded-lg hover:bg-green-600 transition-colors`}
         >
           Got More Questions?
         </button>
