@@ -129,43 +129,43 @@ export default function GoalTracker() {
             {goals.map((goal: Goal) => (
               <div
                 key={goal.id}
-                className="bg-neutral-focus border border-neutral-content/20 flex flex-col md:flex-row md:items-center justify-center rounded-xl p-3 md:p-4 gap-y-3 gap-x-6"
+                className="bg-neutral-focus border border-neutral-content/20 flex flex-row items-center justify-between rounded-xl p-2 sm:p-4 gap-x-2 sm:gap-x-6 w-full box-border overflow-hidden min-w-0"
               >
-                <div className="flex items-center gap-3 justify-center flex-1 min-w-[160px]">
+                <div className="flex items-center gap-2 sm:gap-3 justify-center flex-1 min-w-0">
                   <Image
                     src={getGoalIcon(goal.category)}
                     alt={goal.category}
                     width={40}
                     height={40}
-                    className="object-contain"
+                    className="object-contain hidden md:block"
                   />
                   <div className="flex flex-col">
-                    <p className="font-semibold text-neutral-content">{goal.title}</p>
-                    <p className="text-xs text-neutral-content/70">
+                    <p className="font-semibold text-xs sm:text-sm md:text-base text-neutral-content truncate max-w-[80px] sm:max-w-[120px] md:max-w-none">{goal.title}</p>
+                    <p className="text-[10px] sm:text-xs md:text-sm text-neutral-content/70 truncate max-w-[80px] sm:max-w-[120px] md:max-w-none">
                       Target Year: {new Date().getFullYear() + goal.yearsToGoal}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex flex-row gap-x-2 md:gap-x-3 flex-1 justify-center">
-                  <div className="flex flex-col text-center flex-1 min-w-[120px]">
-                    <p className="text-xs text-neutral-content/70">Priority</p>
-                    <p className="font-semibold text-neutral-content">{goal.priority}</p>
+                <div className="flex flex-row gap-x-2 sm:gap-x-3 flex-1 justify-center min-w-0">
+                  <div className="flex flex-col text-center flex-1 min-w-0">
+                    <p className="text-[10px] sm:text-xs md:text-sm text-neutral-content/70">Priority</p>
+                    <p className="font-semibold text-xs sm:text-sm md:text-base text-neutral-content">{goal.priority}</p>
                   </div>
-                  <div className="flex flex-col text-center flex-1 min-w-[120px]">
-                    <p className="text-xs text-neutral-content/70">Amount</p>
-                    <p className="font-semibold text-neutral-content">{Math.round(goal.targetAmount / 100000)} Lakh</p>
+                  <div className="flex flex-col text-center flex-1 min-w-0">
+                    <p className="text-[10px] sm:text-xs md:text-sm text-neutral-content/70">Amount</p>
+                    <p className="font-semibold text-xs sm:text-sm md:text-base text-neutral-content">{Math.round(goal.targetAmount / 100000)} Lakh</p>
                   </div>
-                  <div className="flex flex-col text-center flex-1 min-w-[120px]">
-                    <p className="text-xs text-neutral-content/70">Target Year</p>
-                    <p className="font-semibold text-neutral-content">{new Date().getFullYear() + goal.yearsToGoal}</p>
+                  <div className="flex flex-col text-center flex-1 min-w-0">
+                    <p className="text-[10px] sm:text-xs md:text-sm text-neutral-content/70">Target Year</p>
+                    <p className="font-semibold text-xs sm:text-sm md:text-base text-neutral-content">{new Date().getFullYear() + goal.yearsToGoal}</p>
                   </div>
                 </div>
 
-                <div className="flex flex-col text-center flex-1 min-w-[120px]">
-                  <p className="text-xs text-neutral-content/70">Goal Possibility</p>
+                <div className="flex flex-col text-center flex-1 min-w-0">
+                  <p className="text-[10px] sm:text-xs md:text-sm text-neutral-content/70">Goal Possibility</p>
                   <p
-                    className={`font-semibold ${
+                    className={`font-semibold text-xs sm:text-sm md:text-base ${
                       goal.isAchievable ? "text-success" : "text-error"
                     }`}
                   >

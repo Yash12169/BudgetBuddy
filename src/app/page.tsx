@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className="flex flex-col bg-[#FFF8ED]">
       <Navbar2 />
-      <main className="flex flex-col gap-16 md:gap-[8rem] pt-16 md:pt-0">
+      <main className="flex flex-col gap-8 sm:gap-12 md:gap-16 lg:gap-[8rem] pt-16 md:pt-0">
         <Hero />
         <TextParallax />
         <Accomplishments />
