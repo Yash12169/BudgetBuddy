@@ -34,6 +34,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAtom } from "jotai";
 import { persistentThemeAtom } from "../../atoms/atoms";
+import { themes, theme as ThemeType } from "../ThemeController/themeController";
 
 interface theme {
   id: string | number;
@@ -49,32 +50,6 @@ export default function FinancialSidebar() {
   const router = useRouter();
   const [isProfileLoading, setIsProfileLoading] = useState(false);
   const [, setTheme] = useAtom(persistentThemeAtom);
-  const themes: theme[] = [
-    {
-      id: 0,
-      theme: 'dark', 
-      primary: "#200282",     
-      secondary: "#5c6bc0",   
-      accent: "#00bcd4",      
-      neutral: "#0d1117",     
-    },
-    {
-      id: 1,
-      theme: 'night', 
-      primary: "#000",     
-      secondary: "#94a3b8",   
-      accent: "#22d3ee",      
-      neutral: "#1e1e2f",     
-    },
-    {
-      id: 2,
-      theme: 'corporate', 
-      primary: "#4169e1",     
-      secondary: "#7b9fff",   
-      accent: "#00c49a",      
-      neutral: "#f4f4f5",     
-    },
-  ];
 
   const handleProfileClick = async () => {
     setIsProfileLoading(true);

@@ -151,9 +151,9 @@ export default function Debt() {
                 <p className={`${poppins} font-semibold text-sm`}>View</p>
               </div>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] bg-neutral border border-neutral-content/20 rounded-2xl shadow-xl">
-              <DialogHeader className="pb-4 border-b border-neutral-content/20">
-                <DialogTitle className={`${montserrat} text-xl flex items-center gap-3 text-neutral-content`}>
+            <DialogContent className="sm:max-w-[425px] bg-background border border-border rounded-2xl shadow-xl">
+              <DialogHeader className="pb-4 border-b border-border">
+                <DialogTitle className={`${montserrat} text-xl flex items-center gap-3 text-foreground`}>
                   <div className="p-2 bg-error/10 rounded-lg">
                     <TrendingDown className="w-6 h-6 text-error" />
                   </div>
@@ -165,37 +165,34 @@ export default function Debt() {
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 mb-1">
                     <div className="w-1.5 h-5 bg-error rounded-full"></div>
-                    <div className="text-base font-semibold text-neutral-content">Loan Details</div>
+                    <div className="text-base font-semibold text-foreground">Loan Details</div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-neutral-focus border border-neutral-content/10 gap-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-muted border border-border gap-4">
                       <div className="flex items-center gap-3">
-                        <span className="p-2 bg-neutral-content/10 rounded-lg flex items-center justify-center">
-                          <Banknote className="w-5 h-5 text-neutral-content/70" />
+                        <span className="p-2 bg-muted/10 rounded-lg flex items-center justify-center">
+                          <Banknote className="w-5 h-5 text-muted-foreground" />
                         </span>
-                        <span className={`${poppins} text-base font-medium text-neutral-content`}>Loan Amount</span>
+                        <span className={`${poppins} text-base font-medium text-foreground`}>Loan Amount</span>
                       </div>
-                      <span className={`${poppins} text-lg font-semibold text-neutral-content`}>{formatAmount(debt.data.data.loanAmount)}</span>
+                      <span className={`${poppins} text-lg font-semibold text-foreground`}>{formatAmount(debt.data.data.loanAmount)}</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-neutral-focus border border-neutral-content/10 gap-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-muted border border-border gap-4">
                       <div className="flex items-center gap-3">
-                        <span className="p-2 bg-neutral-content/10 rounded-lg flex items-center justify-center">
-                          <Calendar className="w-5 h-5 text-neutral-content/70" />
+                        <span className="p-2 bg-muted/10 rounded-lg flex items-center justify-center">
+                          <Calendar className="w-5 h-5 text-muted-foreground" />
                         </span>
-                        <span className={`${poppins} text-base font-medium text-neutral-content`}>Loan Tenure (yrs)</span>
+                        <span className={`${poppins} text-base font-medium text-foreground`}>Loan Tenure (yrs)</span>
                       </div>
-                      <span className={`${poppins} text-lg font-semibold text-neutral-content`}>{debt.data.data.loanTenure}</span>
+                      <span className={`${poppins} text-lg font-semibold text-foreground`}>{debt.data.data.loanTenure}</span>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <p className="text-neutral-content">Interest Rate:</p>
-                      <span className={`${poppins} text-lg font-semibold text-neutral-content`}>N/A</span>
-                    </div>
+                   
                   </div>
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 mb-1">
                     <div className="w-1.5 h-5 bg-warning rounded-full"></div>
-                    <div className="text-base font-semibold text-neutral-content">EMI & Risk</div>
+                    <div className="text-base font-semibold text-foreground">EMI & Risk</div>
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between p-4 rounded-xl bg-warning/10 border border-warning/20 gap-4">
@@ -203,27 +200,27 @@ export default function Debt() {
                         <span className="p-2 bg-warning/20 rounded-lg flex items-center justify-center">
                           <BadgeDollarSign className="w-5 h-5 text-warning" />
                         </span>
-                        <span className={`${poppins} text-base font-medium text-neutral-content`}>EMI Amount</span>
+                        <span className={`${poppins} text-base font-medium text-foreground`}>EMI Amount</span>
                       </div>
-                      <span className={`${poppins} text-lg font-semibold text-neutral-content`}>{formatAmount(debt.data.data.emiAmount)}</span>
+                      <span className={`${poppins} text-lg font-semibold text-foreground`}>{formatAmount(debt.data.data.emiAmount)}</span>
                     </div>
                     <div className="flex items-center justify-between p-4 rounded-xl bg-warning/10 border border-warning/20 gap-4">
                       <div className="flex items-center gap-3">
                         <span className="p-2 bg-warning/20 rounded-lg flex items-center justify-center">
                           <Percent className="w-5 h-5 text-warning" />
                         </span>
-                        <span className={`${poppins} text-base font-medium text-neutral-content`}>EMI Load</span>
+                        <span className={`${poppins} text-base font-medium text-foreground`}>EMI Load</span>
                       </div>
-                      <span className={`${poppins} text-lg font-semibold text-neutral-content`}>{debt.data.debtLoad}%</span>
+                      <span className={`${poppins} text-lg font-semibold text-foreground`}>{debt.data.debtLoad}%</span>
                     </div>
                     <div className="flex items-center justify-between p-4 rounded-xl bg-warning/10 border border-warning/20 gap-4">
                       <div className="flex items-center gap-3">
                         <span className="p-2 bg-warning/20 rounded-lg flex items-center justify-center">
                           <AlertTriangle className="w-5 h-5 text-warning" />
                         </span>
-                        <span className={`${poppins} text-base font-medium text-neutral-content`}>Risk of Debt Trap</span>
+                        <span className={`${poppins} text-base font-medium text-foreground`}>Risk of Debt Trap</span>
                       </div>
-                      <span className={`${poppins} text-lg font-semibold text-neutral-content`}>{debt.data.debtLoad <= 30 ? 'Low' : debt.data.debtLoad <= 50 ? 'Moderate' : 'High'}</span>
+                      <span className={`${poppins} text-lg font-semibold text-foreground`}>{debt.data.debtLoad <= 30 ? 'Low' : debt.data.debtLoad <= 50 ? 'Moderate' : 'High'}</span>
                     </div>
                   </div>
                 </div>

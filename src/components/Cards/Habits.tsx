@@ -180,9 +180,9 @@ export default function Habits() {
                 <p className={`${poppins} font-semibold text-sm`}>View</p>
               </div>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] bg-neutral border border-neutral-content/20 rounded-2xl shadow-xl">
-              <DialogHeader className="pb-4 border-b border-neutral-content/20">
-                <DialogTitle className={`${montserrat} text-xl flex items-center gap-3 text-neutral-content`}>
+            <DialogContent className="sm:max-w-[425px] bg-background border border-border rounded-2xl shadow-xl">
+              <DialogHeader className="pb-4  border-b border-border">
+                <DialogTitle className={`${montserrat} text-xl flex items-center gap-3 text-foreground`}>
                   <div className="p-2 bg-primary/10 rounded-lg">
                     <Wallet className="w-6 h-6 text-primary" />
                   </div>
@@ -193,35 +193,35 @@ export default function Habits() {
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 mb-1">
                     <div className="w-1.5 h-5 bg-primary rounded-full"></div>
-                    <div className="text-base font-semibold text-neutral-content">Expenses</div>
+                    <div className="text-base font-semibold ">Spending Details</div>
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between p-4 rounded-xl bg-neutral-focus border border-neutral-content/10 gap-4">
                       <div className="flex items-center gap-3">
                         <span className="p-2 bg-neutral-content/10 rounded-lg flex items-center justify-center">
-                          <Receipt className="w-5 h-5 text-neutral-content/70" />
+                          <Receipt className="w-5 h-5 text-primary-content/70" />
                         </span>
-                        <span className={`${poppins} text-base font-medium text-neutral-content`}>Basic Expenses</span>
+                        <span className={`${poppins} text-base font-medium text-primary-content`}>Basic Expenses</span>
                       </div>
-                      <span className={`${poppins} text-lg font-semibold text-neutral-content`}>{formatAmount(financials.allData.expenses || 0)}</span>
+                      <span className={`${poppins} text-lg font-semibold text-primary-content`}>{formatAmount(financials.allData.expenses || 0)}</span>
                     </div>
                     <div className="flex items-center justify-between p-4 rounded-xl bg-neutral-focus border border-neutral-content/10 gap-4">
                       <div className="flex items-center gap-3">
                         <span className="p-2 bg-neutral-content/10 rounded-lg flex items-center justify-center">
-                          <PlusCircle className="w-5 h-5 text-neutral-content/70" />
+                          <PlusCircle className="w-5 h-5 text-primary-content/70" />
                         </span>
-                        <span className={`${poppins} text-base font-medium text-neutral-content`}>Extra Expenses</span>
+                        <span className={`${poppins} text-base font-medium text-primary-content`}>Extra Expenses</span>
                       </div>
-                      <span className={`${poppins} text-lg font-semibold text-neutral-content`}>{formatAmount(financials.allData.extraExpenses || 0)}</span>
+                      <span className={`${poppins} text-lg font-semibold text-primary-content`}>{formatAmount(financials.allData.extraExpenses || 0)}</span>
                     </div>
                     <div className="flex items-center justify-between p-4 rounded-xl bg-neutral-focus border border-neutral-content/10 gap-4">
                       <div className="flex items-center gap-3">
                         <span className="p-2 bg-neutral-content/10 rounded-lg flex items-center justify-center">
-                          <Shield className="w-5 h-5 text-neutral-content/70" />
+                          <Shield className="w-5 h-5 text-primary-content/70" />
                         </span>
-                        <span className={`${poppins} text-base font-medium text-neutral-content`}>Insurance</span>
+                        <span className={`${poppins} text-base font-medium text-primary-content`}>Insurance</span>
                       </div>
-                      <span className={`${poppins} text-lg font-semibold text-neutral-content`}>{formatAmount(financials.allData.insurancePremium || 0)}</span>
+                      <span className={`${poppins} text-lg font-semibold text-primary-content`}>{formatAmount(financials.allData.insurancePremium || 0)}</span>
                     </div>
                   </div>
                 </div>

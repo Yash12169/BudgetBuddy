@@ -166,9 +166,9 @@ export default function EmergencyFund() {
                 <p className={`${poppins.className} font-semibold text-sm`}>View</p>
               </div>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] bg-neutral border border-neutral-content/20 rounded-2xl shadow-xl">
-              <DialogHeader className="pb-4 border-b border-neutral-content/20">
-                <DialogTitle className={`${montserrat.className} text-xl flex items-center gap-3 text-neutral-content`}>
+            <DialogContent className="sm:max-w-[425px] bg-background border border-border rounded-2xl shadow-xl">
+              <DialogHeader className="pb-4 border-b border-border">
+                <DialogTitle className={`${montserrat.className} text-xl flex items-center gap-3 text-foreground`}>
                   <div className="p-2 bg-success/10 rounded-lg">
                     <Shield className="w-6 h-6 text-success" />
                   </div>
@@ -179,33 +179,24 @@ export default function EmergencyFund() {
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 mb-1">
                     <div className="w-1.5 h-5 bg-success rounded-full"></div>
-                    <div className="text-base font-semibold text-neutral-content">Fund Details</div>
+                    <div className="text-base font-semibold text-foreground">Emergency Fund Details</div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-neutral-focus border border-neutral-content/10 gap-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-muted border border-border gap-4">
                       <div className="flex items-center gap-3">
-                        <span className="p-2 bg-neutral-content/10 rounded-lg flex items-center justify-center">
-                          <Wallet className="w-5 h-5 text-neutral-content/70" />
+                        <span className="p-2 bg-muted/10 rounded-lg flex items-center justify-center">
+                          <Shield className="w-5 h-5 text-muted-foreground" />
                         </span>
-                        <span className={`${poppins.className} text-base font-medium text-neutral-content`}>Monthly Salary</span>
+                        <span className={`${poppins.className} text-base font-medium text-foreground`}>Emergency Fund</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-neutral-content`}>₹{salary.toLocaleString()}</span>
-                    </div>
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-neutral-focus border border-neutral-content/10 gap-4">
-                      <div className="flex items-center gap-3">
-                        <span className="p-2 bg-neutral-content/10 rounded-lg flex items-center justify-center">
-                          <Shield className="w-5 h-5 text-neutral-content/70" />
-                        </span>
-                        <span className={`${poppins.className} text-base font-medium text-neutral-content`}>Emergency Fund</span>
-                      </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-neutral-content`}>₹{emergencyFundAmount.toLocaleString()}</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-foreground`}>{emergencyFundAmount.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 mb-1">
                     <div className="w-1.5 h-5 bg-primary rounded-full"></div>
-                    <div className="text-base font-semibold text-neutral-content">Coverage & Status</div>
+                    <div className="text-base font-semibold text-foreground">Coverage & Status</div>
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between p-4 rounded-xl bg-primary/10 border border-primary/20 gap-4">
@@ -213,36 +204,36 @@ export default function EmergencyFund() {
                         <span className="p-2 bg-primary/20 rounded-lg flex items-center justify-center">
                           <Calendar className="w-5 h-5 text-primary" />
                         </span>
-                        <span className={`${poppins.className} text-base font-medium text-neutral-content`}>Months Covered</span>
+                        <span className={`${poppins.className} text-base font-medium text-foreground`}>Months Covered</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-neutral-content`}>{monthsCovered}</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-foreground`}>{monthsCovered}</span>
                     </div>
                     <div className="flex items-center justify-between p-4 rounded-xl bg-primary/10 border border-primary/20 gap-4">
                       <div className="flex items-center gap-3">
                         <span className="p-2 bg-primary/20 rounded-lg flex items-center justify-center">
                           <AlertTriangle className="w-5 h-5 text-primary" />
                         </span>
-                        <span className={`${poppins.className} text-base font-medium text-neutral-content`}>Current Status</span>
+                        <span className={`${poppins.className} text-base font-medium text-foreground`}>Current Status</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-neutral-content`}>{status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-foreground`}>{status.charAt(0).toUpperCase() + status.slice(1)}</span>
                     </div>
                     <div className="flex items-center justify-between p-4 rounded-xl bg-primary/10 border border-primary/20 gap-4">
                       <div className="flex items-center gap-3">
                         <span className="p-2 bg-primary/20 rounded-lg flex items-center justify-center">
                           <CheckCircle2 className="w-5 h-5 text-primary" />
                         </span>
-                        <span className={`${poppins.className} text-base font-medium text-neutral-content`}>Recommended Min</span>
+                        <span className={`${poppins.className} text-base font-medium text-foreground`}>Recommended Min</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-neutral-content`}>{recommendedMin} months</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-foreground`}>{recommendedMin} months</span>
                     </div>
                     <div className="flex items-center justify-between p-4 rounded-xl bg-primary/10 border border-primary/20 gap-4">
                       <div className="flex items-center gap-3">
                         <span className="p-2 bg-primary/20 rounded-lg flex items-center justify-center">
                           <Info className="w-5 h-5 text-primary" />
                         </span>
-                        <span className={`${poppins.className} text-base font-medium text-neutral-content`}>Recommended Ideal</span>
+                        <span className={`${poppins.className} text-base font-medium text-foreground`}>Recommended Ideal</span>
                       </div>
-                      <span className={`${poppins.className} text-lg font-semibold text-neutral-content`}>{recommendedIdeal} months</span>
+                      <span className={`${poppins.className} text-lg font-semibold text-foreground`}>{recommendedIdeal} months</span>
                     </div>
                   </div>
                 </div>
