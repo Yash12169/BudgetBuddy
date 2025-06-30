@@ -91,10 +91,8 @@ interface GoalResponse {
   data: Goal[];
 }
 
-// Initialize with a default theme that will be consistent between server and client
-export const themeAtom = atom<string>('dark');
+export const themeAtom = atom<string>('night');
 
-// Custom atom with localStorage persistence
 export const persistentThemeAtom = atom(
   (get) => get(themeAtom),
   (get, set, newValue: string) => {
