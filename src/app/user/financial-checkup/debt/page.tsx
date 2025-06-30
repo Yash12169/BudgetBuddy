@@ -19,7 +19,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Disclaimer from "@/components/Cards/Disclaimer";
-import { themes, theme as ThemeType } from "@/components/ThemeController/themeController";
+import { themes } from "@/components/ThemeController/themeController";
 import { useAtom } from "jotai";
 import { persistentThemeAtom } from "@/atoms/atoms";
 import {

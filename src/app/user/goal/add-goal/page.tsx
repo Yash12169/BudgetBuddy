@@ -34,7 +34,7 @@ import { User, LogOut, Loader2 } from "lucide-react";
 import { useAtom } from "jotai";
 import { persistentThemeAtom } from "../../../../atoms/atoms";
 import { poppins } from "@/fonts/fonts";
-import { themes, theme as ThemeType } from "@/components/ThemeController/themeController";
+import { themes } from "@/components/ThemeController/themeController";
 
 export default function AddGoalPage() {
   const router = useRouter();

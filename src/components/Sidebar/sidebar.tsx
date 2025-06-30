@@ -34,7 +34,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { persistentThemeAtom } from "../../atoms/atoms";
-import { themes, theme as ThemeType } from "../ThemeController/themeController";
+import { themes } from "../ThemeController/themeController";
 
 export default function Sidebar() {
   const { user } = useUser();

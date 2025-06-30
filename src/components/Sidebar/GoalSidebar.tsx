@@ -45,7 +45,7 @@ import { goalAtom, persistentThemeAtom } from "@/atoms/atoms"
 import axios from "axios"
 import { montserrat, poppins } from "@/fonts/fonts"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { themes, theme as ThemeType } from "../ThemeController/themeController"
+import { themes } from "../ThemeController/themeController"
 
 interface Goal {
   id: string;
@@ -58,15 +58,6 @@ interface Goal {
   priority: number;
   createdAt: string;
   updatedAt: string;
-}
-
-interface theme {
-  id: string | number;
-  theme: string;
-  primary: string;
-  secondary: string;
-  accent: string;
-  neutral: string;
 }
 
 const getCategoryColor = (category: string): string => {

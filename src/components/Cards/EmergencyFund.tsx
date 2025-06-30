@@ -16,7 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Wallet, Shield, Calendar, AlertTriangle, CheckCircle2, Info } from "lucide-react";
+import { Shield, Calendar, AlertTriangle, CheckCircle2, Info } from "lucide-react";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["600"] });
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500"] });

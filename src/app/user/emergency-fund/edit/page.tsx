@@ -1,6 +1,5 @@
 "use client";
 import EmergencyFundEdit from "@/components/Cards/EmergencyFundEdit";
-import { themes, theme as ThemeType } from "@/components/ThemeController/themeController";
 
 export default function EmergencyFundEditPage() {
   return (

@@ -34,16 +34,7 @@ import { User, LogOut, Loader2 } from "lucide-react";
 import { useAtom } from "jotai";
 import { persistentThemeAtom } from "../../../../atoms/atoms";
 import Disclaimer from "@/components/Cards/Disclaimer";
-import { themes, theme as ThemeType } from "@/components/ThemeController/themeController";
-
-interface theme {
-  id: string | number;
-  theme: string;
-  primary: string;
-  secondary: string;
-  accent: string;
-  neutral: string;
-}
+import { themes } from "@/components/ThemeController/themeController";
 
 export default function FinancialSidebar() {
   const router = useRouter();
