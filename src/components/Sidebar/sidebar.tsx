@@ -192,21 +192,30 @@ export default function Sidebar() {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0 bg-base-200">
-          <div className="grid auto-rows-min md:grid-cols-12 gap-x-4 gap-y-4">
-            <div className="rounded-xl h-[300px] w-full md:col-span-4">
-              <StarterCard />
+        
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+           
+            <div className="md:col-span-4 w-full flex justify-center md:block">
+              <div className="w-full max-w-sm md:max-w-full">
+                <StarterCard />
+              </div>
             </div>
-            <div className="rounded-xl h-[300px] w-full md:col-span-8">
+            <div className="md:col-span-8 w-full">
               <GoalTracker />
             </div>
           </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
+
+          <div className="w-full">
             <FinancialScore />
           </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min mt-2 mb-16 md:mb-4">
+
+          
+          <div className="w-full">
             <Goals />
           </div>
-          <Disclaimer />
+          <div className="hidden md:block">
+            <Disclaimer />
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>
