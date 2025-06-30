@@ -52,16 +52,15 @@ Create a `.env` file in the root of the project and paste the following:
 # Clerk settings
 NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL="/user/dashboard"
 NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL="/user/dashboard"
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_aW5jbHVkZWQtbGFicmFkb3ItMS5jbGVyay5hY2NvdW50cy5kZXYk
-CLERK_SECRET_KEY=sk_test_lApOplVJgbrFRR74lESWTeR4R7ixDvO7lal0D8MmCi
-CLERK_WEBHOOK_SECRET=whsec_/qvF00v9XW91ugersHFsNbvbDSe8IENb
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=YOUR_CLERK_PUBLISHABLE_KEY
+CLERK_SECRET_KEY=YOUR_CLERK_SECRET_KEY
+CLERK_WEBHOOK_SECRET=YOUR_CLERK_WEBHOOK_SECRET
 
 # Database (Supabase)
-DATABASE_URL="postgresql://postgres.anribuwynoygtiemzicj:qwertyasdfgzxcvbpoiulhk@aws-0-ap-south-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connect_timeout=30&pool_timeout=30"
-DIRECT_URL="postgresql://postgres.anribuwynoygtiemzicj:qwertyasdfgzxcvbpoiulhk@aws-0-ap-south-1.pooler.supabase.com:5432/postgres?connect_timeout=30"
+DATABASE_URL=YOUR_DATBASE_CONNECTION_STRING
+DIRECT_URL=YOUR_DATABASE_DIRECT_URL
 ```
 
-🛑 **Important**: Never commit `.env` files to public repositories.
 
 ### 4. 🛠️ Push the Prisma schema (if needed)
 
@@ -102,23 +101,3 @@ The project is already set up for Vercel deployment. Just connect your GitHub re
 
 ---
 
-## 🙋 FAQ
-
-**Why is Prisma used if we have Supabase?**  
-Supabase hosts the database (PostgreSQL), while Prisma gives us a powerful, type-safe way to interact with the database in our code.
-
-**Why two database URLs?**  
-- `DATABASE_URL` uses connection pooling (for app runtime).
-- `DIRECT_URL` connects directly to the DB (for migrations or prisma studio).
-
----
-
-## 🧑‍💻 Author
-
-Made with 💙 by [Your Name]
-
----
-
-## 📄 License
-
-MIT License – feel free to fork and build on this.
