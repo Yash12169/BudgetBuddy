@@ -5,12 +5,10 @@ import {
 } from "@tabler/icons-react";
 import { montserrat } from "@/fonts/fonts";
 import { useSignIn } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import { OAuthStrategy } from "@clerk/types";
 
 export function LogInForm() {
   const { signIn, isLoaded } = useSignIn();
-  const router = useRouter();
   const [error, setError] = React.useState("");
 
   const handleOAuthSignIn = async (strategy: OAuthStrategy) => {

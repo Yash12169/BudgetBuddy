@@ -3,14 +3,12 @@ import React, { useState } from "react";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import { montserrat } from "@/fonts/fonts";
 import { useSignUp } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import { OAuthStrategy } from "@clerk/types";
 
 export function SignupForm() {
   const [formError, setFormError] = useState("");
 
   const { isLoaded, signUp } = useSignUp();
-  const router = useRouter();
 
   if (!isLoaded) {
     return (
